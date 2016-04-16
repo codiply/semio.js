@@ -1,0 +1,27 @@
+{
+  "name": "semio.js",
+  "version": "0.0.0",
+  "description": "One more data visualisation library for the browser.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codiply/semio.js.git"
+  },
+  "author": "Codiply",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/codiply/semio.js/issues"
+  },
+  "homepage": "https://github.com/codiply/semio.js#readme",
+  "dependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-tslint": "^4.3.5",
+    "gulp-typescript": "^2.13.0",
+    "tslint": "^3.7.4",
+    "typescript": "^1.8.10"
+  }
+}

@@ -16,9 +16,10 @@
     "url": "https://github.com/codiply/semio.js/issues"
   },
   "homepage": "https://github.com/codiply/semio.js#readme",
-  "dependencies": {
+  "devDependencies": {
     "del": "^2.2.0",
     "gulp": "^3.9.1",
+    "gulp-tsd": "^0.1.1",
     "gulp-tslint": "^4.3.5",
     "gulp-typescript": "^2.13.0",
     "tslint": "^3.7.4",

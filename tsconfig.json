@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outFile": "semio.js",
+    "target": "ES5",
+    "module": "commonjs",
+    "removeComments": true,
+    "preserveConstEnums": true,
     "noImplicitAny": true
   }
 }

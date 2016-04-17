@@ -4,14 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Example</title>
-    <script src="../dist/semio.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
+    <script src="semio.js"></script>
     <script type="text/javascript">
-        var plot = new semio.violinplot();
-        plot.draw();
+        
+        d3.csv('./data/auto_mpg.csv', function(data) {
+            var plot = new semio.violinplot(data);
+            plot.width(600)
+                .height(600)
+                .categorical(function (d) { return d['cylinders']; })
+                .numeric(function(d) { return d['horsepower']; });
+            
+            plot.draw('#plotContainer');
+        });
     </script>
 </head>
  
 <body>
     <h1>Example</h1>
+    <div id="plotContainer"></div>
 </body>
 </html>

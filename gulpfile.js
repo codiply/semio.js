@@ -38,13 +38,12 @@ gulp.task('watch-ts', function() {
 
 gulp.task('browser-sync', function() {
     browserSync.init({
-        server: './',
-        index: './examples/index.html',
-        port: 4040,
-        files: ['./dist/*.*', './examples/index.html']
+        server: ["examples", "dist"],
+        port: 4040
     });
 });
 
-gulp.task('build', ['tslint', 'compile']);
+gulp.task('lint', ['tslint']);
+gulp.task('build', ['lint', 'compile']);
 gulp.task('watch', ['watch-ts', 'browser-sync']);
 gulp.task('default', ['build']);

@@ -45,5 +45,5 @@ gulp.task('browser-sync', function() {
 
 gulp.task('lint', ['tslint']);
 gulp.task('build', ['lint', 'compile']);
-gulp.task('watch', ['watch-ts', 'browser-sync']);
+gulp.task('watch', ['build', 'watch-ts', 'browser-sync']);
 gulp.task('default', ['build']);

@@ -1,6 +1,10 @@
 /// <reference path="../typings/d3/d3.d.ts"/>
+/// <reference path="../typings/lodash/lodash.d.ts"/>
+/// <reference path="objects/violin.ts"/>
 
 module semio {
+    import ExportedClass = semio.objects.verticalViolin;
+    
     export class violinplot {
         private _x: number = 0;
         private _y: number = 0;
@@ -41,7 +45,7 @@ module semio {
         numeric(accessor: (d: any) => number | string): violinplot {
             this._numericAccessor = function (d) {
                 return +accessor(d);
-            };;
+            };
             return this;
         } 
         
@@ -71,15 +75,13 @@ module semio {
             let yAxisGroup = svg.append('g')
                 .attr('transform', 'translate(' + (0.1 * this._height) + ',0)')
                 .call(yAxis);
-            
-            svg.selectAll('circle')
-                .data(this.data)
-                .enter()
-                .append('circle')
-                .attr('fill', 'black')
-                .attr('r', 5)
-                .attr('cx', d => xScale(this._categoricalAccessor(d)))
-                .attr('cy', d => yScale(this._numericAccessor(d)));
+                           
+           let groups = d3.nest().key(this._categoricalAccessor).entries(this.data);
+           _.forOwn(groups, (group) => {
+              let violin = new semio.objects.verticalViolin(group.values);
+              violin.cx(xScale(group.key)).yScale(yScale).yAccessor(this._numericAccessor).width(20);
+              violin.draw(svg);
+           });
         }
     }
 }

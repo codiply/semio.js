@@ -10,7 +10,7 @@
         
         d3.csv('./data/auto_mpg.csv', function(data) {
             var plot = new semio.violinplot(data);
-            plot.width(600)
+            plot.width(800)
                 .height(600)
                 .categorical(function (d) { return d['cylinders']; })
                 .numeric(function(d) { return d['horsepower']; });

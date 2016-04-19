@@ -7,6 +7,7 @@ module semio.objects {
         private _yAccessor: (d: any) => number;
         private _yScale: (x: number) => number;
         private _width: number;
+        private _fill: string;
         
         constructor(private _data: Array<any>) { }
         
@@ -30,15 +31,23 @@ module semio.objects {
             return this;
         }
         
+        fill(fill: string): verticalViolin {
+            this._fill = fill;
+            return this;
+        }
+        
         draw(svg: d3.Selection<any>): void {
-            var yTop = this._yScale(d3.max(this._data, this._yAccessor));
-            var yBottom = this._yScale(d3.min(this._data, this._yAccessor));
+            let yMax = d3.max(this._data, this._yAccessor);
+            let yMin = d3.min(this._data, this._yAccessor);
+            let yTop = this._yScale(yMax);
+            let yBottom = this._yScale(yMin);
+            
             svg.append('rect')
                .attr('width', this._width)
                .attr('height', yBottom - yTop)
                .attr('x', this._cx - this._width / 2)
                .attr('y', yTop)
-               .attr('fill', 'black')
+               .attr('fill', this._fill)
                .attr('stroke-width', 5);
         }
     }

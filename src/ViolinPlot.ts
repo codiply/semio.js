@@ -92,7 +92,9 @@ module semio {
               violin.cx(xScale(group.key))
                     .yScale(yScale)
                     .yAccessor(this._numericAccessor)
-                    .width(0.9 * categoryWidth)
+                    .width(0.8 * categoryWidth)
+                    .bandwidth(60)
+                    .cut(2)
                     .fill(categoryColor(group.key));
               violin.draw(svg);
            });

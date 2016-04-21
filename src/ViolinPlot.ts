@@ -54,7 +54,7 @@ module semio {
         draw(containerSelector: string): void {
             if (!this.data)
                 return;
-           
+            
             let svg = d3.select(containerSelector)
                 .append('svg')
                 .attr('x', this._x)
@@ -85,19 +85,18 @@ module semio {
                 .attr('transform', 'translate(' + (this._yMargin * this._height) + ',0)')
                 .call(yAxis);
                            
-           let groupedData = d3.nest().key(this._categoricalAccessor).entries(this.data);
+            let groupedData = d3.nest().key(this._categoricalAccessor).entries(this.data);
            
-           _.forOwn(groupedData, (group) => {
-              let violin = new semio.objects.verticalViolin(group.values);
-              violin.cx(xScale(group.key))
+            _.forOwn(groupedData, (group) => {
+                let violin = new semio.objects.verticalViolin(group.values);
+                violin.cx(xScale(group.key))
                     .yScale(yScale)
                     .yAccessor(this._numericAccessor)
                     .width(0.8 * categoryWidth)
-                    .bandwidth(60)
-                    .cut(2)
+                    .cut(1)
                     .fill(categoryColor(group.key));
-              violin.draw(svg);
-           });
+                violin.draw(svg);
+            });
         }
     }
 }

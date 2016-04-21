@@ -54,11 +54,12 @@ module semio.objects {
             let yMax = d3.max(this._data, this._yAccessor);
 
             let support = _.range(this._yScale(yMax + this._cut), 
-                                  this._yScale(yMin - this._cut), 1);
+                                  this._yScale(yMin - this._cut), 5);
 
             let kernel = semio.stats.kde.epanechnikovKernel;
-            let densities = semio.stats.kde.estimate(kernel, 
-                this._data.map(this._yAccessor).map(this._yScale), this._bandwidth, support);
+            let values = this._data.map(this._yAccessor).map(this._yScale);
+            let bandwidth = 1.06 * d3.deviation(values) / Math.pow(values.length, 0.2);
+            let densities = semio.stats.kde.estimate(kernel, values, bandwidth, support);
             let maxDensity = d3.max(densities, (d) => d.density);
             // Scale densities         
             densities.forEach((d) => {

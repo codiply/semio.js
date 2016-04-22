@@ -1,11 +1,11 @@
-/// <reference path="../typings/d3/d3.d.ts"/>
-/// <reference path="../typings/lodash/lodash.d.ts"/>
-/// <reference path="objects/violin.ts"/>
+/// <reference path="../../typings/d3/d3.d.ts"/>
+/// <reference path="../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../shape/VerticalViolin.ts"/>
 
-module semio {
-    import ExportedClass = semio.objects.verticalViolin;
+module semio.chart {
+    import VerticalViolin = semio.shape.VerticalViolin;
     
-    export class violinplot {
+    export class ViolinPlot {
         private _x: number = 0;
         private _y: number = 0;
         private _width: number = 720;
@@ -17,34 +17,34 @@ module semio {
         
         constructor(private data: Array<any>) { }
                 
-        x(x: number): violinplot {
+        x(x: number): ViolinPlot {
             this._x = x;
             return this;
         }
         
-        y(y: number): violinplot {
+        y(y: number): ViolinPlot {
             this._y = y;
             return this;
         }
         
-        width(width: number): violinplot {
+        width(width: number): ViolinPlot {
             this._width = width;
             return this;
         }
         
-        height(height: number): violinplot {
+        height(height: number): ViolinPlot {
             this._height = height;
             return this;
         }
         
-        categorical(accessor: (d: any) => d3.Primitive): violinplot {
+        categorical(accessor: (d: any) => d3.Primitive): ViolinPlot {
             this._categoricalAccessor = function (d) {
                 return accessor(d).toString();
             };
             return this;
         } 
         
-        numeric(accessor: (d: any) => number | string): violinplot {
+        numeric(accessor: (d: any) => number | string): ViolinPlot {
             this._numericAccessor = function (d) {
                 return +accessor(d);
             };
@@ -88,7 +88,7 @@ module semio {
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(this.data);
            
             _.forOwn(groupedData, (group) => {
-                let violin = new semio.objects.verticalViolin(group.values);
+                let violin = new VerticalViolin(group.values);
                 violin.cx(xScale(group.key))
                     .yScale(yScale)
                     .yAccessor(this._numericAccessor)

@@ -1,8 +1,8 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
-/// <reference path="../stats/kde.ts"/>
+/// <reference path="../math/Kde.ts"/>
 
-module semio.objects {
-    export class verticalViolin {
+module semio.shape {
+    export class VerticalViolin {
         
         private _cx: number;
         private _yAccessor: (d: any) => number;
@@ -14,37 +14,37 @@ module semio.objects {
         
         constructor(private _data: Array<any>) { }
         
-        cx(cx: number): verticalViolin {
+        cx(cx: number): VerticalViolin {
             this._cx = cx;
             return this;
         }
         
-        yAccessor(accessor: (d: any) => number): verticalViolin {
+        yAccessor(accessor: (d: any) => number): VerticalViolin {
             this._yAccessor = accessor;
             return this;
         }
         
-        yScale(scale: (y: number) => number): verticalViolin {
+        yScale(scale: (y: number) => number): VerticalViolin {
             this._yScale = scale;
             return this;
         }
         
-        width(width: number): verticalViolin {
+        width(width: number): VerticalViolin {
             this._width = width;
             return this;
         }
         
-        fill(fill: string): verticalViolin {
+        fill(fill: string): VerticalViolin {
             this._fill = fill;
             return this;
         }
         
-        cut(cut: number): verticalViolin {
+        cut(cut: number): VerticalViolin {
             this._cut = cut;
             return this;
         }
         
-        bandwidth(bandwidth: number): verticalViolin {
+        bandwidth(bandwidth: number): VerticalViolin {
             this._bandwidth = bandwidth;
             return this;
         }
@@ -56,17 +56,17 @@ module semio.objects {
             let support = _.range(this._yScale(yMax + this._cut), 
                                   this._yScale(yMin - this._cut), 5);
 
-            let kernel = semio.stats.kde.epanechnikovKernel;
+            let kernel = semio.math.Kde.epanechnikovKernel;
             let values = this._data.map(this._yAccessor).map(this._yScale);
             let bandwidth = 1.06 * d3.deviation(values) / Math.pow(values.length, 0.2);
-            let densities = semio.stats.kde.estimate(kernel, values, bandwidth, support);
+            let densities = semio.math.Kde.estimate(kernel, values, bandwidth, support);
             let maxDensity = d3.max(densities, (d) => d.density);
             // Scale densities         
             densities.forEach((d) => {
                 d.density = 0.5 * this._width * d.density / maxDensity;
             });
 
-            let area = d3.svg.area<stats.kdePoint>()
+            let area = d3.svg.area<math.KdePoint>()
                .y(d => d.value)
                .x0(d => this._cx - d.density)
                .x1(d => this._cx + d.density);

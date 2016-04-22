@@ -1,17 +1,17 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 
-module semio.stats {
-    export interface kdePoint {
+module semio.math {
+    export interface KdePoint {
         value: number,
         density: number
     }
         
-    export class kde {
+    export class Kde {
         static estimate(kernel: (x: number) => number,
                         sample: Array<number>,
                         bandwidth: number,
-                        support: Array<number>): Array<kdePoint> {
-            let estimator = kde.estimator(kernel, sample, bandwidth);
+                        support: Array<number>): Array<KdePoint> {
+            let estimator = Kde.estimator(kernel, sample, bandwidth);
             return support.map((v) => { 
                 return { value: v, density: estimator(v) };
             });

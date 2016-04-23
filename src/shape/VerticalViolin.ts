@@ -2,6 +2,9 @@
 /// <reference path="../math/Kde.ts"/>
 
 module semio.shape {
+    import Kde = semio.math.Kde;
+    import KdePoint = semio.math.KdePoint;
+    
     export class VerticalViolin {
         
         private _cx: number;
@@ -56,17 +59,17 @@ module semio.shape {
             let support = _.range(this._yScale(yMax + this._cut), 
                                   this._yScale(yMin - this._cut), 5);
 
-            let kernel = semio.math.Kde.epanechnikovKernel;
+            let kernel = Kde.epanechnikovKernel;
             let values = this._data.map(this._yAccessor).map(this._yScale);
             let bandwidth = 1.06 * d3.deviation(values) / Math.pow(values.length, 0.2);
-            let densities = semio.math.Kde.estimate(kernel, values, bandwidth, support);
+            let densities = Kde.estimate(kernel, values, bandwidth, support);
             let maxDensity = d3.max(densities, (d) => d.density);
             // Scale densities         
             densities.forEach((d) => {
                 d.density = 0.5 * this._width * d.density / maxDensity;
             });
 
-            let area = d3.svg.area<math.KdePoint>()
+            let area = d3.svg.area<KdePoint>()
                .y(d => d.value)
                .x0(d => this._cx - d.density)
                .x1(d => this._cx + d.density);

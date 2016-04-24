@@ -1,5 +1,9 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../core/DrawingSurface.ts"/>
+/// <reference path="../interfaces/Environment.ts"/>
+/// <reference path="../interfaces/Plotable.ts"/>
+/// <reference path="../interfaces/Surface.ts"/>
 
 namespace semio.chart {
     import DrawingSurface = semio.core.DrawingSurface;

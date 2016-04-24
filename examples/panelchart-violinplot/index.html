@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Chart - Violin Plot Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
+    <script src="../semio.js"></script>
+    <script type="text/javascript">
+        d3.csv('../data/auto_mpg.csv', function(data) {
+            var violinPlot = new semio.chart.ViolinPlot(data)
+                .splitOn('cylinders')
+                .value('acceleration');
+            var panelChart = new semio.chart.PanelChart()
+                .splitOn('origin')
+                .setWidth(800)
+                .setHeight(600)
+                .plot('chartContainer', violinPlot, data);
+        });
+    </script>
+</head>
+<body>
+    <div id="chartContainer"></div>
+</body>
+</html>

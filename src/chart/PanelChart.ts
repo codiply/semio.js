@@ -42,7 +42,7 @@ namespace semio.chart {
             return this;
         } 
         
-        plot(containerId: string, data: Array<any>, plotable: Plotable): void {
+        plot(containerId: string, plotable: Plotable, data: Array<any>): void {
             var surface = new DrawingSurface(containerId)
                 .setWidth(this.width)
                 .setHeight(this.height);

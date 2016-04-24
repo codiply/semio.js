@@ -47,7 +47,9 @@ module semio.core {
         splitRows(n: number): Array<Surface> {
             let rowHeight = this.height / n;
             return _.range(0, n).map((row) => {
-                return new DrawingSurface(this.containerId + '_row_' + row.toString())
+                let id = this.containerId + '_row_' + row.toString();
+                this.svg.append('g').attr('id', id);
+                return new DrawingSurface(id)
                     .setHeight(rowHeight)
                     .setWidth(this.width)
                     .setY(row * rowHeight); 
@@ -57,7 +59,9 @@ module semio.core {
         splitColumns(n: number): Array<Surface> {
             let columnWidth = this.width / n;
             return _.range(0, n).map((col) => {
-                return new DrawingSurface(this.containerId + '_column_' + col.toString())
+                let id = this.containerId + '_column_' + col.toString()
+                this.svg.append('g').attr('id', id);
+                return new DrawingSurface(id)
                     .setHeight(this.height)
                     .setWidth(columnWidth)
                     .setX(col * columnWidth);
@@ -76,7 +80,9 @@ module semio.core {
                     let i = row * nColumns + col;
                     return i < n; 
                 }).map((col) => {
-                    return new DrawingSurface(this.containerId + '_row_' + row.toString() + '_column_' + col.toString())
+                    let id = this.containerId + '_row_' + row.toString() + '_column_' + col.toString();
+                    this.svg.append('g').attr('id', id);
+                    return new DrawingSurface(id)
                         .setHeight(cellHeight)
                         .setWidth(cellHeight)
                         .setX(col * cellHeight)

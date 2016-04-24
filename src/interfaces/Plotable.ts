@@ -1,7 +1,8 @@
-/// <reference path="../../typings/d3/d3.d.ts"/>
+/// <reference path="./Environment.ts"/>
+/// <reference path="./Surface.ts"/>
 
 module semio.interfaces {
     export interface Plotable {
-        plot(svg: d3.Selection<any>, data: Array<any>): void;
+        plot(surface: Surface, environment: Environment, data: Array<any>): void;
     }
 }

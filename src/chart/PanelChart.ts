@@ -1,47 +1,54 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 
-module semio.chart {
+namespace semio.chart {
+    import DrawingSurface = semio.core.DrawingSurface;
+    import Environment = semio.interfaces.Environment;
     import Plotable = semio.interfaces.Plotable;
+    import Surface = semio.interfaces.Surface;
 
-    export class PanelChart implements Plotable {        
-        private _width: number;
-        private _height: number;
-        private _maxColumns: number;
-        private _categoricalAccessor: (d: any) => string;
-        private _plotable: Plotable
+    export class PanelChart {        
+        private width: number;
+        private height: number;
+        private maxColumns: number;
+        private categoricalAccessor: (d: any) => string;
+        private plotable: Plotable
         
         constructor() { }
         
-        width(width: number): PanelChart {
-            this._width = width;
+        setWidth(width: number): PanelChart {
+            this.width = width;
             return this;
         }
         
-        height(height: number): PanelChart {
-            this._height = height;
+        setHeight(height: number): PanelChart {
+            this.height = height;
             return this;
         }
         
-        maxColumns(maxColumns: number): PanelChart {
-            this._maxColumns = maxColumns;
+        setMaxColumns(maxColumns: number): PanelChart {
+            this.maxColumns = maxColumns;
             return this;
         }
         
-        categorical(accessor: (d: any) => d3.Primitive): PanelChart {
-            this._categoricalAccessor = function (d) {
-                return accessor(d).toString();
+        splitOn(column: string): PanelChart {
+            this.categoricalAccessor = function (d) {
+                return d[column].toString();
             };
             return this;
         } 
         
-        plot(svg: d3.Selection<any>, data: Array<any>): void {               
-            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
+        plot(containerId: string, data: Array<any>, plotable: Plotable): void {
+            var surface = new DrawingSurface(containerId)
+                .setWidth(this.width)
+                .setHeight(this.height);
+                
+            let groupedData = d3.nest().key(this.categoricalAccessor).entries(data);
            
             _.forOwn(groupedData, (group) => {
                 // TODO: Arrange svg's in a grid.
-                let childSvg = svg.append('svg');
-                this._plotable.plot(childSvg, group.values);
+                //let childSvg = svg.append('svg');
+                //this.plotable.plot(childSvg, group.values);
             });
         }
     }

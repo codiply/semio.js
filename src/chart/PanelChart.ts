@@ -1,12 +1,14 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../core/DrawingSurface.ts"/>
+/// <reference path="../core/PlotEnvironment.ts"/>
 /// <reference path="../interfaces/Environment.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 
 namespace semio.chart {
     import DrawingSurface = semio.core.DrawingSurface;
+    import PlotEnvironment = semio.core.PlotEnvironment;
     import Environment = semio.interfaces.Environment;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
@@ -40,20 +42,27 @@ namespace semio.chart {
                 return d[column].toString();
             };
             return this;
-        } 
+        }
         
         plot(containerId: string, plotable: Plotable, data: Array<any>): void {
             var surface = new DrawingSurface(containerId)
                 .setWidth(this.width)
                 .setHeight(this.height);
                 
+            let environment = new PlotEnvironment();
+            plotable.getCategoryColumns().forEach((column) => {
+                let categories = d3.set(data.map(function(d) { return d[column]; })).values();     
+                var color = d3.scale.category20().domain(categories);
+                environment.setCategoryColours(column, color);
+            });
+               
             let groupedData = d3.nest().key(this.categoricalAccessor).entries(data);
             let categories = groupedData.map((g) => g.key);
-            
-            let subSurfaces = surface.splitRows(categories.length);
+           
+            let subSurfaces = surface.splitRows(categories.length); 
             
             categories.forEach((cat, i) => {
-                plotable.plot(subSurfaces[i], null, groupedData[i].values);
+                plotable.plot(subSurfaces[i], environment, groupedData[i].values);
             });
         }
     }

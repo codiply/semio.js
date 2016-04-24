@@ -4,5 +4,7 @@
 module semio.interfaces {
     export interface Plotable {
         plot(surface: Surface, environment: Environment, data: Array<any>): void;
+        
+        getCategoryColumns(): Array<string>;
     }
 }

@@ -14,8 +14,10 @@ module semio.chart {
     export class ViolinPlot implements Plotable {
         private xMargin: number = 0.1;
         private yMargin: number = 0.1;
+        private splitOnColumn: string;
         private categoricalAccessor: (d: any) => string;
         private numericAccessor: (d: any) => number;
+        private categoryColumns: Array<string> = [];
 
         value(column: string): ViolinPlot {
             this.numericAccessor = function (d) {
@@ -28,8 +30,14 @@ module semio.chart {
             this.categoricalAccessor = function (d) {
                 return d[column].toString();
             };
+            this.splitOnColumn = column;
+            this.categoryColumns.push(column);
             return this;
         } 
+        
+        getCategoryColumns(): Array<string> {
+            return this.categoryColumns;
+        }
         
         plot(surface: Surface, environment: Environment, data: Array<any>): void {
             if (!data)
@@ -39,7 +47,8 @@ module semio.chart {
             let categories = d3.set(data.map(this.categoricalAccessor)).values();     
             let categoryWidth = plotableWidth / categories.length;
             
-            var categoryColor = d3.scale.category20().domain(categories);
+            let environmentColours = environment.getCategoryColours()[this.splitOnColumn];
+            var categoryColor = environmentColours ? environmentColours : d3.scale.category20().domain(categories);
             let xScale = d3.scale.ordinal()
                 .domain(categories)
                 .rangePoints([this.xMargin * surface.getWidth() + categoryWidth / 2, 

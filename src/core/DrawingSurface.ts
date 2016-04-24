@@ -82,7 +82,7 @@ module semio.core {
                         .setX(col * cellHeight)
                         .setY(row * cellHeight);
                 });
-            })
+            });
         }
     }
 }

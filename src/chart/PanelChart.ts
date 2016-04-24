@@ -44,11 +44,12 @@ namespace semio.chart {
                 .setHeight(this.height);
                 
             let groupedData = d3.nest().key(this.categoricalAccessor).entries(data);
-           
-            _.forOwn(groupedData, (group) => {
-                // TODO: Arrange svg's in a grid.
-                //let childSvg = svg.append('svg');
-                //this.plotable.plot(childSvg, group.values);
+            let categories = groupedData.map((g) => g.key);
+            
+            let subSurfaces = surface.splitRows(categories.length);
+            
+            categories.forEach((cat, i) => {
+                plotable.plot(subSurfaces[i], null, groupedData[i].values);
             });
         }
     }

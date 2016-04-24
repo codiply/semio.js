@@ -47,8 +47,8 @@ module semio.chart {
             let categories = d3.set(data.map(this.categoricalAccessor)).values();     
             let categoryWidth = plotableWidth / categories.length;
             
-            let environmentColours = environment.getCategoryColours()[this.splitOnColumn];
-            var categoryColor = environmentColours ? environmentColours : d3.scale.category20().domain(categories);
+            let environmentColours = environment ? environment.getCategoryColours()[this.splitOnColumn] : undefined;
+            let categoryColor = environmentColours ? environmentColours : d3.scale.category20().domain(categories);
             let xScale = d3.scale.ordinal()
                 .domain(categories)
                 .rangePoints([this.xMargin * surface.getWidth() + categoryWidth / 2, 

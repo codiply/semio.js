@@ -51,8 +51,9 @@ namespace semio.chart {
                 
             let environment = new PlotEnvironment();
             plotable.getCategoryColumns().forEach((column) => {
-                let categories = d3.set(data.map(function(d) { return d[column]; })).values();     
-                var color = d3.scale.category20().domain(categories);
+                let values = d3.set(data.map(function(d) { return d[column]; })).values();
+                environment.setCategoryValues(column, values); 
+                var color = d3.scale.category20().domain(values);
                 environment.setCategoryColours(column, color);
             });
                

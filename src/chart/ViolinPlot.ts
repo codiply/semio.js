@@ -44,7 +44,12 @@ module semio.chart {
                 return;
             
             let plotableWidth = (1 - 2 * this.yMargin) * surface.getWidth();
-            let categories = d3.set(data.map(this.categoricalAccessor)).values();     
+            let environmentCategories = environment ? 
+                                        environment.getCategoryValues()[this.splitOnColumn] : 
+                                        undefined;
+            let categories = environmentCategories ? 
+                             environmentCategories : 
+                             d3.set(data.map(this.categoricalAccessor)).values();     
             let categoryWidth = plotableWidth / categories.length;
             
             let environmentColours = environment ? environment.getCategoryColours()[this.splitOnColumn] : undefined;

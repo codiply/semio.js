@@ -4,7 +4,7 @@
 /// <reference path="core/PlotEnvironment.ts"/>
 /// <reference path="interfaces/Plotable.ts"/>
 
-namespace semio.chart {
+namespace semio {
     import DrawingSurface = semio.core.DrawingSurface;
     import PlotEnvironment = semio.core.PlotEnvironment;
     import Plotable = semio.interfaces.Plotable;
@@ -13,7 +13,7 @@ namespace semio.chart {
         private _width: number;
         private _height: number;
         
-        constructor() { }
+        constructor(private containerId: string) { }
         
         width(width: number): Visualization {
             this._width = width;
@@ -25,8 +25,8 @@ namespace semio.chart {
             return this;
         }
         
-        plot(containerId: string, plotable: Plotable, data: Array<any>): void {
-            var surface = new DrawingSurface(containerId)
+        plot(plotable: Plotable, data: Array<any>): void {
+            var surface = new DrawingSurface(this.containerId)
                 .setWidth(this._width)
                 .setHeight(this._height);
                 

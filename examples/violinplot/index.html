@@ -8,13 +8,13 @@
     <script src="../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../data/auto_mpg.csv', function(data) {
-            var surface = new semio.core.DrawingSurface('plotContainer')
-                .setWidth(800)
-                .setHeight(600);
-            new semio.chart.ViolinPlot(data)
-                .splitOn('cylinders')
+            var visualization = new semio.Visualization('plotContainer')
+                .width(800)
+                .height(600);
+            var violinPlot = new semio.chart.ViolinPlot()
                 .value('acceleration')
-                .plot(surface, null, data);
+                .splitOn('cylinders');
+            visualization.plot(violinPlot, data);
         });
     </script>
 </head>

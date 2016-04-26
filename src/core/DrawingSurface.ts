@@ -5,10 +5,10 @@ module semio.core {
     import Surface = semio.interfaces.Surface;
     
     export class DrawingSurface implements Surface {
-        private width: number;
-        private height: number;
-        private x: number;
-        private y: number;
+        private _width: number;
+        private _height: number;
+        private _x: number;
+        private _y: number;
         
         svg: d3.Selection<any>;
         
@@ -18,51 +18,51 @@ module semio.core {
         }
         
         setWidth(width: number): Surface {
-            this.width = width;
+            this._width = width;
             this.svg.attr('width', width);
             return this;
         }
         
         setHeight(height: number): Surface {
-            this.height = height;
+            this._height = height;
             this.svg.attr('height', height);
             return this;
         }
         
         setX(x: number): Surface {
-            this.x = x;
+            this._x = x;
             this.svg.attr('x', x);
             return this;
         }
         
         setY(y: number): Surface {
-            this.y = y;
+            this._y = y;
             this.svg.attr('y', y);
             return this;
         }
         
-        getWidth(): number { return this.width; }
-        getHeight(): number { return this.height; }
+        getWidth(): number { return this._width; }
+        getHeight(): number { return this._height; }
         
         splitRows(n: number): Array<Surface> {
-            let rowHeight = this.height / n;
+            let rowHeight = this._height / n;
             return _.range(0, n).map((row) => {
                 let id = this.containerId + '_row_' + row.toString();
                 this.svg.append('g').attr('id', id);
                 return new DrawingSurface(id)
                     .setHeight(rowHeight)
-                    .setWidth(this.width)
+                    .setWidth(this._width)
                     .setY(row * rowHeight); 
             });
         }
         
         splitColumns(n: number): Array<Surface> {
-            let columnWidth = this.width / n;
+            let columnWidth = this._width / n;
             return _.range(0, n).map((col) => {
                 let id = this.containerId + '_column_' + col.toString()
                 this.svg.append('g').attr('id', id);
                 return new DrawingSurface(id)
-                    .setHeight(this.height)
+                    .setHeight(this._height)
                     .setWidth(columnWidth)
                     .setX(col * columnWidth);
             });
@@ -72,8 +72,8 @@ module semio.core {
             let nColumns = Math.min(n, maxColumns);
             let nRows = Math.ceil(n / nColumns);
             
-            let cellWidth = this.width / nColumns;
-            let cellHeight = this.height / nRows;
+            let cellWidth = this._width / nColumns;
+            let cellHeight = this._height / nRows;
             
             return _.range(0, nRows).map((row) => {
                 return _.range(0, nColumns).filter((col) => {

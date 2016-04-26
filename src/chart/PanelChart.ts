@@ -14,31 +14,31 @@ namespace semio.chart {
     import Surface = semio.interfaces.Surface;
 
     export class PanelChart {        
-        private width: number;
-        private height: number;
-        private maxColumns: number;
-        private categoricalAccessor: (d: any) => string;
-        private plotable: Plotable
+        private _width: number;
+        private _height: number;
+        private _maxColumns: number;
+        private _categoricalAccessor: (d: any) => string;
+        private _plotable: Plotable
         
         constructor() { }
         
-        setWidth(width: number): PanelChart {
-            this.width = width;
+        width(width: number): PanelChart {
+            this._width = width;
             return this;
         }
         
-        setHeight(height: number): PanelChart {
-            this.height = height;
+        height(height: number): PanelChart {
+            this._height = height;
             return this;
         }
         
-        setMaxColumns(maxColumns: number): PanelChart {
-            this.maxColumns = maxColumns;
+        maxColumns(maxColumns: number): PanelChart {
+            this._maxColumns = maxColumns;
             return this;
         }
         
         splitOn(column: string): PanelChart {
-            this.categoricalAccessor = function (d) {
+            this._categoricalAccessor = function (d) {
                 return d[column].toString();
             };
             return this;
@@ -46,8 +46,8 @@ namespace semio.chart {
         
         plot(containerId: string, plotable: Plotable, data: Array<any>): void {
             var surface = new DrawingSurface(containerId)
-                .setWidth(this.width)
-                .setHeight(this.height);
+                .setWidth(this._width)
+                .setHeight(this._height);
                 
             let environment = new PlotEnvironment();
             plotable.getCategoryColumns().forEach((column) => {
@@ -57,7 +57,7 @@ namespace semio.chart {
                 environment.setCategoryColours(column, color);
             });
                
-            let groupedData = d3.nest().key(this.categoricalAccessor).entries(data);
+            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
             let categories = groupedData.map((g) => g.key);
            
             let subSurfaces = surface.splitRows(categories.length); 

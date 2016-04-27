@@ -14,8 +14,8 @@
             var panelChart = new semio.chart.PanelChart()
                 .splitOn('origin');
             var violinPlot = new semio.chart.ViolinPlot(data)
-                .splitOn('cylinders')
-                .value('acceleration');
+                .value('acceleration')
+                .splitOn('cylinders');
             visualization.plot(data, [panelChart, violinPlot]);
         });
     </script>

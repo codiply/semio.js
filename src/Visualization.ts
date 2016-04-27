@@ -12,7 +12,6 @@ namespace semio {
     export class Visualization {        
         private _width: number;
         private _height: number;
-        private _plotable: Plotable;
         
         constructor(private containerId: string) { }
         
@@ -26,19 +25,18 @@ namespace semio {
             return this;
         }
         
-        add(plotable: Plotable): Visualization {
-            this._plotable = plotable;
-            return this;
-        }
-        
-        plot(data: Array<any>): void {
+        plot(data: Array<any>, plotables: Array<Plotable>): void {
             var surface = new DrawingSurface(this.containerId)
                 .setWidth(this._width)
                 .setHeight(this._height);
                 
             let environment = new PlotEnvironment();
             
-            this._plotable.plot(surface, environment, data);
+            if (plotables) {
+                let topPlotable = plotables[0];
+                let restPlotables = plotables.slice(1);
+                topPlotable.plot(data, restPlotables, surface, environment);
+            }
         }
     }
 }

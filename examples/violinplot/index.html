@@ -8,17 +8,17 @@
     <script src="../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../data/auto_mpg.csv', function(data) {
-            var visualization = new semio.Visualization('plotContainer')
+            var visualization = new semio.Visualization('visualizationContainer')
                 .width(800)
                 .height(600);
             var violinPlot = new semio.chart.ViolinPlot()
                 .value('acceleration')
                 .splitOn('cylinders');
-            visualization.add(violinPlot).plot(data);
+            visualization.plot(data, [violinPlot]);
         });
     </script>
 </head>
 <body>
-    <div id="plotContainer"></div>
+    <div id="visualizationContainer"></div>
 </body>
 </html>

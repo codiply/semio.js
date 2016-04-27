@@ -13,7 +13,7 @@ namespace semio.chart {
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
 
-    export class PanelChart {        
+    export class PanelChart implements Plotable {        
         private _width: number;
         private _height: number;
         private _maxColumns: number;
@@ -44,27 +44,33 @@ namespace semio.chart {
             return this;
         }
         
-        plot(containerId: string, plotable: Plotable, data: Array<any>): void {
-            var surface = new DrawingSurface(containerId)
-                .setWidth(this._width)
-                .setHeight(this._height);
+        getCategoryColumns(): Array<string> {
+            // TODO: get the columns from nested plotables.
+            //       You will need to refactor the API, because you don't know the nested plotables until plot is called.
+            return [];
+        }
+        
+        plot(data: Array<any>, plotables: Array<Plotable>, surface: Surface, environment: Environment): void {
+            if (plotables) {
+                let topPlotable = plotables[0];
+                let restPlotables = plotables.slice(0);
                 
-            let environment = new PlotEnvironment();
-            plotable.getCategoryColumns().forEach((column) => {
-                let values = d3.set(data.map(function(d) { return d[column]; })).values();
-                environment.setCategoryValues(column, values); 
-                var color = d3.scale.category20().domain(values);
-                environment.setCategoryColours(column, color);
-            });
-               
-            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
-            let categories = groupedData.map((g) => g.key);
-           
-            let subSurfaces = surface.splitRows(categories.length); 
+               topPlotable.getCategoryColumns().forEach((column) => {
+                    let values = d3.set(data.map(function(d) { return d[column]; })).values();
+                    environment.setCategoryValues(column, values); 
+                    var color = d3.scale.category20().domain(values);
+                    environment.setCategoryColours(column, color);
+                });
+                
+                let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
+                let categories = groupedData.map((g) => g.key);
             
-            categories.forEach((cat, i) => {
-                plotable.plot(subSurfaces[i], environment, groupedData[i].values);
-            });
+                let subSurfaces = surface.splitRows(categories.length); 
+                
+                categories.forEach((cat, i) => {
+                    topPlotable.plot(groupedData[i].values, restPlotables, subSurfaces[i], environment);
+                });
+            }
         }
     }
 }

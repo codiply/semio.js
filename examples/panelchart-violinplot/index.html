@@ -8,18 +8,19 @@
     <script src="../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../data/auto_mpg.csv', function(data) {
+            var visualization = new semio.Visualization('visualizationContainer')
+                .width(600)
+                .height(800);
+            var panelChart = new semio.chart.PanelChart()
+                .splitOn('origin');
             var violinPlot = new semio.chart.ViolinPlot(data)
                 .splitOn('cylinders')
                 .value('acceleration');
-            var panelChart = new semio.chart.PanelChart()
-                .splitOn('origin')
-                .width(600)
-                .height(800)
-                .plot('chartContainer', violinPlot, data);
+            visualization.plot(data, [panelChart, violinPlot]);
         });
     </script>
 </head>
 <body>
-    <div id="chartContainer"></div>
+    <div id="visualizationContainer"></div>
 </body>
 </html>

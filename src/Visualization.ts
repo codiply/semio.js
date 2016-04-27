@@ -29,14 +29,19 @@ namespace semio {
             var surface = new DrawingSurface(this.containerId)
                 .setWidth(this._width)
                 .setHeight(this._height);
-                
-            let environment = new PlotEnvironment();
             
-            if (plotables) {
-                let topPlotable = plotables[0];
-                let restPlotables = plotables.slice(1);
-                topPlotable.plot(data, restPlotables, surface, environment);
+            if (!plotables)
+                return;
+            
+            // Nest the plotables
+            for (let i = 0; i < plotables.length - 1; i++) {
+                let parent = plotables[i];
+                let child = plotables[i + 1];
+                parent.add(child);
             }
+            let topPlotable = plotables[0];
+            let environment = new PlotEnvironment();
+            topPlotable.plot(data, surface, environment);
         }
     }
 }

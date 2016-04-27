@@ -38,7 +38,11 @@ module semio.chart {
             return this._categoryColumns;
         }
         
-        plot(data: Array<any>, plotables: Array<Plotable>, surface: Surface, environment: Environment): void {
+        add(plotable: Plotable): Plotable {
+            return this;
+        }
+        
+        plot(data: Array<any>, surface: Surface, environment: Environment): void {
             
         }
     }

@@ -39,7 +39,12 @@ module semio.chart {
             return this.categoryColumns;
         }
         
-        plot(data: Array<any>, plotables: Array<Plotable>, surface: Surface, environment: Environment): void {
+        add(plotable: Plotable): Plotable {
+            // Do nothing as this does not support nesting at the moment.
+            return this;
+        }
+        
+        plot(data: Array<any>, surface: Surface, environment: Environment): void {
             if (!data)
                 return;
             

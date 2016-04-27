@@ -3,7 +3,8 @@
 
 module semio.interfaces {
     export interface Plotable {
-        plot(data: Array<any>, plotables: Array<Plotable>, surface: Surface, environment: Environment): void;
+        add(plotable: Plotable): Plotable;
+        plot(data: Array<any>, surface: Surface, environment: Environment): void;
         getCategoryColumns(): Array<string>;
     }
 }

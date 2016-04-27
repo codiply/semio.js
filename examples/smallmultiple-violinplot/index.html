@@ -11,12 +11,12 @@
             var visualization = new semio.Visualization('visualizationContainer')
                 .width(600)
                 .height(800);
-            var panelChart = new semio.chart.PanelChart()
+            var smallMultiple = new semio.chart.SmallMultiple()
                 .splitOn('origin');
             var violinPlot = new semio.chart.ViolinPlot(data)
                 .value('acceleration')
                 .splitOn('cylinders');
-            visualization.plot(data, [panelChart, violinPlot]);
+            visualization.plot(data, [smallMultiple, violinPlot]);
         });
     </script>
 </head>

@@ -13,7 +13,7 @@ namespace semio.chart {
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
 
-    export class PanelChart implements Plotable {        
+    export class SmallMultiple implements Plotable {        
         private _width: number;
         private _height: number;
         private _maxColumns: number;
@@ -22,22 +22,22 @@ namespace semio.chart {
         
         constructor() { }
         
-        width(width: number): PanelChart {
+        width(width: number): SmallMultiple {
             this._width = width;
             return this;
         }
         
-        height(height: number): PanelChart {
+        height(height: number): SmallMultiple {
             this._height = height;
             return this;
         }
         
-        maxColumns(maxColumns: number): PanelChart {
+        maxColumns(maxColumns: number): SmallMultiple {
             this._maxColumns = maxColumns;
             return this;
         }
         
-        splitOn(column: string): PanelChart {
+        splitOn(column: string): SmallMultiple {
             this._categoricalAccessor = function (d) {
                 return d[column].toString();
             };

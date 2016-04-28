@@ -3,6 +3,7 @@
 
 module semio.core {
     import Surface = semio.interfaces.Surface;
+    import SurfaceHeaderBody = semio.interfaces.SurfaceHeaderBody;
     
     export class DrawingSurface implements Surface {
         private _width: number;
@@ -93,6 +94,29 @@ module semio.core {
                         .setY(row * cellHeight);
                     });
             });
+        }
+        
+        splitHeader(headerHeightRatio: number): SurfaceHeaderBody {
+            let headerHeight = Math.max(Math.min(headerHeightRatio * this._height, this._height), 0);
+            let bodyHeight = this._height - headerHeight;
+            
+            let headerId = this.containerId + '_header';
+            let bodyId = this.containerId + '_body';
+            
+            this.svg.append('g').attr('id', headerId);
+            this.svg.append('g').attr('id', bodyId);
+            
+            let headerSurface = new DrawingSurface(headerId)
+                .setWidth(this._width)
+                .setHeight(headerHeight);
+            let bodySurface = new DrawingSurface(bodyId)
+                .setWidth(this._width)
+                .setHeight(bodyHeight);
+                
+            return {
+                header: headerSurface,
+                body: bodySurface
+            };
         }
     }
 }

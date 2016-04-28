@@ -1,7 +1,11 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 
-module semio.interfaces {
+module semio.interfaces { 
+    export interface SurfaceHeaderBody {
+        header: Surface;
+        body: Surface;
+    }
     export interface Surface {
         svg: d3.Selection<any>;
         
@@ -16,5 +20,6 @@ module semio.interfaces {
         splitRows(n: number): Array<Surface>;
         splitColumns(n: number): Array<Surface>;
         splitGrid(n: number, maxColumns: number): Array<Surface>;
+        splitHeader(headerHeightRatio: number): SurfaceHeaderBody;
     }
 }

@@ -10,6 +10,7 @@ module semio.shape {
                 .attr('x', surface.getWidth() / 2)             
                 .attr('y', surface.getHeight() / 2)
                 .attr('text-anchor', 'middle')  
+                .attr('font-size', surface.getHeight() / 2)
                 .text(text);
         }
     }

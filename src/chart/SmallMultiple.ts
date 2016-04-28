@@ -45,8 +45,7 @@ namespace semio.chart {
         }
         
         getCategoryColumns(): Array<string> {
-            // TODO: get the columns from nested plotables.
-            return [];
+            return this._plotable.getCategoryColumns();
         }
         
         add(plotable: Plotable): Plotable {

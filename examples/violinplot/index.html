@@ -10,11 +10,11 @@
         d3.csv('../data/auto_mpg.csv', function(data) {
             var visualization = new semio.Visualization('visualizationContainer')
                 .width(800)
-                .height(600);
-            var violinPlot = new semio.chart.ViolinPlot()
-                .value('acceleration')
-                .splitOn('cylinders');
-            visualization.plot(data, [violinPlot]);
+                .height(600)
+                .add(new semio.chart.ViolinPlot()
+                        .value('acceleration')
+                        .splitOn('cylinders')
+                ).plot(data);
         });
     </script>
 </head>

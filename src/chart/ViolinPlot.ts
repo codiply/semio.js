@@ -16,6 +16,7 @@ module semio.chart {
         private yMargin: number = 0.1;
         private splitOnColumn: string;
         private categoricalAccessor: (d: any) => string;
+        private valueColumn: string;
         private numericAccessor: (d: any) => number;
         private categoryColumns: Array<string> = [];
 
@@ -23,6 +24,7 @@ module semio.chart {
             this.numericAccessor = function (d) {
                 return +d[column];
             };
+            this.valueColumn = column;
             return this;
         } 
         
@@ -37,6 +39,13 @@ module semio.chart {
         
         getCategoryColumns(): Array<string> {
             return this.categoryColumns;
+        }
+        
+        getNumericColumns(): Array<string> {
+            if (this.value) {
+                return [this.valueColumn];
+            }
+            return [];
         }
         
         add(plotable: Plotable): Plotable {
@@ -68,7 +77,8 @@ module semio.chart {
                 .attr('transform', 'translate(0,' + ((1 - this.yMargin * 0.8) * surface.getHeight()) + ')')
                 .call(xAxis);
             
-            let yExtent = d3.extent(data, this.numericAccessor);
+            let environmentExtent = environment.getNumericRange(this.valueColumn);
+            let yExtent = environmentExtent ? environmentExtent : d3.extent(data, this.numericAccessor);
             let yScale = d3.scale.linear()
                 .domain(yExtent)
                 .range([(1 - this.yMargin) * surface.getHeight(), this.yMargin * surface.getHeight()]);

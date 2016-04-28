@@ -22,7 +22,7 @@ namespace semio.chart {
         private _maxColumns: number;
         private _splitOnColumn: string;
         private _categoricalAccessor: (d: any) => string;
-        private _plotable: Plotable
+        private _plotable: Plotable;
         
         constructor() { }
         
@@ -58,6 +58,11 @@ namespace semio.chart {
             return this._plotable.getCategoryColumns();
         }
         
+        
+        getNumericColumns(): Array<string> {
+            return this._plotable.getNumericColumns();
+        }
+        
         add(plotable: Plotable): Plotable {
             this._plotable = plotable;
             return this;
@@ -72,14 +77,28 @@ namespace semio.chart {
         
             let subSurfaces = surface.splitGrid(categories.length, this._maxColumns); 
             
+            // TODO: set the colours for the categorical value if not already set.
+            let updatedEnvironment = this.setNumericRanges(data, environment);
+            
             categories.forEach((cat, i) => {
                 let splitSurface = subSurfaces[i].splitHeader(this._headerRatio);
                 
                 let title = this._splitOnColumn + ': ' + cat;
                 Text.placeTitle(splitSurface.header, title);
                 
-                this._plotable.plot(groupedData[i].values, splitSurface.body, environment);
+                this._plotable.plot(groupedData[i].values, splitSurface.body, updatedEnvironment);
             });
+        }
+        
+        private setNumericRanges(data: Array<any>, environment: Environment): Environment {
+            let newEnvironment = environment;
+            this._plotable.getNumericColumns().forEach((col) => {
+                if (!environment.getNumericRange(col)) {
+                    let extent = d3.extent(data, d => +d[col]);
+                    newEnvironment = newEnvironment.setNumericRange(col, extent);
+                }
+            })
+            return newEnvironment;
         }
     }
 }

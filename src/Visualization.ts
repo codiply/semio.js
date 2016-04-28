@@ -40,6 +40,7 @@ namespace semio {
            
             let environment: Environment = new PlotEnvironment();
             
+            // TODO: do this only if a flag is set
             this._plotable.getCategoryColumns().forEach((column) => {
                 let values = d3.set(data.map(function(d) { return d[column]; })).values();
                 

@@ -38,6 +38,13 @@ module semio.chart {
             return this._categoryColumns;
         }
         
+        getNumericColumns(): Array<string> {
+            if (this._splitOnColumn) {
+                return [this._splitOnColumn];
+            }
+            return [];
+        }
+        
         add(plotable: Plotable): Plotable {
             return this;
         }

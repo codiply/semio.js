@@ -68,7 +68,7 @@ namespace semio.chart {
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
             let categories = groupedData.map((g) => g.key);
         
-            let subSurfaces = surface.splitRows(categories.length); 
+            let subSurfaces = surface.splitGrid(categories.length, this._maxColumns); 
             
             categories.forEach((cat, i) => {
                 this._plotable.plot(groupedData[i].values, subSurfaces[i], environment);

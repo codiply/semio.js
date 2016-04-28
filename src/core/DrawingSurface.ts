@@ -68,26 +68,30 @@ module semio.core {
             });
         }
         
-        splitGrid(n: number, maxColumns: number): Array<Array<Surface>> {
-            let nColumns = Math.min(n, maxColumns);
+        splitGrid(n: number, maxColumns: number): Array<Surface> {
+            let nColumns = Math.ceil(Math.sqrt(n));
+            if (maxColumns) {
+                nColumns = Math.min(nColumns, maxColumns);
+            }
             let nRows = Math.ceil(n / nColumns);
             
             let cellWidth = this._width / nColumns;
             let cellHeight = this._height / nRows;
             
-            return _.range(0, nRows).map((row) => {
-                return _.range(0, nColumns).filter((col) => {
-                    let i = row * nColumns + col;
-                    return i < n; 
-                }).map((col) => {
-                    let id = this.containerId + '_row_' + row.toString() + '_column_' + col.toString();
-                    this.svg.append('g').attr('id', id);
-                    return new DrawingSurface(id)
+            return _.flatMap(_.range(0, nRows), (row) => {
+                return _.range(0, nColumns)
+                    .filter((col) => {
+                        let i = row * nColumns + col;
+                        return i < n; 
+                    }).map((col) => {
+                        let id = this.containerId + '_row_' + row.toString() + '_column_' + col.toString();
+                        this.svg.append('g').attr('id', id);
+                        return new DrawingSurface(id)
                         .setHeight(cellHeight)
-                        .setWidth(cellHeight)
-                        .setX(col * cellHeight)
+                        .setWidth(cellWidth)
+                        .setX(col * cellWidth)
                         .setY(row * cellHeight);
-                });
+                    });
             });
         }
     }

@@ -5,6 +5,7 @@
 /// <reference path="../interfaces/Environment.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
+/// <reference path="../shape/Text.ts"/>
 
 namespace semio.chart {
     import DrawingSurface = semio.core.DrawingSurface;
@@ -12,11 +13,14 @@ namespace semio.chart {
     import Environment = semio.interfaces.Environment;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
+    import Text = semio.shape.Text;
 
-    export class SmallMultiple implements Plotable {        
+    export class SmallMultiple implements Plotable {
+        private _headerRatio: number = 0.1;     
         private _width: number;
         private _height: number;
         private _maxColumns: number;
+        private _splitOnColumn: string;
         private _categoricalAccessor: (d: any) => string;
         private _plotable: Plotable
         
@@ -41,6 +45,12 @@ namespace semio.chart {
             this._categoricalAccessor = function (d) {
                 return d[column].toString();
             };
+            this._splitOnColumn = column;
+            return this;
+        }
+        
+        headerRation(ratio: number): SmallMultiple {
+            this._headerRatio = ratio;
             return this;
         }
         
@@ -63,7 +73,12 @@ namespace semio.chart {
             let subSurfaces = surface.splitGrid(categories.length, this._maxColumns); 
             
             categories.forEach((cat, i) => {
-                this._plotable.plot(groupedData[i].values, subSurfaces[i], environment);
+                let splitSurface = subSurfaces[i].splitHeader(this._headerRatio);
+                
+                let title = this._splitOnColumn + ': ' + cat;
+                Text.placeTitle(splitSurface.header, title);
+                
+                this._plotable.plot(groupedData[i].values, splitSurface.body, environment);
             });
         }
     }

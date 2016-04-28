@@ -108,10 +108,12 @@ module semio.core {
             
             let headerSurface = new DrawingSurface(headerId)
                 .setWidth(this._width)
-                .setHeight(headerHeight);
+                .setHeight(headerHeight)
+                .setY(0);
             let bodySurface = new DrawingSurface(bodyId)
                 .setWidth(this._width)
-                .setHeight(bodyHeight);
+                .setHeight(bodyHeight)
+                .setY(headerHeight);
                 
             return {
                 header: headerSurface,

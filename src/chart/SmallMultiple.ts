@@ -56,13 +56,6 @@ namespace semio.chart {
         plot(data: Array<any>, surface: Surface, environment: Environment): void {
             if (!this._plotable)
                 return;
-                
-            this._plotable.getCategoryColumns().forEach((column) => {
-                let values = d3.set(data.map(function(d) { return d[column]; })).values();
-                environment.setCategoryValues(column, values); 
-                var color = d3.scale.category20().domain(values);
-                environment.setCategoryColours(column, color);
-            });
             
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
             let categories = groupedData.map((g) => g.key);

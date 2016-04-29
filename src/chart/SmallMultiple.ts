@@ -16,7 +16,9 @@ namespace semio.chart {
     import Text = semio.shape.Text;
 
     export class SmallMultiple implements Plotable {
-        private _headerRatio: number = 0.1;     
+        private _headerRatio: number = 0.1;    
+        private _betweenMarginRatioRight = 0.05;
+        private _betweenMarginRatioTop = 0.05;
         private _width: number;
         private _height: number;
         private _maxColumns: number;
@@ -49,8 +51,18 @@ namespace semio.chart {
             return this;
         }
         
-        headerRation(ratio: number): SmallMultiple {
+        headerRatio(ratio: number): SmallMultiple {
             this._headerRatio = ratio;
+            return this;
+        }
+        
+        beetweenMarginRatioRight(ratio: number): SmallMultiple {
+            this._betweenMarginRatioRight = ratio;
+            return this;
+        }
+        
+        betweenMarginRatioTop(ratio: number): SmallMultiple {
+            this._betweenMarginRatioTop = ratio;
             return this;
         }
         
@@ -75,7 +87,8 @@ namespace semio.chart {
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
             let categories = groupedData.map((g) => g.key);
         
-            let subSurfaces = surface.splitGrid(categories.length, this._maxColumns); 
+            let subSurfaces = surface.splitGrid(categories.length, 
+                this._maxColumns, this._betweenMarginRatioTop, this._betweenMarginRatioRight); 
             
             // TODO: set the colours for the categorical value if not already set.
             let updatedEnvironment = this.setNumericRanges(data, environment);

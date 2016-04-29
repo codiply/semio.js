@@ -99,7 +99,7 @@ namespace semio.chart {
                 let title = this._splitOnColumn + ': ' + cat;
                 Text.placeTitle(splitSurface.header, title);
                 
-                this._plotable.plot(groupedData[i].values, splitSurface.body, updatedEnvironment);
+                this._plotable.plot(groupedData[i].values, splitSurface.body, updatedEnvironment.setSlicedColumn(this._splitOnColumn, cat));
             });
         }
         

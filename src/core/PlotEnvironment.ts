@@ -8,7 +8,8 @@ module semio.core {
         private _categoryColours: { [column: string]: (value: string) => string } = { };
         private _categoryValues: { [column: string]: Array<string> } = { };
         private _numericRange: { [column: string]: [number, number] } = { };
-
+        private _slicedColumns: { [column: string]: string } = { };
+        
         setCategoryValues(column: string, values: Array<string>): Environment {
             let clone = this.clone();
             clone._categoryValues[column] = values.slice(0);
@@ -27,6 +28,12 @@ module semio.core {
             return this;
         }
         
+        setSlicedColumn(column: string, value: string): Environment {
+            let clone = this.clone();
+            clone._slicedColumns[column] = value;
+            return this;
+        }
+        
         getCategoryValues(): { [column: string]: Array<string>} {            
             return this._categoryValues;
         }
@@ -39,11 +46,16 @@ module semio.core {
             return this._numericRange[column];
         }
         
+        getSlicedColumns(): { [column: string]: string} {
+            return this._slicedColumns;
+        }
+        
         private clone(): PlotEnvironment {
             let clone = new PlotEnvironment();
             clone._categoryColours = _.clone(this._categoryColours);
             clone._categoryValues = _.clone(this._categoryValues);
             clone._numericRange = _.clone(this._numericRange);
+            clone._slicedColumns = _.clone(this._slicedColumns);
             return this;
         }
     }

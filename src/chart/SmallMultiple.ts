@@ -1,16 +1,16 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../core/DrawingSurface.ts"/>
-/// <reference path="../core/PlotEnvironment.ts"/>
-/// <reference path="../interfaces/Environment.ts"/>
+/// <reference path="../core/PlotContext.ts"/>
+/// <reference path="../interfaces/Context.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 /// <reference path="../shape/Text.ts"/>
 
 namespace semio.chart {
     import DrawingSurface = semio.core.DrawingSurface;
-    import PlotEnvironment = semio.core.PlotEnvironment;
-    import Environment = semio.interfaces.Environment;
+    import PlotContext = semio.core.PlotContext;
+    import Context = semio.interfaces.Context;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import Text = semio.shape.Text;
@@ -81,7 +81,7 @@ namespace semio.chart {
             return this;
         }
         
-        plot(data: Array<any>, surface: Surface, environment: Environment): void {
+        plot(data: Array<any>, surface: Surface, context: Context): void {
             if (!this._plotable)
                 return;
             
@@ -92,7 +92,7 @@ namespace semio.chart {
                 this._maxColumns, this._betweenMarginRatioTop, this._betweenMarginRatioRight); 
             
             // TODO: set the colours for the categorical value if not already set.
-            let updatedEnvironment = this.setNumericRanges(data, environment);
+            let updatedContext = this.setNumericRanges(data, context);
             
             categories.forEach((cat, i) => {
                 let splitSurface = subSurfaces[i].splitHeader(this._headerRatio);
@@ -100,19 +100,19 @@ namespace semio.chart {
                 let title = this._splitOnColumn + ': ' + cat;
                 Text.placeTitle(splitSurface.header, title);
                 
-                this._plotable.plot(groupedData[i].values, splitSurface.body, updatedEnvironment.setSlicedColumn(this._splitOnColumn, cat));
+                this._plotable.plot(groupedData[i].values, splitSurface.body, updatedContext.setSlicedColumn(this._splitOnColumn, cat));
             });
         }
         
-        private setNumericRanges(data: Array<any>, environment: Environment): Environment {
-            let newEnvironment = environment;
+        private setNumericRanges(data: Array<any>, context: Context): Context {
+            let newContext = context;
             this._plotable.getNumericColumns().forEach((col) => {
-                if (!environment.getNumericRange(col)) {
+                if (!context.getNumericRange(col)) {
                     let extent = d3.extent(data, d => +d[col]);
-                    newEnvironment = newEnvironment.setNumericRange(col, extent);
+                    newContext = newContext.setNumericRange(col, extent);
                 }
             })
-            return newEnvironment;
+            return newContext;
         }
     }
 }

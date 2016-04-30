@@ -1,9 +1,9 @@
 module semio.interfaces {
-    export interface Environment {
-        setCategoryColours(column: string, colours: (value: string) => string): Environment;
-        setCategoryValues(column: string, values: Array<string>): Environment;
-        setNumericRange(column: string, range: [number, number]): Environment;
-        setSlicedColumn(column: string, value: string): Environment
+    export interface Context {
+        setCategoryColours(column: string, colours: (value: string) => string): Context;
+        setCategoryValues(column: string, values: Array<string>): Context;
+        setNumericRange(column: string, range: [number, number]): Context;
+        setSlicedColumn(column: string, value: string): Context
         
         // TODO: do not return the dictionary, pass in the column and return one value.
         getCategoryColours(): { [column: string]: (value: string) => string };

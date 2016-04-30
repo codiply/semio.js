@@ -1,11 +1,11 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
-/// <reference path="../interfaces/Environment.ts"/>
+/// <reference path="../interfaces/Context.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 
 module semio.chart {
-    import Environment = semio.interfaces.Environment;
+    import Context = semio.interfaces.Context;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
@@ -49,7 +49,7 @@ module semio.chart {
             return this;
         }
         
-        plot(data: Array<any>, surface: Surface, environment: Environment): void {
+        plot(data: Array<any>, surface: Surface, context: Context): void {
             
         }
     }

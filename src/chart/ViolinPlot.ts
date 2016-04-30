@@ -1,12 +1,12 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
-/// <reference path="../interfaces/Environment.ts"/>
+/// <reference path="../interfaces/Context.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 /// <reference path="../shape/VerticalViolin.ts"/>
 
 module semio.chart {
-    import Environment = semio.interfaces.Environment;
+    import Context = semio.interfaces.Context;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
@@ -53,21 +53,21 @@ module semio.chart {
             return this;
         }
         
-        plot(data: Array<any>, surface: Surface, environment: Environment): void {
+        plot(data: Array<any>, surface: Surface, context: Context): void {
             if (!data)
                 return;
             
             let plotableWidth = (1 - 2 * this.yMargin) * surface.getWidth();
-            let environmentCategories = environment ? 
-                                        environment.getCategoryValues()[this.splitOnColumn] : 
+            let contextCategories = context ? 
+                                        context.getCategoryValues()[this.splitOnColumn] : 
                                         undefined;
-            let categories = environmentCategories ? 
-                             environmentCategories : 
+            let categories = contextCategories ? 
+                             contextCategories : 
                              d3.set(data.map(this.categoricalAccessor)).values();     
             let categoryWidth = plotableWidth / categories.length;
             
-            let environmentColours = environment ? environment.getCategoryColours()[this.splitOnColumn] : undefined;
-            let categoryColor = environmentColours ? environmentColours : d3.scale.category20().domain(categories);
+            let contextColours = context ? context.getCategoryColours()[this.splitOnColumn] : undefined;
+            let categoryColor = contextColours ? contextColours : d3.scale.category20().domain(categories);
             let xScale = d3.scale.ordinal()
                 .domain(categories)
                 .rangePoints([this.xMargin * surface.getWidth() + categoryWidth / 2, 
@@ -77,8 +77,8 @@ module semio.chart {
                 .attr('transform', 'translate(0,' + ((1 - this.yMargin * 0.8) * surface.getHeight()) + ')')
                 .call(xAxis);
             
-            let environmentExtent = environment.getNumericRange(this.valueColumn);
-            let yExtent = environmentExtent ? environmentExtent : d3.extent(data, this.numericAccessor);
+            let contextExtent = context.getNumericRange(this.valueColumn);
+            let yExtent = contextExtent ? contextExtent : d3.extent(data, this.numericAccessor);
             let yScale = d3.scale.linear()
                 .domain(yExtent)
                 .range([(1 - this.yMargin) * surface.getHeight(), this.yMargin * surface.getHeight()]);

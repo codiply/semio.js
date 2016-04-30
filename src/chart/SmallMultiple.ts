@@ -82,7 +82,7 @@ namespace semio.chart {
         }
         
         plot(data: Array<any>, surface: Surface, context: Context): void {
-            if (!this._plotable)
+            if (!data || !this._plotable)
                 return;
             
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
@@ -92,7 +92,7 @@ namespace semio.chart {
                 this._maxColumns, this._betweenMarginRatioTop, this._betweenMarginRatioRight); 
             
             // TODO: set the colours for the categorical value if not already set.
-            let updatedContext = this.setNumericRanges(data, context);
+            let updatedContext = this.contextWithNumericRanges(data, context);
             
             categories.forEach((cat, i) => {
                 let splitSurface = subSurfaces[i].splitHeader(this._headerRatio);
@@ -100,11 +100,12 @@ namespace semio.chart {
                 let title = this._splitOnColumn + ': ' + cat;
                 Text.placeTitle(splitSurface.header, title);
                 
-                this._plotable.plot(groupedData[i].values, splitSurface.body, updatedContext.setSlicedColumn(this._splitOnColumn, cat));
+                let updatedContextWithSlice = updatedContext.setSlicedColumn(this._splitOnColumn, cat);
+                this._plotable.plot(groupedData[i].values, splitSurface.body, updatedContextWithSlice);
             });
         }
         
-        private setNumericRanges(data: Array<any>, context: Context): Context {
+        private contextWithNumericRanges(data: Array<any>, context: Context): Context {
             let newContext = context;
             this._plotable.getNumericColumns().forEach((col) => {
                 if (!context.getNumericRange(col)) {

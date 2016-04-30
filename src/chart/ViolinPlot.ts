@@ -12,8 +12,6 @@ module semio.chart {
     import VerticalViolin = semio.shape.VerticalViolin;
     
     export class ViolinPlot implements Plotable {
-        private _xMargin: number = 0.1;
-        private _yMargin: number = 0.1;
         
         private _valueColumn: string;
         private _splitOnColumn: string;
@@ -38,7 +36,7 @@ module semio.chart {
         } 
         
         getCategoricalColumns(): Array<string> {
-            return [this._splitOnColumn];
+            return [];
         }
         
         getNumericColumns(): Array<string> {
@@ -57,48 +55,18 @@ module semio.chart {
             if (!data)
                 return;
             
-            let plotableWidth = (1 - 2 * this._yMargin) * surface.getWidth();
-            let contextCategories = context ? 
-                                        context.getCategoryValues()[this._splitOnColumn] : 
-                                        undefined;
-            let categories = contextCategories ? 
-                             contextCategories : 
-                             d3.set(data.map(this._categoricalAccessor)).values();     
-            let categoryWidth = plotableWidth / categories.length;
+            var yScale = context.getYScale(this._valueColumn);
+            var category = context.getSlicedColumns()[this._splitOnColumn];
+            var categoryColor = context.getCategoryColours()[this._splitOnColumn](category);
             
-            let contextColours = context ? context.getCategoryColours()[this._splitOnColumn] : undefined;
-            let categoryColor = contextColours ? contextColours : d3.scale.category20().domain(categories);
-            let xScale = d3.scale.ordinal()
-                .domain(categories)
-                .rangePoints([this._xMargin * surface.getWidth() + categoryWidth / 2, 
-                              (1 - this._xMargin) * surface.getWidth() - categoryWidth / 2]);
-            let xAxis = d3.svg.axis().scale(xScale).orient('bottom');
-            let xAxisGroup = surface.svg.append('g')
-                .attr('transform', 'translate(0,' + ((1 - this._yMargin * 0.8) * surface.getHeight()) + ')')
-                .call(xAxis);
-            
-            let contextExtent = context.getNumericRange(this._valueColumn);
-            let yExtent = contextExtent ? contextExtent : d3.extent(data, this._numericAccessor);
-            let yScale = d3.scale.linear()
-                .domain(yExtent)
-                .range([(1 - this._yMargin) * surface.getHeight(), this._yMargin * surface.getHeight()]);
-            let yAxis = d3.svg.axis().scale(yScale).orient('left');
-            let yAxisGroup = surface.svg.append('g')
-                .attr('transform', 'translate(' + (this._yMargin * surface.getHeight()) + ',0)')
-                .call(yAxis);
-                           
-            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
-           
-            _.forOwn(groupedData, (group) => {
-                let violin = new VerticalViolin(group.values);
-                violin.cx(xScale(group.key))
+            let violin = new VerticalViolin(data);
+                violin.cx(surface.getWidth() / 2)
                     .yScale(yScale)
                     .yAccessor(this._numericAccessor)
-                    .width(0.8 * categoryWidth)
+                    .width(0.9 * surface.getWidth())
                     .cut(1)
-                    .fill(categoryColor(group.key));
-                violin.draw(surface.svg);
-            });
+                    .fill(categoryColor);
+            violin.draw(surface.svg);
         }
     }
 }

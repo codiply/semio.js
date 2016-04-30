@@ -133,8 +133,15 @@ module semio.chart {
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
            
             _.forOwn(groupedData, (group) => {
-                let updatedContext = context.setSlicedColumn(this._splitOnColumn, group.key);
-                let data = group.values;
+                let subSurface = surface.addCenteredColumn(
+                    this._splitOnColumn + '_' + group.key, xScale(group.key), categoryWidth);
+                let updatedContext = context
+                    .setSlicedColumn(this._splitOnColumn, group.key)
+                    .setYScale(this._valueColumn, yScale);             
+                
+                this._plotables.forEach((pl) => {
+                    pl.plot(group.values, subSurface, updatedContext)
+                })
             });
         }
     }

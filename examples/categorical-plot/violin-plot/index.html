@@ -2,22 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Panel Chart - Violin Plot Example</title>
+    <title>Example: Categorical Plot - Violins</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
-    <script src="../semio.js"></script>
+    <script src="../../semio.js"></script>
     <script type="text/javascript">
-        d3.csv('../data/auto_mpg.csv', function(data) {
-            var violinPlot = new semio.chart.ViolinPlot()
+        d3.csv('../../data/auto_mpg.csv', function(data) {
+            var categoricalPlot = new semio.chart.CategoricalPlot()
                 .value('acceleration')
                 .splitOn('cylinders');
-            var smallMultiple = new semio.chart.SmallMultiple()
-                .splitOn('origin')
-                .add(violinPlot);
             new semio.Visualization('visualizationContainer')
                 .width(800)
                 .height(600)
-                .add(smallMultiple)
+                .add(categoricalPlot)
                 .plot(data);
         });
     </script>

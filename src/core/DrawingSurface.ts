@@ -13,7 +13,7 @@ module semio.core {
         
         svg: d3.Selection<any>;
         
-        constructor(private containerId: string) { 
+        constructor(public containerId: string) { 
             this.svg = d3.select('#' + containerId)
                          .append('svg');
         }
@@ -124,6 +124,32 @@ module semio.core {
                 header: headerSurface,
                 body: bodySurface
             };
+        }
+        
+        addCenteredColumn(idSuffix: string, cx: number, width: number): Surface {
+            let id = this.containerId + '_column_' + idSuffix;
+            
+            this.svg.append('g').attr('id', id);
+            
+            let surface = new DrawingSurface(id)
+                .setHeight(this._height)
+                .setWidth(width)
+                .setX(cx - width / 2);
+                
+            return surface;
+        }
+        
+        addCenteredRow(idSuffix: string, cy: number, height: number): Surface {
+            let id = this.containerId + '_row_' + idSuffix;
+            
+            this.svg.append('g').attr('id', id);
+            
+            let surface = new DrawingSurface(id)
+                .setHeight(height)
+                .setWidth(this._width)
+                .setY(cy - height / 2);
+                
+            return surface;
         }
     }
 }

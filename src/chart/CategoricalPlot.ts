@@ -10,12 +10,15 @@ module semio.chart {
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
     
-    export class CategoricalPlot implements Plotable {        
+    export class CategoricalPlot implements Plotable {       
         private _valueColumn: string;
         private _splitOnColumn: string;
         
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
+        
+        private _xAxisHeightRatio: number = 0.1;
+        private _yAxisWidthRatio: number = 0.1;
         
         private _plotables: Array<Plotable> = [];
 
@@ -34,6 +37,16 @@ module semio.chart {
             };
             return this;
         } 
+        
+        xAxisHeightRatio(ratio: number): CategoricalPlot {
+            this._xAxisHeightRatio = ratio;
+            return this;
+        }
+        
+        yAxisWidthRatio(ratio: number): CategoricalPlot {
+            this._yAxisWidthRatio = ratio;
+            return this;
+        }
         
         getCategoricalColumns(): Array<string> {
             let columns = _.flatMap(this._plotables, (p) => p.getCategoricalColumns());
@@ -56,6 +69,37 @@ module semio.chart {
         plot(data: Array<any>, surface: Surface, context: Context): void {
             if (!data || !this._plotables)
                 return;
+                
+            let plotableWidth = (1 - this._yAxisWidthRatio) * surface.getWidth();
+            
+            let categories = context.getCategoryValues()[this._splitOnColumn] || d3.set(data.map(this._categoricalAccessor)).values();     
+            // TODO: extract the colour scale creation to a helper that can handle more than 20 colours
+            let categoryColor = context.getCategoryColours()[this._splitOnColumn] || d3.scale.category20().domain(categories);
+            let categoryWidth = plotableWidth / categories.length;
+            
+            let xScale = d3.scale.ordinal()
+                .domain(categories)
+                .rangePoints([this._yAxisWidthRatio * surface.getWidth() + categoryWidth / 2, 
+                              surface.getWidth() - categoryWidth / 2]);
+            let xAxis = d3.svg.axis().scale(xScale).orient('bottom');
+            let xAxisGroup = surface.svg.append('g')
+                .attr('transform', 'translate(0,' + ((1 - this._xAxisHeightRatio) * surface.getHeight()) + ')')
+                .call(xAxis);
+            
+            let yExtent = context.getNumericRange(this._valueColumn) || d3.extent(data, this._numericAccessor);
+            let yScale = d3.scale.linear()
+                .domain(yExtent)
+                .range([(1 - this._xAxisHeightRatio) * surface.getHeight(), 0]);
+            let yAxis = d3.svg.axis().scale(yScale).orient('left');
+            let yAxisGroup = surface.svg.append('g')
+                .attr('transform', 'translate(' + (this._xAxisHeightRatio * surface.getHeight()) + ',0)')
+                .call(yAxis);
+                           
+            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
+           
+            _.forOwn(groupedData, (group) => {
+
+            });
         }
     }
 }

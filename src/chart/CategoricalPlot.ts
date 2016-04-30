@@ -10,15 +10,17 @@ module semio.chart {
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
     
-    export class CategoricalPlot implements Plotable {
-        private _xMargin: number = 0.1;
-        private _yMargin: number = 0.1;
+    export class CategoricalPlot implements Plotable {        
+        private _valueColumn: string;
         private _splitOnColumn: string;
-        private _categoricalAccessor: (d: any) => string;
+        
         private _numericAccessor: (d: any) => number;
-        private _categoryColumns: Array<string> = [];
+        private _categoricalAccessor: (d: any) => string;
+        
+        private _plotables: Array<Plotable> = [];
 
         value(column: string): CategoricalPlot {
+            this._valueColumn = column;
             this._numericAccessor = function (d) {
                 return +d[column];
             };
@@ -26,16 +28,17 @@ module semio.chart {
         } 
         
         splitOn(column: string): CategoricalPlot {
+            this._splitOnColumn = column;
             this._categoricalAccessor = function (d) {
                 return d[column].toString();
             };
-            this._splitOnColumn = column;
-            this._categoryColumns.push(column);
             return this;
         } 
         
-        getCategoryColumns(): Array<string> {
-            return this._categoryColumns;
+        getCategoricalColumns(): Array<string> {
+            let columns = _.flatMap(this._plotables, (p) => p.getCategoricalColumns());
+            columns.push(this._splitOnColumn);
+            return columns;
         }
         
         getNumericColumns(): Array<string> {
@@ -46,6 +49,7 @@ module semio.chart {
         }
         
         add(plotable: Plotable): Plotable {
+            this._plotables.push(plotable);
             return this;
         }
         

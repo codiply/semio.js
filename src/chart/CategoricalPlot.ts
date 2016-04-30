@@ -77,11 +77,14 @@ module semio.chart {
             if (!data || !this._plotables)
                 return;
                 
-            // Add background to plot area
             let plotAreaX = this._yAxisWidthRatio * surface.getWidth();
             let plotAreaY = 0;
             let plotAreaWidth = (1 - this._yAxisWidthRatio) * surface.getWidth();
             let plotAreaHeight = (1 - this._xAxisHeightRatio) * surface.getHeight();
+            let xAxisAreaHeight = this._xAxisHeightRatio * surface.getHeight();
+            let yAxisAreaWidth = this._yAxisWidthRatio * surface.getWidth();
+ 
+            // Add background to plot area
             surface.svg.append('g')
                 .append('rect')
                 .attr('width', plotAreaWidth)
@@ -100,7 +103,10 @@ module semio.chart {
                 .domain(categories)
                 .rangePoints([plotAreaX + categoryWidth / 2, 
                               plotAreaX + plotAreaWidth - categoryWidth / 2]);
-            let xAxis = d3.svg.axis().scale(xScale).orient('bottom');
+            let xAxis = d3.svg.axis()
+                .scale(xScale)
+                .orient('bottom')
+                .tickSize(0);
             let xAxisGroup = surface.svg.append('g')
                 .attr('transform', 'translate(0,' + plotAreaHeight + ')')
                 .call(xAxis);
@@ -110,10 +116,19 @@ module semio.chart {
             let yScale = d3.scale.linear()
                 .domain(yExtent)
                 .range([plotAreaY + plotAreaHeight, plotAreaY]);
-            let yAxis = d3.svg.axis().scale(yScale).orient('left');
+            let yAxis = d3.svg.axis()
+                .scale(yScale)
+                .orient('left')
+                .tickSize(-plotAreaWidth, 0);
             let yAxisGroup = surface.svg.append('g')
                 .attr('transform', 'translate(' + plotAreaX + ',0)')
                 .call(yAxis);
+            yAxisGroup.selectAll('.tick line')
+                .style({
+                    'stroke' : 'white',
+                    'stroke-width' : 2
+                });
+
                            
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
            

@@ -54,7 +54,8 @@ module semio.chart {
         }
         
         plot(data: Array<any>, surface: Surface, context: Context): void {
-            
+            if (!data || !this._plotables)
+                return;
         }
     }
 }

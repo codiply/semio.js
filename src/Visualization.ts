@@ -12,8 +12,8 @@ namespace semio {
     import Plotable = semio.interfaces.Plotable;
 
     export class Visualization {        
-        private _width: number;
-        private _height: number;
+        private _width: number = 800;
+        private _height: number = 800;
         private _plotable: Plotable;
         
         constructor(private containerId: string) { }
@@ -34,13 +34,15 @@ namespace semio {
         }
         
         plot(data: Array<any>): void {
+            if (!data || !this._plotable)
+                return;
+            
             var surface = new DrawingSurface(this.containerId)
                 .setWidth(this._width)
                 .setHeight(this._height);
            
             let context: Context = new PlotContext();
             
-            // TODO: do this only if a flag is set
             this._plotable.getCategoricalColumns().forEach((column) => {
                 let values = d3.set(data.map(function(d) { return d[column]; })).values();
                 

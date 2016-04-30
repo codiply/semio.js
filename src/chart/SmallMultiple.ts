@@ -67,9 +67,10 @@ namespace semio.chart {
         }
         
         getCategoryColumns(): Array<string> {
-            return this._plotable.getCategoryColumns();
+            let columns = this._plotable.getCategoryColumns().slice(0);
+            columns.push(this._splitOnColumn);
+            return columns;
         }
-        
         
         getNumericColumns(): Array<string> {
             return this._plotable.getNumericColumns();

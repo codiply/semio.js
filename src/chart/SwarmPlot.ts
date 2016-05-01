@@ -52,10 +52,12 @@ module semio.chart {
             if (!data)
                 return;
             
-            var yScale = context.getYScale(this._valueColumn);
-            var category = context.getSlicedColumns()[this._colorColumn];
-            var categoryColor = context.getCategoryColours()[this._colorColumn](category);
+            let swarm = new semio.shape.VerticalSwarm()
+                .color(this._colorColumn)
+                .value(this._valueColumn)
+                .diameter(10);
             
+            swarm.draw(data, surface, context);
         }
     }
 }

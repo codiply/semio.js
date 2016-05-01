@@ -30,6 +30,9 @@ module semio.chart {
         } 
         
         getCategoricalColumns(): Array<string> {
+            if (this._colorColumn) {
+                return [this._colorColumn];
+            }
             return [];
         }
         

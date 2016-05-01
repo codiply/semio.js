@@ -1,11 +1,13 @@
 /// <reference path="../typings/d3/d3.d.ts"/>
 /// <reference path="../typings/lodash/lodash.d.ts"/>
+/// <reference path="core/ColorPalette.ts"/>
 /// <reference path="core/DrawingSurface.ts"/>
 /// <reference path="core/PlotContext.ts"/>
 /// <reference path="interfaces/Context.ts"/>
 /// <reference path="interfaces/Plotable.ts"/>
 
 namespace semio {
+    import ColorPalette = semio.core.ColorPalette;
     import DrawingSurface = semio.core.DrawingSurface;
     import PlotContext = semio.core.PlotContext;
     import Context = semio.interfaces.Context;
@@ -48,9 +50,8 @@ namespace semio {
                 
                 context = context.setCategoryValues(column, values); 
                 
-                // TODO: Handle more than 20 colours
-                var color = d3.scale.category20().domain(values);
-                context = context.setCategoryColours(column, color);
+                var colors = ColorPalette.qualitative(values);
+                context = context.setCategoryColours(column, colors);
             });            
             
             this._plotable.plot(data, surface, context);

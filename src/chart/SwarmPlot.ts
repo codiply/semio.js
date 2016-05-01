@@ -10,11 +10,10 @@ module semio.chart {
     import Surface = semio.interfaces.Surface;
     
     export class SwarmPlot implements Plotable {
-        
         private _valueColumn: string;
         private _colorColumn: string;
-        
         private _numericAccessor: (d: any) => number;
+        private _diameter: number = 5;
 
         value(column: string): SwarmPlot {
             this._valueColumn = column;
@@ -28,6 +27,11 @@ module semio.chart {
             this._colorColumn = column;
             return this;
         } 
+        
+        diameter(d: number): SwarmPlot {
+            this._diameter = d;
+            return this;
+        }
         
         getCategoricalColumns(): Array<string> {
             if (this._colorColumn) {
@@ -55,7 +59,7 @@ module semio.chart {
             let swarm = new semio.shape.VerticalSwarm()
                 .color(this._colorColumn)
                 .value(this._valueColumn)
-                .diameter(10);
+                .diameter(this._diameter);
             
             swarm.draw(data, surface, context);
         }

@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Example: Categorical Plot - Swarms</title>
+    <title>Example: Categorical Plot - Violins and Swarms</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
     <script src="../../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../../data/auto_mpg.csv', function(data) {
+            var violinPlot = new semio.chart.ViolinPlot()
+                .value('acceleration')
+                .splitOn('cylinders');
             var swarmPlot = new semio.chart.SwarmPlot()
                 .value('acceleration')
-                .color('cylinders')
-                .diameter(10);
+                .color('origin')
+                .diameter(7);
             var categoricalPlot = new semio.chart.CategoricalPlot()
                 .value('acceleration')
-                .splitOn('origin')
+                .splitOn('cylinders')
+                .add(violinPlot)
                 .add(swarmPlot);
             new semio.Visualization('visualizationContainer')
                 .width(800)

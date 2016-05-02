@@ -62,8 +62,8 @@ module semio.chart {
         }
         
         getNumericColumns(): Array<string> {
-            if (this._splitOnColumn) {
-                return [this._splitOnColumn];
+            if (this._valueColumn) {
+                return [this._valueColumn];
             }
             return [];
         }
@@ -128,7 +128,6 @@ module semio.chart {
                     'stroke' : 'white',
                     'stroke-width' : 2
                 });
-
                            
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
            

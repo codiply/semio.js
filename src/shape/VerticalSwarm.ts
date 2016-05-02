@@ -23,7 +23,7 @@ module semio.shape {
         }
         placeNextTo(p: SwarmPoint, diameter: number): Array<SwarmPoint> { 
             let dy = p.y - this.y;
-            let dx = Math.sqrt(diameter * diameter - dy * dy) * 1.05;
+            let dx = Math.sqrt(diameter * diameter - dy * dy) * 1.1;
             return [this.setX(p.x - dx), this.setX(p.x + dx)];
         }
     }

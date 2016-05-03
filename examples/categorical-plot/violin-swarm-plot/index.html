@@ -13,6 +13,7 @@
                 .splitOn('cylinders');
             var swarmPlot = new semio.chart.SwarmPlot()
                 .value('acceleration')
+                .splitOn('cylinders')
                 .color('origin')
                 .diameter(7);
             var categoricalPlot = new semio.chart.CategoricalPlot()

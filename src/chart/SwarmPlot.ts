@@ -11,8 +11,10 @@ module semio.chart {
     
     export class SwarmPlot implements Plotable {
         private _valueColumn: string;
+        private _splitOnColumn: string;
         private _colorColumn: string;
         private _numericAccessor: (d: any) => number;
+        private _categoricalAccessor: (d: any) => string;
         private _diameter: number = 5;
 
         value(column: string): SwarmPlot {
@@ -21,8 +23,15 @@ module semio.chart {
                 return +d[column];
             };
             return this;
-        } 
+        }
         
+        splitOn(column: string): SwarmPlot {
+            this._splitOnColumn = column;
+            this._categoricalAccessor = function (d) {
+                return d[column].toString();
+            };
+            return this;
+        } 
         color(column: string): SwarmPlot {
             this._colorColumn = column;
             return this;
@@ -56,12 +65,29 @@ module semio.chart {
             if (!data)
                 return;
             
-            let swarm = new semio.shape.VerticalSwarm()
-                .color(this._colorColumn)
-                .value(this._valueColumn)
-                .diameter(this._diameter);
+            var yScale = context.getYScale(this._valueColumn);
+            var xScale = context.getXScale(this._splitOnColumn);
+            var categories = context.getCategoryValues()[this._splitOnColumn];
             
-            swarm.draw(data, surface, context);
+            var categoryWidth = surface.getWidth() / categories.length;
+            
+            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
+
+            _.forOwn(groupedData, (group) => {
+                if (group.values) {
+                    var category = group.key;                
+                    
+                    let subSurface = surface
+                        .addCenteredColumn('_swarm_' + category, xScale(category), categoryWidth);
+                    
+                    let swarm = new semio.shape.VerticalSwarm()
+                        .color(this._colorColumn)
+                        .value(this._valueColumn)
+                        .diameter(this._diameter);
+            
+                    swarm.draw(group.values, subSurface, context);
+                }
+            });
         }
     }
 }

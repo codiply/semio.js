@@ -56,17 +56,28 @@ module semio.chart {
                 return;
             
             var yScale = context.getYScale(this._valueColumn);
-            var category = context.getSlicedColumns()[this._splitOnColumn];
-            var categoryColor = context.getCategoryColours()[this._splitOnColumn](category);
+            var xScale = context.getXScale(this._splitOnColumn);
+            var categories = context.getCategoryValues()[this._splitOnColumn];
             
-            let violin = new VerticalViolin(data);
-                violin.cx(surface.getWidth() / 2)
-                    .yScale(yScale)
-                    .yAccessor(this._numericAccessor)
-                    .width(0.9 * surface.getWidth())
-                    .cut(1)
-                    .fill(categoryColor);
-            violin.draw(surface.svg);
+            var categoryWidth = surface.getWidth() / categories.length;
+            
+            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
+
+            _.forOwn(groupedData, (group) => {
+                if (group.values) {
+                    var category = group.key;
+                    var categoryColor = context.getCategoryColours()[this._splitOnColumn](category);                 
+                    
+                    let violin = new VerticalViolin(group.values);
+                    violin.cx(xScale(category))
+                        .yScale(yScale)
+                        .yAccessor(this._numericAccessor)
+                        .width(0.9 * categoryWidth)
+                        .cut(1)
+                        .fill(categoryColor);
+                    violin.draw(surface.svg);
+                }
+            });
         }
     }
 }

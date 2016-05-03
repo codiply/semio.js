@@ -132,8 +132,8 @@ module semio.core {
             this.svg.append('g').attr('id', id);
             
             let surface = new DrawingSurface(id)
-                .setHeight(this._height)
                 .setWidth(width)
+                .setHeight(this._height)
                 .setX(cx - width / 2);
                 
             return surface;
@@ -145,10 +145,24 @@ module semio.core {
             this.svg.append('g').attr('id', id);
             
             let surface = new DrawingSurface(id)
-                .setHeight(height)
                 .setWidth(this._width)
+                .setHeight(height)
                 .setY(cy - height / 2);
                 
+            return surface;
+        }
+        
+        addSurface(idSuffix: string, x: number, y: number, width: number, height: number): Surface {
+            let id = this.containerId + '_' + idSuffix;
+            
+            this.svg.append('g').attr('id', id);
+            
+            let surface = new DrawingSurface(id)
+                .setWidth(width)
+                .setHeight(height)
+                .setX(x)
+                .setY(y);
+            
             return surface;
         }
     }

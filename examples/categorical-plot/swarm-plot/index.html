@@ -10,6 +10,7 @@
         d3.csv('../../data/auto_mpg.csv', function(data) {
             var swarmPlot = new semio.chart.SwarmPlot()
                 .value('acceleration')
+                .splitOn('origin')
                 .color('cylinders')
                 .diameter(10);
             var categoricalPlot = new semio.chart.CategoricalPlot()

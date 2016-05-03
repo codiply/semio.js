@@ -74,7 +74,7 @@ module semio.chart {
         }
         
         plot(data: Array<any>, surface: Surface, context: Context): void {
-            if (!data || !this._plotables)
+            if (!data)
                 return;
                 
             let plotAreaX = this._yAxisWidthRatio * surface.getWidth();
@@ -93,24 +93,6 @@ module semio.chart {
                 .attr('y', plotAreaY)
                 .attr('fill', this._background);
             
-            // Draw x axis
-            let categories = context.getCategoryValues()[this._splitOnColumn] || d3.set(data.map(this._categoricalAccessor)).values();     
-            // TODO: extract the colour scale creation to a helper that can handle more than 20 colours
-            let categoryColor = context.getCategoryColours()[this._splitOnColumn] || d3.scale.category20().domain(categories);
-            let categoryWidth = plotAreaWidth / categories.length;
-            
-            let xScale = d3.scale.ordinal()
-                .domain(categories)
-                .rangePoints([plotAreaX + categoryWidth / 2, 
-                              plotAreaX + plotAreaWidth - categoryWidth / 2]);
-            let xAxis = d3.svg.axis()
-                .scale(xScale)
-                .orient('bottom')
-                .tickSize(0);
-            let xAxisGroup = surface.svg.append('g')
-                .attr('transform', 'translate(0,' + plotAreaHeight + ')')
-                .call(xAxis);
-            
             // Draw y axis
             let yExtent = context.getNumericRange(this._valueColumn) || d3.extent(data, this._numericAccessor);
             let yScale = d3.scale.linear()
@@ -128,20 +110,31 @@ module semio.chart {
                     'stroke' : 'white',
                     'stroke-width' : 2
                 });
-                           
-            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
-           
-            _.forOwn(groupedData, (group) => {
-                let subSurface = surface.addCenteredColumn(
-                    this._splitOnColumn + '_' + group.key, xScale(group.key), categoryWidth);
-                let updatedContext = context
-                    .setSlicedColumn(this._splitOnColumn, group.key)
-                    .setYScale(this._valueColumn, yScale);             
-                
-                this._plotables.forEach((pl) => {
-                    pl.plot(group.values, subSurface, updatedContext)
-                })
-            });
+            
+            let updatedContext = context.setYScale(this._valueColumn, yScale);
+            
+            // Draw x axis
+            let categories = context.getCategoryValues()[this._splitOnColumn];
+            // TODO: extract the colour scale creation to a helper that can handle more than 20 colours
+            let categoryColor = context.getCategoryColours()[this._splitOnColumn] || d3.scale.category20().domain(categories);
+            let categoryWidth = plotAreaWidth / categories.length;
+            
+            let xScale = d3.scale.ordinal()
+                .domain(categories)
+                .rangePoints([plotAreaX + categoryWidth / 2, 
+                              plotAreaX + plotAreaWidth - categoryWidth / 2]);
+            let xAxis = d3.svg.axis()
+                .scale(xScale)
+                .orient('bottom')
+                .tickSize(0);
+            let xAxisGroup = surface.svg.append('g')
+                .attr('transform', 'translate(0,' + plotAreaHeight + ')')
+                .call(xAxis);
+                          
+            updatedContext = updatedContext.setXScale(this._splitOnColumn, (x: string) => xScale(x) - plotAreaX); 
+                          
+            let plotSurface = surface.addSurface('plotablearea', plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
+            this._plotables.forEach((pl) => pl.plot(data, plotSurface, updatedContext))
         }
     }
 }

@@ -112,6 +112,8 @@ module semio.chart {
                     'stroke' : 'white',
                     'stroke-width' : 2
                 });
+            yAxisGroup.selectAll('.tick text')
+                .attr('font-size', yAxisAreaWidth / 3)
             surface.svg.append('svg').append('text')
                 .attr('font-size', yAxisAreaWidth / 3)
                 .attr('text-anchor', 'middle')
@@ -137,6 +139,8 @@ module semio.chart {
             let xAxisGroup = surface.svg.append('g')
                 .attr('transform', 'translate(0,' + plotAreaHeight + ')')
                 .call(xAxis);
+            xAxisGroup.selectAll('.tick text')
+                .attr('font-size', xAxisAreaHeight / 3)
             surface.svg.append('g').append('text')
                 .attr('font-size', xAxisAreaHeight / 3)
                 .attr('text-anchor', 'middle')  

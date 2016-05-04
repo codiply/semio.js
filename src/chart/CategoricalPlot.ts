@@ -112,6 +112,11 @@ module semio.chart {
                     'stroke' : 'white',
                     'stroke-width' : 2
                 });
+            surface.svg.append('svg').append('text')
+                .attr('font-size', yAxisAreaWidth / 3)
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'translate(' + yAxisAreaWidth / 4 + ',' + plotAreaHeight / 2 + ')rotate(-90)')
+                .text(this._valueColumn);
             
             let updatedContext = context.setYScale(this._valueColumn, yScale);
             
@@ -132,6 +137,11 @@ module semio.chart {
             let xAxisGroup = surface.svg.append('g')
                 .attr('transform', 'translate(0,' + plotAreaHeight + ')')
                 .call(xAxis);
+            surface.svg.append('g').append('text')
+                .attr('font-size', xAxisAreaHeight / 3)
+                .attr('text-anchor', 'middle')  
+                .attr('transform', 'translate(' + (plotAreaX + plotAreaWidth / 2) + ',' + (plotAreaHeight + xAxisAreaHeight * 3 / 4) + ')')
+                .text(this._splitOnColumn);
                           
             updatedContext = updatedContext.setXScale(this._splitOnColumn, (x: string) => xScale(x) - plotAreaX); 
                           

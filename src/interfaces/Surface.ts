@@ -18,9 +18,9 @@ module semio.interfaces {
         getWidth(): number;
         getHeight(): number;
         
-        splitRows(n: number, marginRatioTop: number): Array<Surface>;
-        splitColumns(n: number, marginRationRight: number): Array<Surface>;
-        splitGrid(n: number, maxColumns: number, marginRatioTop: number, marginRatioRight: number): Array<Surface>;
+        splitRows(n: number, horizontalSpacingRatio: number): Array<Surface>;
+        splitColumns(n: number, verticalSpacingRatio: number): Array<Surface>;
+        splitGrid(n: number, maxColumns: number, verticalSpacingRatio: number, horizontalSpacingRatio: number): Array<Surface>;
         splitHeader(headerHeightRatio: number): SurfaceHeaderBody;
         
         addCenteredColumn(idSuffix: string, cx: number, width: number): Surface;

@@ -45,9 +45,9 @@ module semio.core {
         getWidth(): number { return this._width; }
         getHeight(): number { return this._height; }
         
-        splitRows(n: number, marginRatioTop: number): Array<Surface> {
-            let rowHeight = this._height * (1 - marginRatioTop) / n;
-            let marginHeight = this._height * marginRatioTop / (n - 1);
+        splitRows(n: number, verticalSpacingRatio: number): Array<Surface> {
+            let rowHeight = this._height * (1 - verticalSpacingRatio) / n;
+            let marginHeight = this._height * verticalSpacingRatio / (n - 1);
             return _.range(0, n).map((row) => {
                 let id = this.containerId + '_row_' + row.toString();
                 this.svg.append('g').attr('id', id);
@@ -58,9 +58,9 @@ module semio.core {
             });
         }
         
-        splitColumns(n: number, marginRatioRight: number): Array<Surface> {
-            let columnWidth = this._width * (1 - marginRatioRight) / n;
-            let marginWidth = this._width * marginRatioRight / (n - 1);
+        splitColumns(n: number, horizontalSpacingRatio: number): Array<Surface> {
+            let columnWidth = this._width * (1 - horizontalSpacingRatio) / n;
+            let marginWidth = this._width * horizontalSpacingRatio / (n - 1);
             return _.range(0, n).map((col) => {
                 let id = this.containerId + '_column_' + col.toString()
                 this.svg.append('g').attr('id', id);
@@ -71,18 +71,18 @@ module semio.core {
             });
         }
         
-        splitGrid(n: number, maxColumns: number, marginRatioTop: number, marginRatioRight: number): Array<Surface> {
+        splitGrid(n: number, maxColumns: number, verticalSpacingRatio: number, horizontalSpacingRatio: number): Array<Surface> {
             let nColumns = Math.ceil(Math.sqrt(n));
             if (maxColumns) {
                 nColumns = Math.min(nColumns, maxColumns);
             }
             let nRows = Math.ceil(n / nColumns);
             
-            let cellWidth = this._width * (1 - marginRatioRight) / nColumns;
-            let cellHeight = this._height * (1 - marginRatioTop) / nRows;
+            let cellWidth = this._width * (1 - horizontalSpacingRatio) / nColumns;
+            let cellHeight = this._height * (1 - verticalSpacingRatio) / nRows;
             
-            let marginWidth = this._width * marginRatioRight / (nColumns - 1);
-            let marginHeight = this._height * marginRatioTop / (nRows - 1);
+            let marginWidth = this._width * horizontalSpacingRatio / (nColumns - 1);
+            let marginHeight = this._height * verticalSpacingRatio / (nRows - 1);
             
             return _.flatMap(_.range(0, nRows), (row) => {
                 return _.range(0, nColumns)

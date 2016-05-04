@@ -17,8 +17,8 @@ namespace semio.chart {
 
     export class SmallMultiple implements Plotable {
         private _headerRatio: number = 0.1;    
-        private _betweenMarginRatioRight = 0.05;
-        private _betweenMarginRatioTop = 0.05;
+        private _horizontalSpacingRatio = 0.05;
+        private _verticalSpacingRatio = 0.05;
         private _width: number;
         private _height: number;
         private _maxColumns: number;
@@ -56,13 +56,13 @@ namespace semio.chart {
             return this;
         }
         
-        beetweenMarginRatioRight(ratio: number): SmallMultiple {
-            this._betweenMarginRatioRight = ratio;
+        horizontalSpacingRatio(ratio: number): SmallMultiple {
+            this._horizontalSpacingRatio = ratio;
             return this;
         }
         
-        betweenMarginRatioTop(ratio: number): SmallMultiple {
-            this._betweenMarginRatioTop = ratio;
+        verticalSpacingRatio(ratio: number): SmallMultiple {
+            this._verticalSpacingRatio = ratio;
             return this;
         }
         
@@ -89,7 +89,7 @@ namespace semio.chart {
             let categories = groupedData.map((g) => g.key);
         
             let subSurfaces = surface.splitGrid(categories.length, 
-                this._maxColumns, this._betweenMarginRatioTop, this._betweenMarginRatioRight); 
+                this._maxColumns, this._horizontalSpacingRatio, this._verticalSpacingRatio); 
             
             // TODO: set the colours for the categorical value if not already set.
             let updatedContext = this.contextWithNumericRanges(data, context);

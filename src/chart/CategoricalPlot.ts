@@ -1,10 +1,12 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../interfaces/CategoricalPlotable.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 
 module semio.chart {
+    import CategoricalPlotable = semio.interfaces.CategoricalPlotable;
     import Context = semio.interfaces.Context;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
@@ -22,7 +24,7 @@ module semio.chart {
         private _xAxisHeightRatio: number = 0.1;
         private _yAxisWidthRatio: number = 0.1;
         
-        private _plotables: Array<Plotable> = [];
+        private _plotables: Array<CategoricalPlotable> = [];
 
         background(colour: string): CategoricalPlot {
             this._background = colour;
@@ -68,7 +70,7 @@ module semio.chart {
             return [];
         }
         
-        add(plotable: Plotable): Plotable {
+        add(plotable: CategoricalPlotable): CategoricalPlot {
             this._plotables.push(plotable);
             return this;
         }
@@ -134,7 +136,10 @@ module semio.chart {
             updatedContext = updatedContext.setXScale(this._splitOnColumn, (x: string) => xScale(x) - plotAreaX); 
                           
             let plotSurface = surface.addSurface('plotablearea', plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
-            this._plotables.forEach((pl) => pl.plot(data, plotSurface, updatedContext))
+            this._plotables.forEach((pl) => {
+                pl.value(this._valueColumn).splitOn(this._splitOnColumn);
+                pl.plot(data, plotSurface, updatedContext);
+            });
         }
     }
 }

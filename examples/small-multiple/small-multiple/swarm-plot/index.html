@@ -8,9 +8,7 @@
     <script src="../../../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../../../data/auto_mpg.csv', function(data) {
-            var swarmPlot = new semio.chart.SwarmPlot()
-                .value('acceleration')
-                .splitOn('cylinders')
+            var swarmPlot = new semio.chart.categorical.SwarmPlot()
                 .color('cylinders')
                 .diameter(4);
             var categoricalPlot = new semio.chart.CategoricalPlot()

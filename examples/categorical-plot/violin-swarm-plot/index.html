@@ -8,12 +8,8 @@
     <script src="../../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../../data/auto_mpg.csv', function(data) {
-            var violinPlot = new semio.chart.ViolinPlot()
-                .value('acceleration')
-                .splitOn('cylinders');
-            var swarmPlot = new semio.chart.SwarmPlot()
-                .value('acceleration')
-                .splitOn('cylinders')
+            var violinPlot = new semio.chart.categorical.ViolinPlot();
+            var swarmPlot = new semio.chart.categorical.SwarmPlot()
                 .color('origin')
                 .diameter(7);
             var categoricalPlot = new semio.chart.CategoricalPlot()

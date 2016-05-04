@@ -1,51 +1,41 @@
-/// <reference path="../../typings/d3/d3.d.ts"/>
-/// <reference path="../../typings/lodash/lodash.d.ts"/>
-/// <reference path="../interfaces/Context.ts"/>
-/// <reference path="../interfaces/Plotable.ts"/>
-/// <reference path="../interfaces/Surface.ts"/>
+/// <reference path="../../../typings/d3/d3.d.ts"/>
+/// <reference path="../../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../../interfaces/CategoricalPlotable.ts"/>
+/// <reference path="../../interfaces/Context.ts"/>
+/// <reference path="../../interfaces/Surface.ts"/>
+/// <reference path="../../shape/VerticalViolin.ts"/>
 
-module semio.chart {
+module semio.chart.categorical {
+    import CategoricalPlotable = semio.interfaces.CategoricalPlotable;
     import Context = semio.interfaces.Context;
-    import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
+    import VerticalViolin = semio.shape.VerticalViolin;
     
-    export class SwarmPlot implements Plotable {
+    export class ViolinPlot implements CategoricalPlotable {
+        
         private _valueColumn: string;
         private _splitOnColumn: string;
-        private _colorColumn: string;
+        
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
-        private _diameter: number = 5;
-
-        value(column: string): SwarmPlot {
+        
+        value(column: string): ViolinPlot {
             this._valueColumn = column;
             this._numericAccessor = function (d) {
                 return +d[column];
             };
             return this;
-        }
+        } 
         
-        splitOn(column: string): SwarmPlot {
+        splitOn(column: string): ViolinPlot {
             this._splitOnColumn = column;
             this._categoricalAccessor = function (d) {
                 return d[column].toString();
             };
             return this;
         } 
-        color(column: string): SwarmPlot {
-            this._colorColumn = column;
-            return this;
-        } 
-        
-        diameter(d: number): SwarmPlot {
-            this._diameter = d;
-            return this;
-        }
         
         getCategoricalColumns(): Array<string> {
-            if (this._colorColumn) {
-                return [this._colorColumn];
-            }
             return [];
         }
         
@@ -54,11 +44,6 @@ module semio.chart {
                 return [this._valueColumn];
             }
             return [];
-        }
-        
-        add(plotable: Plotable): Plotable {
-            // Do nothing as this does not support nesting at the moment.
-            return this;
         }
         
         plot(data: Array<any>, surface: Surface, context: Context): void {
@@ -75,17 +60,17 @@ module semio.chart {
 
             _.forOwn(groupedData, (group) => {
                 if (group.values) {
-                    var category = group.key;                
+                    var category = group.key;
+                    var categoryColor = context.getCategoryColours()[this._splitOnColumn](category);                 
                     
-                    let subSurface = surface
-                        .addCenteredColumn('_swarm_' + category, xScale(category), categoryWidth);
-                    
-                    let swarm = new semio.shape.VerticalSwarm()
-                        .color(this._colorColumn)
-                        .value(this._valueColumn)
-                        .diameter(this._diameter);
-            
-                    swarm.draw(group.values, subSurface, context);
+                    let violin = new VerticalViolin(group.values);
+                    violin.cx(xScale(category))
+                        .yScale(yScale)
+                        .yAccessor(this._numericAccessor)
+                        .width(0.9 * categoryWidth)
+                        .cut(1)
+                        .fill(categoryColor);
+                    violin.draw(surface.svg);
                 }
             });
         }

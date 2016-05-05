@@ -7,9 +7,12 @@ module semio.core {
              '#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928'];
         
         static qualitative(values: Array<string>): (x: string) => string   {
-            // TODO: Handle more than 20 colours
-            var colors = ColorPalette._qualitativeColors12.slice(0, values.length);
-            var mapping: {[x: string]: string } = { };
+            // TODO: Handle more than 12 colours
+            var colors: Array<string>;
+            if (values.length <= 12) {
+                colors = ColorPalette._qualitativeColors12.slice(0, values.length)
+            }
+            let mapping: {[x: string]: string } = { };
             _.zip(values, colors).forEach((x) => {
                mapping[x[0]] = x[1]; 
             });

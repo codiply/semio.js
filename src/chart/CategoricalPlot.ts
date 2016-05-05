@@ -1,5 +1,6 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../core/ColorPalette.ts"/>
 /// <reference path="../interfaces/CategoricalPlotable.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
 /// <reference path="../interfaces/MarginRatio.ts"/>
@@ -8,6 +9,7 @@
 /// <reference path="../math/Extent.ts"/>
 
 module semio.chart {
+    import ColorPalette = semio.core.ColorPalette;
     import CategoricalPlotable = semio.interfaces.CategoricalPlotable;
     import Context = semio.interfaces.Context;
     import MarginRatio = semio.interfaces.MarginRatio;
@@ -130,8 +132,7 @@ module semio.chart {
             
             // Draw x axis
             let categories = context.getCategoryValues()[this._splitOnColumn];
-            // TODO: extract the colour scale creation to a helper that can handle more than 20 colours
-            let categoryColor = context.getCategoryColours()[this._splitOnColumn] || d3.scale.category20().domain(categories);
+            let categoryColor = context.getCategoryColours()[this._splitOnColumn] || ColorPalette.qualitative(categories);
             let categoryWidth = plotAreaWidth / categories.length;
             
             let xScale = d3.scale.ordinal()

@@ -56,7 +56,7 @@ module semio.shape {
             let centre = surface.getWidth() / 2;
 
             var yScale = context.getYScale(this._valueColumn);            
-            let colors = context.getCategoryColours()[this._colorColumn];
+            let colors = context.getCategoryColours(this._colorColumn);
             
             let startingPositions: Array<SwarmPoint> = _.chain(data).map((d) => {
                 return new SwarmPoint(centre, 

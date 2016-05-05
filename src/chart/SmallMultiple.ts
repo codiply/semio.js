@@ -87,7 +87,7 @@ namespace semio.chart {
                 let title = this._splitOnColumn + ': ' + cat;
                 Text.placeTitle(splitSurface.header, title);
                 
-                let updatedContextWithSlice = updatedContext.setSlicedColumn(this._splitOnColumn, cat);
+                let updatedContextWithSlice = updatedContext.setSlicedColumnValue(this._splitOnColumn, cat);
                 this._plotable.plot(groupedData[i].values, splitSurface.body, updatedContextWithSlice);
             });
         }

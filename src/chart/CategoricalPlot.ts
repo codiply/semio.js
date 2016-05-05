@@ -131,8 +131,8 @@ module semio.chart {
             let updatedContext = context.setYScale(this._valueColumn, yScale);
             
             // Draw x axis
-            let categories = context.getCategoryValues()[this._splitOnColumn];
-            let categoryColor = context.getCategoryColours()[this._splitOnColumn] || ColorPalette.qualitative(categories);
+            let categories = context.getCategoryValues(this._splitOnColumn);
+            let categoryColor = context.getCategoryColours(this._splitOnColumn) || ColorPalette.qualitative(categories);
             let categoryWidth = plotAreaWidth / categories.length;
             
             let xScale = d3.scale.ordinal()

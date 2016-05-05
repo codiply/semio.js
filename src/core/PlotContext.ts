@@ -30,7 +30,7 @@ module semio.core {
             return this;
         }
         
-        setSlicedColumn(column: string, value: string): Context {
+        setSlicedColumnValue(column: string, value: string): Context {
             let clone = this.clone();
             clone._slicedColumns[column] = value;
             return this;
@@ -46,20 +46,24 @@ module semio.core {
            return this;   
         }
         
-        getCategoryValues(): { [column: string]: Array<string>} {            
-            return this._categoryValues;
+        getCategoryValues(column: string): Array<string> {            
+            return this._categoryValues[column];
         }
         
-        getCategoryColours(): { [column: string]: (value: string) => string } {
-            return this._categoryColours;
+        getCategoryColours(column: string): (value: string) => string {
+            return this._categoryColours[column];
         }
         
         getNumericRange(column: string): [number, number] {
             return this._numericRange[column];
         }
         
-        getSlicedColumns(): { [column: string]: string} {
-            return this._slicedColumns;
+        getSlicedColumns(): Array<string> {
+            return _.keys(this._slicedColumns);
+        }
+        
+        getSlicedColumnValue(column: string): string {
+            return this._slicedColumns[column];
         }
         
         getXScale(column: string): (value: d3.Primitive) => number {

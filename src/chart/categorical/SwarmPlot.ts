@@ -63,7 +63,7 @@ module semio.chart.categorical {
             
             var yScale = context.getYScale(this._valueColumn);
             var xScale = context.getXScale(this._splitOnColumn);
-            var categories = context.getCategoryValues()[this._splitOnColumn];
+            var categories = context.getCategoryValues(this._splitOnColumn);
             
             var categoryWidth = surface.getWidth() / categories.length;
             

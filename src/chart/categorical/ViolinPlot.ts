@@ -52,7 +52,7 @@ module semio.chart.categorical {
             
             var yScale = context.getYScale(this._valueColumn);
             var xScale = context.getXScale(this._splitOnColumn);
-            var categories = context.getCategoryValues()[this._splitOnColumn];
+            var categories = context.getCategoryValues(this._splitOnColumn);
             
             var categoryWidth = surface.getWidth() / categories.length;
             
@@ -61,7 +61,7 @@ module semio.chart.categorical {
             _.forOwn(groupedData, (group) => {
                 if (group.values) {
                     var category = group.key;
-                    var categoryColor = context.getCategoryColours()[this._splitOnColumn](category);                 
+                    var categoryColor = context.getCategoryColours(this._splitOnColumn)(category);                 
                     
                     let violin = new VerticalViolin(group.values);
                     violin.cx(xScale(category))

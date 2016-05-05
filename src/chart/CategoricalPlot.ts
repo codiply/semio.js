@@ -2,6 +2,7 @@
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../interfaces/CategoricalPlotable.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
+/// <reference path="../interfaces/MarginRatio.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 /// <reference path="../math/Extent.ts"/>
@@ -9,13 +10,14 @@
 module semio.chart {
     import CategoricalPlotable = semio.interfaces.CategoricalPlotable;
     import Context = semio.interfaces.Context;
+    import MarginRatio = semio.interfaces.MarginRatio;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
     import Extent = semio.math.Extent;
     
     export class CategoricalPlot implements Plotable {
-        private _valueExtentWidening: number = 0.08;
+        private _valueExtentWidening: number = 0.12;
         private _background: string = '#e6e6e6'; 
         private _yTickStrokeRatio: number = 0.05;
         
@@ -25,8 +27,12 @@ module semio.chart {
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
         
-        private _xAxisHeightRatio: number = 0.1;
-        private _yAxisWidthRatio: number = 0.1;
+        private _marginRatio: MarginRatio = {
+            top: 0.02,
+            right: 0.02,
+            bottom: 0.08,
+            left: 0.08  
+        };
         
         private _plotables: Array<CategoricalPlotable> = [];
 
@@ -51,13 +57,8 @@ module semio.chart {
             return this;
         } 
         
-        xAxisHeightRatio(ratio: number): CategoricalPlot {
-            this._xAxisHeightRatio = ratio;
-            return this;
-        }
-        
-        yAxisWidthRatio(ratio: number): CategoricalPlot {
-            this._yAxisWidthRatio = ratio;
+        marginRatio(marginRatio: MarginRatio): CategoricalPlot {
+            this._marginRatio = marginRatio;
             return this;
         }
         
@@ -83,12 +84,12 @@ module semio.chart {
             if (!data)
                 return;
                 
-            let plotAreaX = this._yAxisWidthRatio * surface.getWidth();
-            let plotAreaY = 0;
-            let plotAreaWidth = (1 - this._yAxisWidthRatio) * surface.getWidth();
-            let plotAreaHeight = (1 - this._xAxisHeightRatio) * surface.getHeight();
-            let xAxisAreaHeight = this._xAxisHeightRatio * surface.getHeight();
-            let yAxisAreaWidth = this._yAxisWidthRatio * surface.getWidth();
+            let plotAreaX = this._marginRatio.left * surface.getWidth();
+            let plotAreaY = this._marginRatio.top * surface.getHeight();
+            let plotAreaWidth = (1 - this._marginRatio.left - this._marginRatio.right) * surface.getWidth();
+            let plotAreaHeight = (1 - this._marginRatio.top - this._marginRatio.bottom) * surface.getHeight();
+            let xAxisAreaHeight = this._marginRatio.bottom * surface.getHeight();
+            let yAxisAreaWidth = this._marginRatio.left * surface.getWidth();
  
             // Add background to plot area
             surface.svg.append('g')
@@ -110,7 +111,7 @@ module semio.chart {
                 .orient('left')
                 .tickSize(-plotAreaWidth, 0);
             let yAxisGroup = surface.svg.append('g')
-                .attr('transform', 'translate(' + plotAreaX + ',0)')
+                .attr('transform', 'translate(' + plotAreaX + ',' + plotAreaY + ')')
                 .call(yAxis);
             yAxisGroup.selectAll('.tick line')
                 .style({
@@ -122,7 +123,7 @@ module semio.chart {
             surface.svg.append('svg').append('text')
                 .attr('font-size', yAxisAreaWidth / 3)
                 .attr('text-anchor', 'middle')
-                .attr('transform', 'translate(' + yAxisAreaWidth / 4 + ',' + plotAreaHeight / 2 + ')rotate(-90)')
+                .attr('transform', 'translate(' + yAxisAreaWidth / 4 + ',' + (plotAreaY + plotAreaHeight / 2) + ')rotate(-90)')
                 .text(this._valueColumn);
             
             let updatedContext = context.setYScale(this._valueColumn, yScale);
@@ -142,14 +143,14 @@ module semio.chart {
                 .orient('bottom')
                 .tickSize(0);
             let xAxisGroup = surface.svg.append('g')
-                .attr('transform', 'translate(0,' + plotAreaHeight + ')')
+                .attr('transform', 'translate(0,' + (plotAreaY + plotAreaHeight) + ')')
                 .call(xAxis);
             xAxisGroup.selectAll('.tick text')
                 .attr('font-size', xAxisAreaHeight / 3)
             surface.svg.append('g').append('text')
                 .attr('font-size', xAxisAreaHeight / 3)
                 .attr('text-anchor', 'middle')  
-                .attr('transform', 'translate(' + (plotAreaX + plotAreaWidth / 2) + ',' + (plotAreaHeight + xAxisAreaHeight * 3 / 4) + ')')
+                .attr('transform', 'translate(' + (plotAreaX + plotAreaWidth / 2) + ',' + (plotAreaY + plotAreaHeight + xAxisAreaHeight * 3 / 4) + ')')
                 .text(this._splitOnColumn);
                           
             updatedContext = updatedContext.setXScale(this._splitOnColumn, (x: string) => xScale(x) - plotAreaX); 

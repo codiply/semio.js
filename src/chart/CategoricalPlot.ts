@@ -4,6 +4,7 @@
 /// <reference path="../interfaces/Context.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
+/// <reference path="../math/Extent.ts"/>
 
 module semio.chart {
     import CategoricalPlotable = semio.interfaces.CategoricalPlotable;
@@ -11,8 +12,10 @@ module semio.chart {
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
+    import Extent = semio.math.Extent;
     
-    export class CategoricalPlot implements Plotable {   
+    export class CategoricalPlot implements Plotable {
+        private _valueExtentWidening: number = 0.08;
         private _background: string = '#e6e6e6'; 
         
         private _valueColumn: string;
@@ -97,6 +100,7 @@ module semio.chart {
             
             // Draw y axis
             let yExtent = context.getNumericRange(this._valueColumn) || d3.extent(data, this._numericAccessor);
+            yExtent = Extent.widen(yExtent, this._valueExtentWidening);
             let yScale = d3.scale.linear()
                 .domain(yExtent)
                 .range([plotAreaY + plotAreaHeight, plotAreaY]);

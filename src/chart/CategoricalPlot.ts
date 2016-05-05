@@ -17,6 +17,7 @@ module semio.chart {
     export class CategoricalPlot implements Plotable {
         private _valueExtentWidening: number = 0.08;
         private _background: string = '#e6e6e6'; 
+        private _yTickStrokeRatio: number = 0.05;
         
         private _valueColumn: string;
         private _splitOnColumn: string;
@@ -114,7 +115,7 @@ module semio.chart {
             yAxisGroup.selectAll('.tick line')
                 .style({
                     'stroke' : 'white',
-                    'stroke-width' : 2
+                    'stroke-width' : plotAreaHeight * this._yTickStrokeRatio / yAxis.ticks()[0]
                 });
             yAxisGroup.selectAll('.tick text')
                 .attr('font-size', yAxisAreaWidth / 3)

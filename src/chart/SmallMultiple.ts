@@ -19,24 +19,12 @@ namespace semio.chart {
         private _headerRatio: number = 0.1;    
         private _horizontalSpacingRatio = 0.05;
         private _verticalSpacingRatio = 0.05;
-        private _width: number;
-        private _height: number;
         private _maxColumns: number;
         private _splitOnColumn: string;
         private _categoricalAccessor: (d: any) => string;
         private _plotable: Plotable;
         
         constructor() { }
-        
-        width(width: number): SmallMultiple {
-            this._width = width;
-            return this;
-        }
-        
-        height(height: number): SmallMultiple {
-            this._height = height;
-            return this;
-        }
         
         maxColumns(maxColumns: number): SmallMultiple {
             this._maxColumns = maxColumns;
@@ -73,7 +61,7 @@ namespace semio.chart {
         }
         
         getNumericColumns(): Array<string> {
-            return this._plotable.getNumericColumns();
+            return this._plotable.getNumericColumns().slice(0);
         }
         
         add(plotable: Plotable): Plotable {
@@ -91,8 +79,7 @@ namespace semio.chart {
             let subSurfaces = surface.splitGrid(categories.length, 
                 this._maxColumns, this._horizontalSpacingRatio, this._verticalSpacingRatio); 
             
-            // TODO: set the colours for the categorical value if not already set.
-            let updatedContext = this.contextWithNumericRanges(data, context);
+            let updatedContext = this.fixNumericRanges(data, context);
             
             categories.forEach((cat, i) => {
                 let splitSurface = subSurfaces[i].splitHeader(this._headerRatio);
@@ -105,7 +92,7 @@ namespace semio.chart {
             });
         }
         
-        private contextWithNumericRanges(data: Array<any>, context: Context): Context {
+        private fixNumericRanges(data: Array<any>, context: Context): Context {
             let newContext = context;
             this._plotable.getNumericColumns().forEach((col) => {
                 if (!context.getNumericRange(col)) {

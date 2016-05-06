@@ -7,7 +7,6 @@ module semio.interfaces {
         setXScale(column: string, scale: (value: d3.Primitive) => number): Context;
         setYScale(column: string, scale: (value: d3.Primitive) => number): Context;
         
-        // TODO: do not return the dictionary, pass in the column and return one value.
         getCategoryColours(column: string): (value: string) => string;
         getCategoryValues(column: string): Array<string>;
         getNumericRange(column: string): [number, number];

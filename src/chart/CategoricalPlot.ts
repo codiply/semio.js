@@ -107,7 +107,7 @@ module semio.chart {
             yExtent = Extent.widen(yExtent, this._valueExtentWidening);
             let yScale = d3.scale.linear()
                 .domain(yExtent)
-                .range([plotAreaY + plotAreaHeight, plotAreaY]);
+                .range([plotAreaHeight, 0]);
             let yAxis = d3.svg.axis()
                 .scale(yScale)
                 .orient('left')
@@ -137,14 +137,13 @@ module semio.chart {
             
             let xScale = d3.scale.ordinal()
                 .domain(categories)
-                .rangePoints([plotAreaX + categoryWidth / 2, 
-                              plotAreaX + plotAreaWidth - categoryWidth / 2]);
+                .rangePoints([categoryWidth / 2, plotAreaWidth - categoryWidth / 2]);
             let xAxis = d3.svg.axis()
                 .scale(xScale)
                 .orient('bottom')
                 .tickSize(0);
             let xAxisGroup = surface.svg.append('g')
-                .attr('transform', 'translate(0,' + (plotAreaY + plotAreaHeight) + ')')
+                .attr('transform', 'translate(' + plotAreaX + ',' + (plotAreaY + plotAreaHeight) + ')')
                 .call(xAxis);
             xAxisGroup.selectAll('.tick text')
                 .attr('font-size', xAxisAreaHeight / 3)
@@ -154,7 +153,7 @@ module semio.chart {
                 .attr('transform', 'translate(' + (plotAreaX + plotAreaWidth / 2) + ',' + (plotAreaY + plotAreaHeight + xAxisAreaHeight * 3 / 4) + ')')
                 .text(this._splitOnColumn);
                           
-            updatedContext = updatedContext.setXScale(this._splitOnColumn, (x: string) => xScale(x) - plotAreaX); 
+            updatedContext = updatedContext.setXScale(this._splitOnColumn, xScale); 
                           
             let plotSurface = surface.addSurface('plotablearea', plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
             this._plotables.forEach((pl) => {

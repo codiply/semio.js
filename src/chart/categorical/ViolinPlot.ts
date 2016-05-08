@@ -63,14 +63,14 @@ module semio.chart.categorical {
                     var category = group.key;
                     var categoryColor = context.getCategoryColours(this._splitOnColumn)(category);                 
                     
-                    let violin = new VerticalViolin(group.values);
-                    violin.cx(xScale(category))
-                        .yScale(yScale)
-                        .yAccessor(this._numericAccessor)
-                        .width(0.9 * categoryWidth)
+                    let subSurface = surface
+                        .addCenteredColumn('_violin_' + category, xScale(category), categoryWidth);
+                    
+                    let violin = new VerticalViolin();
+                    violin.value(this._valueColumn)
                         .cut(1)
                         .fill(categoryColor);
-                    violin.draw(surface.svg);
+                    violin.draw(group.values, subSurface, context);
                 }
             });
         }

@@ -72,7 +72,7 @@ module semio.shape {
                 swarm.push(this.findPosition(p, neighbors, centre));
             });
             
-            surface.svg.append('g')
+            let circles = surface.svg.append('g')
                 .selectAll('circle')
                 .data(swarm)
                 .enter()
@@ -81,6 +81,8 @@ module semio.shape {
                 .attr('cy', d => d.y)
                 .attr('r', this._diameter / 2)
                 .style('fill', d => d.color);
+             
+            context.getTooltip().addOn(circles, d => "This is a tooltip");
         }
         
         findPosition(p: SwarmPoint, neighbors: Array<SwarmPoint>, centre: number): SwarmPoint {

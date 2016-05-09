@@ -22,7 +22,7 @@ module semio.core {
             return selection.on('mouseover', function(d) {
                 return that._tooltip
                   .style('visibility', 'visible')
-                  .html(html);
+                  .html(html(d));
             })
             .on('mousemove', function(d) { 
                 let mouse = d3.mouse(document.body);

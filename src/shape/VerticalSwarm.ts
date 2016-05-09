@@ -8,12 +8,13 @@ module semio.shape {
     
     class SwarmPoint {
         
-        constructor(public x: number, 
+        constructor(public datum: any,
+                    public x: number, 
                     public y: number, 
                     public color: string) { }
         
         setX(newX: number): SwarmPoint {
-            return new SwarmPoint(newX, this.y, this.color);    
+            return new SwarmPoint(this.datum, newX, this.y, this.color);    
         }
         
         distance(p: SwarmPoint): number {
@@ -53,13 +54,14 @@ module semio.shape {
         }
         
         draw(data: Array<any>, surface: Surface, context: Context): void {
+            let that = this;
             let centre = surface.getWidth() / 2;
 
             var yScale = context.getYScale(this._valueColumn);            
             let colors = context.getCategoryColours(this._colorColumn);
             
             let startingPositions: Array<SwarmPoint> = _.chain(data).map((d) => {
-                return new SwarmPoint(centre, 
+                return new SwarmPoint(d, centre, 
                                       yScale(this._numericAccessor(d)), 
                                       colors(d[this._colorColumn]));
             }).orderBy((p) => -p.y).value();
@@ -82,7 +84,9 @@ module semio.shape {
                 .attr('r', this._diameter / 2)
                 .style('fill', d => d.color);
              
-            context.getTooltip().addOn(circles, d => "This is a tooltip");
+            context.getTooltip().addOn(circles, (swarmPoint: SwarmPoint) => {
+                return that._colorColumn + ': ' + swarmPoint.datum[that._colorColumn];
+            });
         }
         
         findPosition(p: SwarmPoint, neighbors: Array<SwarmPoint>, centre: number): SwarmPoint {

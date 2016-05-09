@@ -30,28 +30,31 @@ module semio.core {
         setNumericRange(column:string, range: [number, number]): Context {
             let clone = this.clone();
             clone._numericRange[column] = range;
-            return this;
+            return clone;
         }
         
         setSlicedColumnValue(column: string, value: string): Context {
             let clone = this.clone();
             clone._slicedColumns[column] = value;
-            return this;
+            return clone;
         }
         
         setXScale(column: string, scale: (value: d3.Primitive) => number): Context {
-            this._xScale[column] = scale;
-            return this;
+            let clone = this.clone();
+            clone._xScale[column] = scale;
+            return clone;
         }
         
         setYScale(column: string, scale: (value: d3.Primitive) => number): Context {
-           this._yScale[column] = scale;
-           return this;   
+           let clone = this.clone();
+           clone._yScale[column] = scale;
+           return clone;   
         }
         
         setTooltip(tooltip: Tooltip): Context {
-            this._tooltip = tooltip;
-            return this;
+            let clone = this.clone();
+            clone._tooltip = tooltip;
+            return clone;
         }
         
         getCategoryValues(column: string): Array<string> {            

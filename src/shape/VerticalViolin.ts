@@ -45,7 +45,7 @@ module semio.shape {
 
             var yScale = context.getYScale(this._valueColumn);      
             
-            let yMin = d3.min(data, this._numericAccessor;
+            let yMin = d3.min(data, this._numericAccessor);
             let yMax = d3.max(data, this._numericAccessor);
 
             let support = _.range(yScale(yMax + this._cut), 

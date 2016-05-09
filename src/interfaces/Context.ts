@@ -1,3 +1,5 @@
+/// <reference path="./Tooltip.ts"/>
+
 module semio.interfaces {
     export interface Context {
         setCategoryColours(column: string, colours: (value: string) => string): Context;
@@ -6,7 +8,8 @@ module semio.interfaces {
         setSlicedColumnValue(column: string, value: string): Context
         setXScale(column: string, scale: (value: d3.Primitive) => number): Context;
         setYScale(column: string, scale: (value: d3.Primitive) => number): Context;
-        
+        setTooltip(tooltip: Tooltip): Context;
+                
         getCategoryColours(column: string): (value: string) => string;
         getCategoryValues(column: string): Array<string>;
         getNumericRange(column: string): [number, number];
@@ -14,5 +17,6 @@ module semio.interfaces {
         getSlicedColumnValue(column: string): string; 
         getXScale(column: string): (value: d3.Primitive) => number;
         getYScale(column: string): (value: d3.Primitive) => number;
+        getTooltip(): Tooltip;
     }
 }

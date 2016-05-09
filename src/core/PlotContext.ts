@@ -1,8 +1,10 @@
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
+/// <reference path="../interfaces/Tooltip.ts"/>
 
 module semio.core {
     import Context = semio.interfaces.Context;
+    import Tooltip = semio.interfaces.Tooltip;
     
     export class PlotContext implements Context {
         private _categoryColours: { [column: string]: (value: string) => string } = { };
@@ -11,6 +13,7 @@ module semio.core {
         private _slicedColumns: { [column: string]: string } = { };
         private _yScale: { [column: string]: (value: d3.Primitive) => number } = { };
         private _xScale: { [column: string]: (value: d3.Primitive) => number } = { };
+        private _tooltip: Tooltip;
         
         setCategoryValues(column: string, values: Array<string>): Context {
             let clone = this.clone();
@@ -46,6 +49,11 @@ module semio.core {
            return this;   
         }
         
+        setTooltip(tooltip: Tooltip): Context {
+            this._tooltip = tooltip;
+            return this;
+        }
+        
         getCategoryValues(column: string): Array<string> {            
             return this._categoryValues[column];
         }
@@ -74,6 +82,10 @@ module semio.core {
             return this._yScale[column];
         }
         
+        getTooltip(): Tooltip {
+            return this._tooltip;
+        }
+        
         private clone(): PlotContext {
             let clone = new PlotContext();
             clone._categoryColours = _.clone(this._categoryColours);
@@ -82,6 +94,7 @@ module semio.core {
             clone._slicedColumns = _.clone(this._slicedColumns);
             clone._yScale = _.clone(this._yScale);
             clone._xScale = _.clone(this._xScale);
+            clone._tooltip = this._tooltip;
             return this;
         }
     }

@@ -14,7 +14,11 @@ module semio.core {
               .attr('class', 'tooltip')
               .style('position', 'absolute')
               .style('z-index', '10')
-              .style('visibility', 'hidden');
+              .style('visibility', 'hidden')
+              .style('background', '#eee')
+              .style('text-align', 'center')
+              .style('box-shadow', '0 0 5px #999999')
+              .style('padding', '10px');
         }
         
         addOn(selection: d3.Selection<any>, html: (d: any) => string): d3.Selection<any> {
@@ -28,7 +32,7 @@ module semio.core {
                 let mouse = d3.mouse(document.body);
                 return that._tooltip
                     .style('top', (mouse[1] - 10) + 'px')
-                    .style('left',(mouse[0] + 10) + 'px'); })
+                    .style('left',(mouse[0] + 20) + 'px'); })
             .on('mouseout', function(d) { 
                 return that._tooltip.style('visibility', 'hidden'); 
             });

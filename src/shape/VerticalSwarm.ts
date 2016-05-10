@@ -96,6 +96,9 @@ module semio.shape {
                     lines.push(that._idColumn + ': ' + swarmPoint.datum[that._idColumn]);
                 }
                 lines.push(that._colorColumn + ': ' + swarmPoint.datum[that._colorColumn]);
+                context.getSlicedColumns().forEach((column) => {
+                    lines.push(column + ': ' + swarmPoint.datum[column]);
+                })
                 return lines.join('<br/>');
             });
         }

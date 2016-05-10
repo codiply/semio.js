@@ -87,7 +87,8 @@ module semio.chart.categorical {
                         .value(this._valueColumn)
                         .diameter(this._diameter)
                         .id(this._idColumn);
-            
+                    
+                    let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
                     swarm.draw(group.values, subSurface, context);
                 }
             });

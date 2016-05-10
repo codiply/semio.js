@@ -51,30 +51,38 @@ module semio.chart.categorical {
                 return;
             
             var yScale = context.getYScale(this._valueColumn);
-            var xScale = context.getXScale(this._splitOnColumn);
-            var categories = context.getCategoryValues(this._splitOnColumn);
             
-            var categoryWidth = surface.getWidth() / categories.length;
-            
-            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
+            if (this._splitOnColumn) {
+                var xScale = context.getXScale(this._splitOnColumn);
+                var categories = context.getCategoryValues(this._splitOnColumn);
+                
+                var categoryWidth = surface.getWidth() / categories.length;
+                
+                let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
 
-            _.forOwn(groupedData, (group) => {
-                if (group.values) {
-                    var category = group.key;
-                    var categoryColor = context.getCategoryColours(this._splitOnColumn)(category);                 
-                    
-                    let subSurface = surface
-                        .addCenteredColumn('_violin_' + category, xScale(category), categoryWidth);
-                    
-                    let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
-                    
-                    let violin = new VerticalViolin();
-                    violin.value(this._valueColumn)
-                        .cut(1)
-                        .fill(categoryColor);
-                    violin.draw(group.values, subSurface, context);
-                }
-            });
+                _.forOwn(groupedData, (group) => {
+                    if (group.values) {
+                        var category = group.key;
+                        var categoryColor = context.getCategoryColours(this._splitOnColumn)(category);                 
+                        
+                        let subSurface = surface
+                            .addCenteredColumn('_violin_' + category, xScale(category), categoryWidth);
+                        
+                        let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
+                        
+                        let violin = new VerticalViolin();
+                        violin.value(this._valueColumn)
+                            .cut(1)
+                            .fill(categoryColor);
+                        violin.draw(group.values, subSurface, context);
+                    }
+                });      
+            } else {
+                let violin = new VerticalViolin();
+                violin.value(this._valueColumn)
+                    .cut(1);
+                violin.draw(data, surface, context);
+            }
         }
     }
 }

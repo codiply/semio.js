@@ -68,30 +68,41 @@ module semio.chart.categorical {
                 return;
             
             var yScale = context.getYScale(this._valueColumn);
-            var xScale = context.getXScale(this._splitOnColumn);
-            var categories = context.getCategoryValues(this._splitOnColumn);
             
-            var categoryWidth = surface.getWidth() / categories.length;
-            
-            let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
+            if (this._splitOnColumn) {
+                var xScale = context.getXScale(this._splitOnColumn);
+                var categories = context.getCategoryValues(this._splitOnColumn);
+                
+                var categoryWidth = surface.getWidth() / categories.length;
+                
+                let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
 
-            _.forOwn(groupedData, (group) => {
-                if (group.values) {
-                    var category = group.key;                
-                    
-                    let subSurface = surface
-                        .addCenteredColumn('_swarm_' + category, xScale(category), categoryWidth);
-                    
-                    let swarm = new semio.shape.VerticalSwarm()
-                        .color(this._colorColumn)
-                        .value(this._valueColumn)
-                        .diameter(this._diameter)
-                        .id(this._idColumn);
-                    
-                    let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
-                    swarm.draw(group.values, subSurface, context);
-                }
-            });
+                _.forOwn(groupedData, (group) => {
+                    if (group.values) {
+                        var category = group.key;                
+                        
+                        let subSurface = surface
+                            .addCenteredColumn('_swarm_' + category, xScale(category), categoryWidth);
+                        
+                        let swarm = new semio.shape.VerticalSwarm()
+                            .color(this._colorColumn)
+                            .value(this._valueColumn)
+                            .diameter(this._diameter)
+                            .id(this._idColumn);
+                        
+                        let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
+                        swarm.draw(group.values, subSurface, context);
+                    }
+                });
+            } else {                 
+                let swarm = new semio.shape.VerticalSwarm()
+                    .color(this._colorColumn)
+                    .value(this._valueColumn)
+                    .diameter(this._diameter)
+                    .id(this._idColumn);
+                
+                swarm.draw(data, surface, context);
+            }
         }
     }
 }

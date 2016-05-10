@@ -130,31 +130,33 @@ module semio.chart {
             
             let updatedContext = context.setYScale(this._valueColumn, yScale);
             
-            // Draw x axis
-            let categories = context.getCategoryValues(this._splitOnColumn);
-            let categoryColor = context.getCategoryColours(this._splitOnColumn) || ColorPalette.qualitative(categories);
-            let categoryWidth = plotAreaWidth / categories.length;
-            
-            let xScale = d3.scale.ordinal()
-                .domain(categories)
-                .rangePoints([categoryWidth / 2, plotAreaWidth - categoryWidth / 2]);
-            let xAxis = d3.svg.axis()
-                .scale(xScale)
-                .orient('bottom')
-                .tickSize(0);
-            let xAxisGroup = surface.svg.append('g')
-                .attr('transform', 'translate(' + plotAreaX + ',' + (plotAreaY + plotAreaHeight) + ')')
-                .call(xAxis);
-            xAxisGroup.selectAll('.tick text')
-                .attr('font-size', xAxisAreaHeight / 3)
-            surface.svg.append('g').append('text')
-                .attr('font-size', xAxisAreaHeight / 3)
-                .attr('text-anchor', 'middle')  
-                .attr('transform', 'translate(' + (plotAreaX + plotAreaWidth / 2) + ',' + (plotAreaY + plotAreaHeight + xAxisAreaHeight * 3 / 4) + ')')
-                .text(this._splitOnColumn);
-                          
-            updatedContext = updatedContext.setXScale(this._splitOnColumn, xScale); 
-                          
+            if (this._splitOnColumn) {
+                // Draw x axis
+                let categories = context.getCategoryValues(this._splitOnColumn);
+                let categoryColor = context.getCategoryColours(this._splitOnColumn) || ColorPalette.qualitative(categories);
+                let categoryWidth = plotAreaWidth / categories.length;
+                
+                let xScale = d3.scale.ordinal()
+                    .domain(categories)
+                    .rangePoints([categoryWidth / 2, plotAreaWidth - categoryWidth / 2]);
+                let xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient('bottom')
+                    .tickSize(0);
+                let xAxisGroup = surface.svg.append('g')
+                    .attr('transform', 'translate(' + plotAreaX + ',' + (plotAreaY + plotAreaHeight) + ')')
+                    .call(xAxis);
+                xAxisGroup.selectAll('.tick text')
+                    .attr('font-size', xAxisAreaHeight / 3)
+                surface.svg.append('g').append('text')
+                    .attr('font-size', xAxisAreaHeight / 3)
+                    .attr('text-anchor', 'middle')  
+                    .attr('transform', 'translate(' + (plotAreaX + plotAreaWidth / 2) + ',' + (plotAreaY + plotAreaHeight + xAxisAreaHeight * 3 / 4) + ')')
+                    .text(this._splitOnColumn);
+                                
+                updatedContext = updatedContext.setXScale(this._splitOnColumn, xScale); 
+            }
+             
             let plotSurface = surface.addSurface('plotablearea', plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
             this._plotables.forEach((pl) => {
                 pl.value(this._valueColumn).splitOn(this._splitOnColumn);

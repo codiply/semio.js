@@ -13,6 +13,7 @@ module semio.chart.categorical {
         private _valueColumn: string;
         private _splitOnColumn: string;
         private _colorColumn: string;
+        private _idColumn: string;
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
         private _diameter: number = 5;
@@ -37,6 +38,11 @@ module semio.chart.categorical {
             this._colorColumn = column;
             return this;
         } 
+        
+        id(column: string): SwarmPlot {
+            this._idColumn = column;
+            return this;
+        }
         
         diameter(d: number): SwarmPlot {
             this._diameter = d;
@@ -79,7 +85,8 @@ module semio.chart.categorical {
                     let swarm = new semio.shape.VerticalSwarm()
                         .color(this._colorColumn)
                         .value(this._valueColumn)
-                        .diameter(this._diameter);
+                        .diameter(this._diameter)
+                        .id(this._idColumn);
             
                     swarm.draw(group.values, subSurface, context);
                 }

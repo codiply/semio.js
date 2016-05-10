@@ -32,6 +32,7 @@ module semio.shape {
     export class VerticalSwarm {        
         private _valueColumn: string;
         private _colorColumn: string;
+        private _idColumn: string;
         private _numericAccessor: (d: any) => number;        
         private _diameter: number;
                 
@@ -47,6 +48,11 @@ module semio.shape {
             this._colorColumn = column;
             return this;
         } 
+        
+        id(column: string): VerticalSwarm {
+            this._idColumn = column;
+            return this;
+        }
         
         diameter(d: number): VerticalSwarm {
             this._diameter = d;
@@ -85,7 +91,12 @@ module semio.shape {
                 .style('fill', d => d.color);
              
             context.getTooltip().addOn(circles, (swarmPoint: SwarmPoint) => {
-                return that._colorColumn + ': ' + swarmPoint.datum[that._colorColumn];
+                let lines: Array<string> = [];
+                if (that._idColumn) {
+                    lines.push(that._idColumn + ': ' + swarmPoint.datum[that._idColumn]);
+                }
+                lines.push(that._colorColumn + ': ' + swarmPoint.datum[that._colorColumn]);
+                return lines.join('<br/>');
             });
         }
         

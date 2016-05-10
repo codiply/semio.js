@@ -10,6 +10,7 @@
         d3.csv('../../data/auto_mpg.csv', function(data) {
             var violinPlot = new semio.chart.categorical.ViolinPlot();
             var swarmPlot = new semio.chart.categorical.SwarmPlot()
+                .id('car name')
                 .color('origin')
                 .diameter(7);
             var categoricalPlot = new semio.chart.CategoricalPlot()

@@ -9,6 +9,7 @@
     <script type="text/javascript">
         d3.csv('../../data/auto_mpg.csv', function(data) {
             var swarmPlot = new semio.chart.categorical.SwarmPlot()
+                .id('car name')
                 .color('cylinders')
                 .diameter(10);
             var categoricalPlot = new semio.chart.CategoricalPlot()

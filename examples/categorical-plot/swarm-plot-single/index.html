@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example: Categorical Plot - Single Swarm</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
+    <script src="../../semio.js"></script>
+    <script type="text/javascript">
+        d3.csv('../../data/auto_mpg.csv', function(data) {
+            var swarmPlot = new semio.chart.categorical.SwarmPlot()
+                .id('car name')
+                .color('cylinders')
+                .diameter(10);
+            var categoricalPlot = new semio.chart.CategoricalPlot()
+                .value('acceleration')
+                .add(swarmPlot);
+            new semio.Visualization('visualizationContainer')
+                .width(800)
+                .height(600)
+                .add(categoricalPlot)
+                .plot(data);
+        });
+    </script>
+</head>
+<body>
+    <div id="visualizationContainer"></div>
+</body>
+</html>

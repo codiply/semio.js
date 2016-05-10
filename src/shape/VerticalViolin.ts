@@ -76,9 +76,11 @@ module semio.shape {
             context.getSlicedColumns().forEach((column) => {
                 tooltipLines.push(column + ': ' + context.getSlicedColumnValue(column));
             });
-            context.getTooltip().addOn(violin, () => {
-                return tooltipLines.join('<br/>');
-            });
+            if (tooltipLines) {
+                context.getTooltip().addOn(violin, () => {
+                    return tooltipLines.join('<br/>');
+                });
+            }
         }
     }
 }

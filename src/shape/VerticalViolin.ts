@@ -10,7 +10,7 @@ module semio.shape {
     import KdePoint = semio.math.KdePoint;
     
     export class VerticalViolin {
-        
+        private _defaultFill: string = '#1f77b4';
         private _valueColumn: string;
         private _fill: string;
         private _cut: number = 1;
@@ -70,7 +70,7 @@ module semio.shape {
                  .append('path')
                  .datum(densities)
                  .attr('d', area)
-                 .style('fill', this._fill);
+                 .style('fill', this._fill || this._defaultFill);
                
             let tooltipLines: Array<string> = [];
             context.getSlicedColumns().forEach((column) => {

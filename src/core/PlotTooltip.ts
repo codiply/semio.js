@@ -16,7 +16,7 @@ module semio.core {
               .style('z-index', '10')
               .style('visibility', 'hidden')
               .style('background', '#eee')
-              .style('text-align', 'center')
+              .style('text-align', 'left')
               .style('box-shadow', '0 0 5px #999999')
               .style('padding', '10px');
         }

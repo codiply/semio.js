@@ -66,6 +66,8 @@ module semio.chart.categorical {
                     let subSurface = surface
                         .addCenteredColumn('_violin_' + category, xScale(category), categoryWidth);
                     
+                    let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
+                    
                     let violin = new VerticalViolin();
                     violin.value(this._valueColumn)
                         .cut(1)

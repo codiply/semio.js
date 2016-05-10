@@ -66,11 +66,19 @@ module semio.shape {
                .x0(d => centre - d.density)
                .x1(d => centre + d.density);
            
-          surface.svg.append('g')
-               .append('path')
-               .datum(densities)
-               .attr('d', area)
-               .style('fill', this._fill);
+            let violin = surface.svg.append('g')
+                 .append('path')
+                 .datum(densities)
+                 .attr('d', area)
+                 .style('fill', this._fill);
+               
+            let tooltipLines: Array<string> = [];
+            context.getSlicedColumns().forEach((column) => {
+                tooltipLines.push(column + ': ' + context.getSlicedColumnValue(column));
+            });
+            context.getTooltip().addOn(violin, () => {
+                return tooltipLines.join('<br/>');
+            });
         }
     }
 }

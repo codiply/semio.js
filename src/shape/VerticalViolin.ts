@@ -44,10 +44,13 @@ module semio.shape {
         }
         
         preDraw(data:Array<any>): number {
+            if (!data)
+                return;
+                
             let yMin = d3.min(data, this._numericAccessor);
             let yMax = d3.max(data, this._numericAccessor);
 
-            let support = _.range(yMin - this._cut, yMax + this._cut, 0.01);
+            let support = _.range(yMin, yMax, 0.01);
 
             let kernel = Kde.epanechnikovKernel;
             let values = data.map(this._numericAccessor);
@@ -58,6 +61,9 @@ module semio.shape {
         }
         
         draw(surface: Surface, context: Context): void {
+            if (!this._densities)
+                return;
+                
             let centre = surface.getWidth() / 2;
 
             var yScale = context.getYScale(this._valueColumn);   

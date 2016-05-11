@@ -74,14 +74,16 @@ module semio.chart.categorical {
                         violin.value(this._valueColumn)
                             .cut(1)
                             .fill(categoryColor);
-                        violin.draw(group.values, subSurface, context);
+                        violin.preDraw(group.values);
+                        violin.draw(subSurface, context);
                     }
                 });      
             } else {
                 let violin = new VerticalViolin();
                 violin.value(this._valueColumn)
                     .cut(1);
-                violin.draw(data, surface, context);
+                violin.preDraw(data);
+                violin.draw(surface, context);
             }
         }
     }

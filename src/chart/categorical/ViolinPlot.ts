@@ -11,6 +11,9 @@ module semio.chart.categorical {
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
     
+    const SCALE_METHOD_WIDTH = 'width';
+    const SCALE_METHOD_COUNT = 'count';
+    
     export class ViolinPlot implements CategoricalPlotable {
         
         private _valueColumn: string;
@@ -18,6 +21,8 @@ module semio.chart.categorical {
         
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
+        
+        private _scaleMethod: string = SCALE_METHOD_COUNT;
         
         value(column: string): ViolinPlot {
             this._valueColumn = column;
@@ -34,6 +39,13 @@ module semio.chart.categorical {
             };
             return this;
         } 
+        
+        scale(method: string): ViolinPlot {
+            if (method.toLowerCase() === SCALE_METHOD_WIDTH) {
+                this._scaleMethod = SCALE_METHOD_WIDTH;
+            }
+            return this;
+        }
         
         getCategoricalColumns(): Array<string> {
             return [];
@@ -80,8 +92,7 @@ module semio.chart.categorical {
                 });      
             } else {
                 let violin = new VerticalViolin();
-                violin.value(this._valueColumn)
-                    .cut(1);
+                violin.value(this._valueColumn).cut(1);
                 violin.preDraw(data);
                 violin.draw(surface, context);
             }

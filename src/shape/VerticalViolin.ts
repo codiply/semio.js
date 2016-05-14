@@ -18,7 +18,7 @@ module semio.shape {
         private _defaultFill: string = '#1f77b4';
         private _valueColumn: string;
         private _fill: string;
-        private _cut: number = 1;
+        private _extend: number = 0.2;
         private _bandwidth: number;
         private _numericAccessor: (d: any) => number;
         
@@ -38,8 +38,8 @@ module semio.shape {
             return this;
         }
         
-        cut(cut: number): VerticalViolin {
-            this._cut = cut;
+        extend(ratio: number): VerticalViolin {
+            this._extend = ratio;
             return this;
         }
         

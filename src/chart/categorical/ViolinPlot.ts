@@ -23,6 +23,7 @@ module semio.chart.categorical {
         private _categoricalAccessor: (d: any) => string;
         
         private _scaleMethod: string = SCALE_METHOD_COUNT;
+        private _extend: number = 0.2;
         
         value(column: string): ViolinPlot {
             this._valueColumn = column;
@@ -44,6 +45,11 @@ module semio.chart.categorical {
             if (method.toLowerCase() === SCALE_METHOD_WIDTH) {
                 this._scaleMethod = SCALE_METHOD_WIDTH;
             }
+            return this;
+        }
+        
+        extend(ratio: number): ViolinPlot {
+            this._extend = ratio;
             return this;
         }
         
@@ -84,7 +90,7 @@ module semio.chart.categorical {
                         
                         let violin = new VerticalViolin();
                         violin.value(this._valueColumn)
-                            .cut(1)
+                            .extend(1)
                             .fill(categoryColor);
                         violin.preDraw(group.values);
                         violin.draw(subSurface, context);

@@ -18,7 +18,7 @@ module semio.shape {
         private _defaultFill: string = '#1f77b4';
         private _valueColumn: string;
         private _fill: string;
-        private _extend: number = 0.2;
+        private _extend: number = 1;
         private _bandwidth: number;
         private _numericAccessor: (d: any) => number;
         
@@ -38,8 +38,8 @@ module semio.shape {
             return this;
         }
         
-        extend(ratio: number): VerticalViolin {
-            this._extend = ratio;
+        extend(extend: number): VerticalViolin {
+            this._extend = extend;
             return this;
         }
         
@@ -52,15 +52,20 @@ module semio.shape {
             if (!data)
                 return;
                 
+            let values = data.map(this._numericAccessor);
+            
+            if (!this._bandwidth) {
+                this._bandwidth = 1.06 * d3.deviation(values) / Math.pow(values.length, 0.2);
+            }
+            
             let yMin = d3.min(data, this._numericAccessor);
             let yMax = d3.max(data, this._numericAccessor);
 
-            let support = _.range(yMin, yMax, 0.01);
+            let support = _.range(yMin - this._extend * this._bandwidth / 2, 
+                                  yMax + this._extend * this._bandwidth / 2, 0.01);
 
             let kernel = Kde.epanechnikovKernel;
-            let values = data.map(this._numericAccessor);
-            let bandwidth = 1.06 * d3.deviation(values) / Math.pow(values.length, 0.2);
-            this._densities = Kde.estimate(kernel, values, bandwidth, support);
+            this._densities = Kde.estimate(kernel, values, this._bandwidth, support);
             this._maxDensity = d3.max(this._densities, (d) => d.density); 
             return { 
                 maxDensity: this._maxDensity,

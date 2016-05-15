@@ -100,7 +100,7 @@ module semio.shape {
             context.getSlicedColumns().forEach((column) => {
                 tooltipLines.push(column + ': ' + context.getSlicedColumnValue(column));
             });
-            if (tooltipLines) {
+            if (tooltipLines.length > 0) {
                 context.getTooltip().addOn(violin, () => {
                     return tooltipLines.join('<br/>');
                 });

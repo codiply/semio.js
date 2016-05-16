@@ -10,8 +10,8 @@ module semio.shape {
     import KdePoint = semio.math.KdePoint;
     
     export interface PreDrawResult {
-        maxDensity: number,
-        count: number
+        count: number,
+        maxDensity: number
     }
     
     export class VerticalViolin {
@@ -24,6 +24,7 @@ module semio.shape {
         
         private _densities: Array<KdePoint>;
         private _maxDensity: number;
+        private _area: number;
             
         value(column: string): VerticalViolin {
             this._valueColumn = column;
@@ -60,16 +61,16 @@ module semio.shape {
             
             let yMin = d3.min(data, this._numericAccessor);
             let yMax = d3.max(data, this._numericAccessor);
-
+            
             let support = _.range(yMin - this._extend * this._bandwidth / 2, 
-                                  yMax + this._extend * this._bandwidth / 2, 0.01);
-
+                                  yMax + this._extend * this._bandwidth / 2, this._bandwidth / 10);
+            
             let kernel = Kde.epanechnikovKernel;
             this._densities = Kde.estimate(kernel, values, this._bandwidth, support);
-            this._maxDensity = d3.max(this._densities, (d) => d.density); 
+            this._maxDensity = d3.max(this._densities, (d) => d.density);
             return { 
-                maxDensity: this._maxDensity,
-                count: data.length
+                count: data.length,
+                maxDensity: this._maxDensity
             };    
         }
         

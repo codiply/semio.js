@@ -10,9 +10,11 @@ module semio.chart.categorical {
     import Context = semio.interfaces.Context;
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
+    import PreDrawResult = semio.shape.VerticalViolinPreDrawResult;
     
     const SCALE_METHOD_WIDTH = 'width';
     const SCALE_METHOD_COUNT = 'count';
+    const SCALE_METHOD_AREA = 'area';
     
     export class ViolinPlot implements CategoricalPlotable {
         
@@ -42,8 +44,11 @@ module semio.chart.categorical {
         } 
         
         scale(method: string): ViolinPlot {
-            if (method.toLowerCase() === SCALE_METHOD_WIDTH) {
+            let methodLower = method.toLowerCase();
+            if (methodLower === SCALE_METHOD_WIDTH) {
                 this._scaleMethod = SCALE_METHOD_WIDTH;
+            } else if (methodLower == SCALE_METHOD_AREA) {
+                this._scaleMethod = SCALE_METHOD_AREA;
             }
             return this;
         }
@@ -78,29 +83,38 @@ module semio.chart.categorical {
                 
                 let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
 
+                let preDrawResults: { [category: string]: PreDrawResult }= { };
+                let violins: { [category: string]: VerticalViolin} = { };
                 _.forOwn(groupedData, (group) => {
                     if (group.values) {
                         var category = group.key;
                         var categoryColor = context.getCategoryColours(this._splitOnColumn)(category);                 
                         
-                        let subSurface = surface
-                            .addCenteredColumn('_violin_' + category, xScale(category), categoryWidth);
-                        
-                        let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
-                        
                         let violin = new VerticalViolin();
                         violin.value(this._valueColumn)
                             .extend(this._extend)
                             .fill(categoryColor);
-                        violin.preDraw(group.values);
-                        violin.draw(subSurface, context);
+                        let preDrawResult = violin.preDraw(group.values);
+                        preDrawResults[category] = preDrawResult;
+                        violins[category] = violin;
                     }
-                });      
+                });
+                
+                // TODO: inspect preDrawResults and decide on the width depending on the scale method
+                
+                _.forOwn(groupedData, (group) => {
+                    var category = group.key;
+                    let subSurface = surface
+                        .addCenteredColumn('_violin_' + category, xScale(category), categoryWidth);
+                                
+                    let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
+                    violins[category].draw(subSurface, updatedContext, 1);
+                });    
             } else {
                 let violin = new VerticalViolin();
                 violin.value(this._valueColumn).extend(this._extend);
                 violin.preDraw(data);
-                violin.draw(surface, context);
+                violin.draw(surface, context, 1);
             }
         }
     }

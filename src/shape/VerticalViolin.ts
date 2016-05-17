@@ -9,7 +9,7 @@ module semio.shape {
     import Kde = semio.math.Kde;
     import KdePoint = semio.math.KdePoint;
     
-    export interface PreDrawResult {
+    export interface VerticalViolinPreDrawResult {
         count: number,
         maxDensity: number
     }
@@ -49,7 +49,7 @@ module semio.shape {
             return this;
         }
         
-        preDraw(data:Array<any>): PreDrawResult {
+        preDraw(data:Array<any>): VerticalViolinPreDrawResult {
             if (!data)
                 return;
                 
@@ -74,7 +74,7 @@ module semio.shape {
             };    
         }
         
-        draw(surface: Surface, context: Context): void {
+        draw(surface: Surface, context: Context, widthRatio: number): void {
             if (!this._densities)
                 return;
                 
@@ -83,7 +83,7 @@ module semio.shape {
             var yScale = context.getYScale(this._valueColumn);   
 
             this._densities.forEach((d) => {
-                d.density = 0.45 * surface.getWidth() * d.density / this._maxDensity;
+                d.density = 0.45 * (surface.getWidth() * widthRatio) * (d.density  / this._maxDensity);
             });
 
             let area = d3.svg.area<KdePoint>()

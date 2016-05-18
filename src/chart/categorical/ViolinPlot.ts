@@ -24,7 +24,7 @@ module semio.chart.categorical {
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
         
-        private _scaleMethod: string = SCALE_METHOD_COUNT;
+        private _scaleMethod: string = SCALE_METHOD_WIDTH;
         private _extend: number = 1;
         
         value(column: string): ViolinPlot {
@@ -100,7 +100,21 @@ module semio.chart.categorical {
                     }
                 });
                 
-                // TODO: inspect preDrawResults and decide on the width depending on the scale method
+                let scaleForCategory = (cagetory: string) => 1;
+                
+                if (this._scaleMethod === SCALE_METHOD_COUNT) {
+                    let counts = _.values(preDrawResults).map((d: PreDrawResult) => d.count)
+                    let maxCount = d3.max(counts);
+                    scaleForCategory = (category: string) => {
+                        return preDrawResults[category].count / maxCount;  
+                    };
+                } else if (this._scaleMethod === SCALE_METHOD_AREA) {
+                    let maxDensities = _.values(preDrawResults).map((d: PreDrawResult) => d.maxDensity);
+                    let maxMaxDensity = d3.max(maxDensities);
+                    scaleForCategory = (category: string) => {
+                        return preDrawResults[category].maxDensity / maxMaxDensity;  
+                    };
+                }
                 
                 _.forOwn(groupedData, (group) => {
                     var category = group.key;
@@ -108,7 +122,7 @@ module semio.chart.categorical {
                         .addCenteredColumn('_violin_' + category, xScale(category), categoryWidth);
                                 
                     let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
-                    violins[category].draw(subSurface, updatedContext, 1);
+                    violins[category].draw(subSurface, updatedContext, scaleForCategory(category));
                 });    
             } else {
                 let violin = new VerticalViolin();

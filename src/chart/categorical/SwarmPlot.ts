@@ -3,11 +3,13 @@
 /// <reference path="../../interfaces/CategoricalPlotable.ts"/>
 /// <reference path="../../interfaces/Context.ts"/>
 /// <reference path="../../interfaces/Surface.ts"/>
+/// <reference path="../../shape/VerticalSwarm.ts"/>
 
 module semio.chart.categorical {
     import CategoricalPlotable = semio.interfaces.CategoricalPlotable;
     import Context = semio.interfaces.Context;
     import Surface = semio.interfaces.Surface;
+    import VerticalSwarm = semio.shape.VerticalSwarm;
     
     export class SwarmPlot implements CategoricalPlotable {
         private _valueColumn: string;
@@ -17,6 +19,7 @@ module semio.chart.categorical {
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
         private _diameter: number = 5;
+        private _delay: number = 2000;
 
         value(column: string): SwarmPlot {
             this._valueColumn = column;
@@ -44,8 +47,13 @@ module semio.chart.categorical {
             return this;
         }
         
-        diameter(d: number): SwarmPlot {
-            this._diameter = d;
+        diameter(diameter: number): SwarmPlot {
+            this._diameter = diameter;
+            return this;
+        }
+        
+        delay(delay: number): SwarmPlot {
+            this._delay = delay;
             return this;
         }
         
@@ -84,25 +92,22 @@ module semio.chart.categorical {
                         let subSurface = surface
                             .addCenteredColumn('_swarm_' + category, xScale(category), categoryWidth);
                         
-                        let swarm = new semio.shape.VerticalSwarm()
-                            .color(this._colorColumn)
-                            .value(this._valueColumn)
-                            .diameter(this._diameter)
-                            .id(this._idColumn);
-                        
                         let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
-                        swarm.draw(group.values, subSurface, context);
+                        this.constructVerticalSwarm().draw(group.values, subSurface, context);
                     }
                 });
             } else {                 
-                let swarm = new semio.shape.VerticalSwarm()
-                    .color(this._colorColumn)
-                    .value(this._valueColumn)
-                    .diameter(this._diameter)
-                    .id(this._idColumn);
-                
-                swarm.draw(data, surface, context);
+                this.constructVerticalSwarm().draw(data, surface, context);
             }
+        }
+        
+        private constructVerticalSwarm(): VerticalSwarm {
+            return new semio.shape.VerticalSwarm()
+                .color(this._colorColumn)
+                .value(this._valueColumn)
+                .diameter(this._diameter)
+                .delay(this._delay)
+                .id(this._idColumn);
         }
     }
 }

@@ -29,7 +29,8 @@ module semio.shape {
         }
     }
     
-    export class VerticalSwarm {        
+    export class VerticalSwarm {  
+        private _delay: number;      
         private _valueColumn: string;
         private _colorColumn: string;
         private _idColumn: string;
@@ -54,8 +55,13 @@ module semio.shape {
             return this;
         }
         
-        diameter(d: number): VerticalSwarm {
-            this._diameter = d;
+        diameter(diameter: number): VerticalSwarm {
+            this._diameter = diameter;
+            return this;
+        }
+        
+        delay(delay: number): VerticalSwarm {
+            this._delay = delay;
             return this;
         }
         
@@ -80,13 +86,16 @@ module semio.shape {
                 swarm.push(this.findPosition(p, neighbors, centre));
             });
             
+            let startingX = (d: SwarmPoint) => centre;
+            let startingY = (d: SwarmPoint) => this._diameter / 2;
+            
             let circles = surface.svg.append('g')
                 .selectAll('circle')
                 .data(swarm)
                 .enter()
                 .append('circle')
-                .attr('cx', d => d.x)
-                .attr('cy', d => d.y)
+                .attr('cx', d => startingX(d))
+                .attr('cy', d => startingY(d))
                 .attr('r', this._diameter / 2)
                 .style('fill', d => d.color);
              
@@ -102,6 +111,12 @@ module semio.shape {
             context.getTooltip().addOn(circles, (swarmPoint: SwarmPoint) => {
                 return tooltipColumns.map((col) => col + ': ' + swarmPoint.datum[col]).join('<br/>');
             });
+            
+            let circleCount = swarm.length;
+            circles.transition()
+                .delay((d, i) => i * this._delay / circleCount)
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
         }
         
         findPosition(p: SwarmPoint, neighbors: Array<SwarmPoint>, centre: number): SwarmPoint {

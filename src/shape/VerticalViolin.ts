@@ -21,6 +21,7 @@ module semio.shape {
         private _extend: number = 1;
         private _bandwidth: number;
         private _numericAccessor: (d: any) => number;
+        private _delay: number;
         
         private _densities: Array<KdePoint>;
         private _maxDensity: number;
@@ -46,6 +47,11 @@ module semio.shape {
         
         bandwidth(bandwidth: number): VerticalViolin {
             this._bandwidth = bandwidth;
+            return this;
+        }
+        
+        delay(delay: number): VerticalViolin {
+            this._delay = delay;
             return this;
         }
         
@@ -86,6 +92,11 @@ module semio.shape {
                 d.density = 0.45 * (surface.getWidth() * widthRatio) * (d.density  / this._maxDensity);
             });
 
+            let area0 = d3.svg.area<KdePoint>()
+                .y(d => yScale(d.value))
+                .x0(d => centre - d.density / 100)
+                .x1(d => centre + d.density / 100);
+
             let area = d3.svg.area<KdePoint>()
                .y(d => yScale(d.value))
                .x0(d => centre - d.density)
@@ -94,8 +105,12 @@ module semio.shape {
             let violin = surface.svg.append('g')
                  .append('path')
                  .datum(this._densities)
-                 .attr('d', area)
+                 .attr('d', area0)
                  .style('fill', this._fill || this._defaultFill);
+                 
+            violin.transition()
+                 .duration(this._delay)
+                 .attr('d', area);
                
             let tooltipLines: Array<string> = [];
             context.getSlicedColumns().forEach((column) => {

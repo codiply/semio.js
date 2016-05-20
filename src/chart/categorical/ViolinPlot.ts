@@ -26,6 +26,7 @@ module semio.chart.categorical {
         
         private _scaleMethod: string = SCALE_METHOD_WIDTH;
         private _extend: number = 1;
+        private _delay: number = 2000;
         
         value(column: string): ViolinPlot {
             this._valueColumn = column;
@@ -55,6 +56,11 @@ module semio.chart.categorical {
         
         extend(extend: number): ViolinPlot {
             this._extend = extend;
+            return this;
+        }
+        
+        delay(delay: number): ViolinPlot {
+            this._delay = delay;
             return this;
         }
         
@@ -93,7 +99,8 @@ module semio.chart.categorical {
                         let violin = new VerticalViolin();
                         violin.value(this._valueColumn)
                             .extend(this._extend)
-                            .fill(categoryColor);
+                            .fill(categoryColor)
+                            .delay(this._delay);
                         let preDrawResult = violin.preDraw(group.values);
                         preDrawResults[category] = preDrawResult;
                         violins[category] = violin;
@@ -126,7 +133,7 @@ module semio.chart.categorical {
                 });    
             } else {
                 let violin = new VerticalViolin();
-                violin.value(this._valueColumn).extend(this._extend);
+                violin.value(this._valueColumn).extend(this._extend).delay(this._delay);
                 violin.preDraw(data);
                 violin.draw(surface, context, 1);
             }

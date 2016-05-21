@@ -96,11 +96,7 @@ module semio.chart.categorical {
                         var category = group.key;
                         var categoryColor = context.getCategoryColours(this._splitOnColumn)(category);                 
                         
-                        let violin = new VerticalViolin();
-                        violin.value(this._valueColumn)
-                            .extend(this._extend)
-                            .fill(categoryColor)
-                            .delay(this._delay);
+                        let violin = this.constructVerticalViolin().fill(categoryColor);
                         let preDrawResult = violin.preDraw(group.values);
                         preDrawResults[category] = preDrawResult;
                         violins[category] = violin;
@@ -132,11 +128,17 @@ module semio.chart.categorical {
                     violins[category].draw(subSurface, updatedContext, scaleForCategory(category));
                 });    
             } else {
-                let violin = new VerticalViolin();
-                violin.value(this._valueColumn).extend(this._extend).delay(this._delay);
+                let violin = this.constructVerticalViolin();
                 violin.preDraw(data);
                 violin.draw(surface, context, 1);
             }
+        }
+        
+        private constructVerticalViolin(): VerticalViolin {
+            return new VerticalViolin()
+                .value(this._valueColumn)
+                .extend(this._extend)
+                .delay(this._delay);
         }
     }
 }

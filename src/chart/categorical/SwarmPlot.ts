@@ -37,6 +37,10 @@ module semio.chart.categorical {
             return this;
         } 
         
+        getLegendColumn(): string {
+            return this._colorColumn;
+        }
+        
         color(column: string): SwarmPlot {
             this._colorColumn = column;
             return this;

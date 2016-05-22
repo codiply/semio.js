@@ -44,6 +44,10 @@ module semio.chart.categorical {
             return this;
         } 
         
+        getLegendColumn(): string {
+            return this._splitOnColumn;
+        }
+        
         scale(method: string): ViolinPlot {
             let methodLower = method.toLowerCase();
             if (methodLower === SCALE_METHOD_WIDTH) {

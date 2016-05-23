@@ -31,9 +31,9 @@ module semio.chart {
         
         private _marginRatio: MarginRatio = {
             top: 0.02,
-            right: 0.02,
+            right: 0.16,
             bottom: 0.08,
-            left: 0.08  
+            left: 0.08 
         };
         
         private _plotables: Array<CategoricalPlotable> = [];
@@ -92,6 +92,11 @@ module semio.chart {
             let plotAreaHeight = (1 - this._marginRatio.top - this._marginRatio.bottom) * surface.getHeight();
             let xAxisAreaHeight = this._marginRatio.bottom * surface.getHeight();
             let yAxisAreaWidth = this._marginRatio.left * surface.getWidth();
+            
+            let legendAreaX = (1 - this._marginRatio.right) * surface.getWidth();
+            let legendAreaY = plotAreaY;
+            let legendAreaWidth = this._marginRatio.right * surface.getHeight();
+            let legendAreaHeight = plotAreaHeight;
  
             // Add background to plot area
             surface.svg.append('g')
@@ -156,6 +161,8 @@ module semio.chart {
                                 
                 updatedContext = updatedContext.setXScale(this._splitOnColumn, xScale); 
             }
+            
+            let legendSurface = surface.addSurface('legendarea', legendAreaX, legendAreaY, legendAreaWidth, legendAreaHeight);
              
             let plotSurface = surface.addSurface('plotablearea', plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
             this._plotables.forEach((pl) => {

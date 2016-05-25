@@ -7,6 +7,7 @@
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 /// <reference path="../math/Extent.ts"/>
+/// <reference path="../shape/Legend.ts"/>
 
 module semio.chart {
     import ColorPalette = semio.core.ColorPalette;
@@ -17,6 +18,7 @@ module semio.chart {
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
     import Extent = semio.math.Extent;
+    import Legend = semio.shape.Legend;
     
     export class CategoricalPlot implements Plotable {
         private _valueExtentWidening: number = 0.12;
@@ -163,6 +165,8 @@ module semio.chart {
             }
             
             let legendSurface = surface.addSurface('legendarea', legendAreaX, legendAreaY, legendAreaWidth, legendAreaHeight);
+            let legend = new Legend();
+            legend.draw(legendSurface, context);
              
             let plotSurface = surface.addSurface('plotablearea', plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
             this._plotables.forEach((pl) => {

@@ -1,5 +1,5 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
-/// <reference path="../interfaces/surface.ts"/>
+/// <reference path="../interfaces/Surface.ts"/>
 
 module semio.shape {        
     import Surface = semio.interfaces.Surface;

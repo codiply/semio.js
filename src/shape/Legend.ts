@@ -7,6 +7,13 @@ module semio.shape {
     import Surface = semio.interfaces.Surface;
     
     export class Legend {
+        private _columns: Array<string> = [];
+        
+        addColumn(column: string): Legend {
+            this._columns.push(column);
+            return this;
+        }
+        
         draw(surface: Surface, context: Context): void {
             
         }

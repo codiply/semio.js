@@ -166,13 +166,15 @@ module semio.chart {
             
             let legendSurface = surface.addSurface('legendarea', legendAreaX, legendAreaY, legendAreaWidth, legendAreaHeight);
             let legend = new Legend();
-            legend.draw(legendSurface, context);
-             
+            
             let plotSurface = surface.addSurface('plotablearea', plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
             this._plotables.forEach((pl) => {
                 pl.value(this._valueColumn).splitOn(this._splitOnColumn);
                 pl.plot(data, plotSurface, updatedContext);
+                legend.addColumn(pl.getLegendColumn());
             });
+            
+            legend.draw(legendSurface, context);
         }
     }
 }

@@ -97,7 +97,7 @@ module semio.chart {
             
             let legendAreaX = (1 - this._marginRatio.right) * surface.getWidth();
             let legendAreaY = plotAreaY;
-            let legendAreaWidth = this._marginRatio.right * surface.getHeight();
+            let legendAreaWidth = this._marginRatio.right * surface.getWidth();
             let legendAreaHeight = plotAreaHeight;
  
             // Add background to plot area

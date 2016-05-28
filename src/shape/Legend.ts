@@ -34,17 +34,29 @@ module semio.shape {
             let colors = context.getCategoryColours(column);
             let values = context.getCategoryValues(column);
             
-            let height = surface.getHeight() / values.length;
+            let blockHeight = surface.getHeight() / values.length;
             
             let rects = surface.svg.append('g')
                 .selectAll('rect')
                 .data(values)
                 .enter()
                 .append('rect')
-                .attr('width', surface.getWidth())
-                .attr('height', height)
-                .attr('y', (d, i) => i * height)
-                .attr('fill', (d) => colors(d))
+                .attr('width', surface.getWidth() * 4 / 5)
+                .attr('height', blockHeight / 5)
+                .attr('x', surface.getWidth() / 10)
+                .attr('y', (d, i) => (i + 1 / 10) * blockHeight)
+                .attr('fill', (d) => colors(d));
+            
+            let labels = surface.svg.append('g')
+                .selectAll('text')
+                .data(values)
+                .enter()
+                .append('text')
+                .attr('x', surface.getWidth() / 2)
+                .attr('y', (d, i) => (i + 3 / 5) * blockHeight)
+                .attr('text-anchor', 'middle')  
+                .attr('font-size', blockHeight * 1 / 5)
+                .text((d) => d);
         }
     }
     

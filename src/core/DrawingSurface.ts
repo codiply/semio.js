@@ -46,7 +46,7 @@ module semio.core {
         getHeight(): number { return this._height; }
         
         splitRows(n: number, verticalSpacingRatio: number): Array<Surface> {
-            let rowHeight = this._height * (1 - verticalSpacingRatio) / n;
+            let rowHeight = n > 1 ? this._height * (1 - verticalSpacingRatio) / n : this._height;
             let marginHeight = n > 1 ? this._height * verticalSpacingRatio / (n - 1) : 0;
             return _.range(0, n).map((row) => {
                 let id = this.containerId + '_row_' + row.toString();
@@ -59,10 +59,10 @@ module semio.core {
         }
         
         splitColumns(n: number, horizontalSpacingRatio: number): Array<Surface> {
-            let columnWidth = this._width * (1 - horizontalSpacingRatio) / n;
+            let columnWidth = n > 1 ? this._width * (1 - horizontalSpacingRatio) / (n - 1) : this._width;
             let marginWidth = n > 1 ? this._width * horizontalSpacingRatio / (n - 1) : 0;
             return _.range(0, n).map((col) => {
-                let id = this.containerId + '_column_' + col.toString()
+                let id = this.containerId + '_column_' + col.toString();
                 this.svg.append('g').attr('id', id);
                 return new DrawingSurface(id)
                     .setHeight(this._height)

@@ -1,4 +1,5 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
+/// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../interfaces/surface.ts"/>
 /// <reference path="../interfaces/context.ts"/>
 
@@ -7,6 +8,7 @@ module semio.shape {
     import Surface = semio.interfaces.Surface;
     
     export class Legend {
+        private _horizontalSpacingRatio = 0.1;
         private _columns: Array<string> = [];
         
         addColumn(column: string): Legend {
@@ -15,7 +17,34 @@ module semio.shape {
         }
         
         draw(surface: Surface, context: Context): void {
+            if (!this._columns)
+                return;
+                
+            let nColumns = this._columns.length;
+            let subSurfaces = surface.splitRows(nColumns, this._horizontalSpacingRatio);
+            for (let i = 0; i < nColumns; i++) {
+                let column = this._columns[i];
+                let subSurface = subSurfaces[i];
+                this.drawLegend(column, subSurface, context);
+            }
             
+        }
+        
+        private drawLegend(column: string, surface: Surface, context: Context) {
+            let colors = context.getCategoryColours(column);
+            let values = context.getCategoryValues(column);
+            
+            let height = surface.getHeight() / values.length;
+            
+            let rects = surface.svg.append('g')
+                .selectAll('rect')
+                .data(values)
+                .enter()
+                .append('rect')
+                .attr('width', surface.getWidth())
+                .attr('height', height)
+                .attr('y', (d, i) => i * height)
+                .attr('fill', (d) => colors(d))
         }
     }
     

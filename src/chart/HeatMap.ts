@@ -36,11 +36,11 @@ module semio.chart {
         }
         
         getCategoricalColumns(): Array<string> {
-            return [];
+            return _.filter([this._xColumn, this._yColumn], _.negate(_.isNull));
         }
         
         getNumericColumns(): Array<string> {
-            return [];
+            return _.filter([this._radiusColumn, this._colorColumn], _.negate(_.isNull));
         }
         
         plot(data: Array<any>, surface: Surface, context: Context): void {

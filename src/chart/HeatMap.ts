@@ -10,7 +10,30 @@ module semio.chart {
     import Surface = semio.interfaces.Surface;
 
     export class HeatMap implements Plotable {
+        private _xColumn: string;
+        private _yColumn: string;
+        private _radiusColumn: string;
+        private _colorColumn: string;
         
+        xColumn(column: string): HeatMap {
+            this._xColumn = column;
+            return this;
+        }
+        
+        yColumn(column: string): HeatMap {
+            this._yColumn = column;
+            return this;
+        }
+        
+        radiusColumn(column: string): HeatMap { 
+            this._radiusColumn = column;
+            return this;
+        }
+        
+        colorColumn(column: string): HeatMap {
+            this._colorColumn = column;
+            return this;
+        }
         
         getCategoricalColumns(): Array<string> {
             return [];

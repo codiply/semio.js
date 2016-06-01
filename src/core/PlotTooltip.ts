@@ -8,33 +8,33 @@ module semio.core {
         private _tooltip: d3.Selection<any>; 
         
         constructor(private containerId: string) {
-            this._container = d3.select('#' + containerId);
+            this._container = d3.select("#" + containerId);
             this._tooltip = this._container
-              .append('div')
-              .attr('class', 'tooltip')
-              .style('position', 'absolute')
-              .style('z-index', '10')
-              .style('visibility', 'hidden')
-              .style('background', '#eee')
-              .style('text-align', 'left')
-              .style('box-shadow', '0 0 5px #999999')
-              .style('padding', '10px');
+              .append("div")
+              .attr("class", "tooltip")
+              .style("position", "absolute")
+              .style("z-index", "10")
+              .style("visibility", "hidden")
+              .style("background", "#eee")
+              .style("text-align", "left")
+              .style("box-shadow", "0 0 5px #999999")
+              .style("padding", "10px");
         }
         
         addOn(selection: d3.Selection<any>, html: (d: any) => string): d3.Selection<any> {
             let that = this;
-            return selection.on('mouseover', function(d) {
+            return selection.on("mouseover", function(d) {
                 return that._tooltip
-                  .style('visibility', 'visible')
+                  .style("visibility", "visible")
                   .html(html(d));
             })
-            .on('mousemove', function(d) { 
+            .on("mousemove", function(d) { 
                 let mouse = d3.mouse(document.body);
                 return that._tooltip
-                    .style('top', (mouse[1] - 10) + 'px')
-                    .style('left',(mouse[0] + 20) + 'px'); })
-            .on('mouseout', function(d) { 
-                return that._tooltip.style('visibility', 'hidden'); 
+                    .style("top", (mouse[1] - 10) + "px")
+                    .style("left",(mouse[0] + 20) + "px"); })
+            .on("mouseout", function(d) { 
+                return that._tooltip.style("visibility", "hidden"); 
             });
         }        
     }

@@ -89,15 +89,15 @@ module semio.shape {
             let startingX = (d: SwarmPoint) => centre;
             let startingY = (d: SwarmPoint) => this._diameter / 2;
 
-            let circles = surface.svg.append('g')
-                .selectAll('circle')
+            let circles = surface.svg.append("g")
+                .selectAll("circle")
                 .data(swarm)
                 .enter()
-                .append('circle')
-                .attr('cx', d => startingX(d))
-                .attr('cy', d => startingY(d))
-                .attr('r', this._diameter / 2)
-                .style('fill', d => d.color);
+                .append("circle")
+                .attr("cx", d => startingX(d))
+                .attr("cy", d => startingY(d))
+                .attr("r", this._diameter / 2)
+                .style("fill", d => d.color);
 
             let tooltipColumns: Array<string> = [];
             if (that._idColumn) {
@@ -109,14 +109,14 @@ module semio.shape {
                 tooltipColumns.push(column);
             });
             context.getTooltip().addOn(circles, (swarmPoint: SwarmPoint) => {
-                return tooltipColumns.map((col) => col + ': ' + swarmPoint.datum[col]).join('<br/>');
+                return tooltipColumns.map((col) => col + ": " + swarmPoint.datum[col]).join("<br/>");
             });
 
             let circleCount = swarm.length;
             circles.transition()
                 .delay((d, i) => i * this._delay / circleCount)
-                .attr('cx', d => d.x)
-                .attr('cy', d => d.y);
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
         }
 
         public findPosition(p: SwarmPoint, neighbors: Array<SwarmPoint>, centre: number): SwarmPoint {

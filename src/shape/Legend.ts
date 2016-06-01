@@ -6,17 +6,17 @@
 module semio.shape {
     import Context = semio.interfaces.Context;
     import Surface = semio.interfaces.Surface;
-    
+
     export class Legend {
         private _horizontalSpacingRatio = 0.1;
         private _columns: Array<string> = [];
-        
-        addColumn(column: string): Legend {
+
+        public addColumn(column: string): Legend {
             this._columns.push(column);
             return this;
         }
-        
-        draw(surface: Surface, context: Context): void {
+
+        public draw(surface: Surface, context: Context): void {
             if (!this._columns)
                 return;
                 
@@ -29,35 +29,34 @@ module semio.shape {
             }
             
         }
-        
+
         private drawLegend(column: string, surface: Surface, context: Context) {
             let colors = context.getCategoryColours(column);
             let values = context.getCategoryValues(column);
-            
+
             let blockHeight = surface.getHeight() / values.length;
-            
-            let rects = surface.svg.append('g')
-                .selectAll('rect')
+
+            let rects = surface.svg.append("g")
+                .selectAll("rect")
                 .data(values)
                 .enter()
-                .append('rect')
-                .attr('width', surface.getWidth() * 4 / 5)
-                .attr('height', blockHeight / 5)
-                .attr('x', surface.getWidth() / 10)
-                .attr('y', (d, i) => (i + 1 / 10) * blockHeight)
-                .attr('fill', (d) => colors(d));
-            
-            let labels = surface.svg.append('g')
-                .selectAll('text')
+                .append("rect")
+                .attr("width", surface.getWidth() * 4 / 5)
+                .attr("height", blockHeight / 5)
+                .attr("x", surface.getWidth() / 10)
+                .attr("y", (d, i) => (i + 1 / 10) * blockHeight)
+                .attr("fill", (d) => colors(d));
+
+            let labels = surface.svg.append("g")
+                .selectAll("text")
                 .data(values)
                 .enter()
-                .append('text')
-                .attr('x', surface.getWidth() / 2)
-                .attr('y', (d, i) => (i + 3 / 5) * blockHeight)
-                .attr('text-anchor', 'middle')  
-                .attr('font-size', blockHeight * 1 / 5)
+                .append("text")
+                .attr("x", surface.getWidth() / 2)
+                .attr("y", (d, i) => (i + 3 / 5) * blockHeight)
+                .attr("text-anchor", "middle")  
+                .attr("font-size", blockHeight * 1 / 5)
                 .text((d) => d);
         }
-    }
-    
+    }    
 }

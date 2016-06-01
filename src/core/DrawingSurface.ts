@@ -14,31 +14,31 @@ module semio.core {
         svg: d3.Selection<any>;
         
         constructor(public containerId: string) { 
-            this.svg = d3.select('#' + containerId)
-                         .append('svg');
+            this.svg = d3.select("#" + containerId)
+                         .append("svg");
         }
         
         setWidth(width: number): Surface {
             this._width = width;
-            this.svg.attr('width', width);
+            this.svg.attr("width", width);
             return this;
         }
         
         setHeight(height: number): Surface {
             this._height = height;
-            this.svg.attr('height', height);
+            this.svg.attr("height", height);
             return this;
         }
         
         setX(x: number): Surface {
             this._x = x;
-            this.svg.attr('x', x);
+            this.svg.attr("x", x);
             return this;
         }
         
         setY(y: number): Surface {
             this._y = y;
-            this.svg.attr('y', y);
+            this.svg.attr("y", y);
             return this;
         }
         
@@ -49,8 +49,8 @@ module semio.core {
             let rowHeight = n > 1 ? this._height * (1 - verticalSpacingRatio) / n : this._height;
             let marginHeight = n > 1 ? this._height * verticalSpacingRatio / (n - 1) : 0;
             return _.range(0, n).map((row) => {
-                let id = this.containerId + '_row_' + row.toString();
-                this.svg.append('g').attr('id', id);
+                let id = this.containerId + "_row_" + row.toString();
+                this.svg.append("g").attr("id", id);
                 return new DrawingSurface(id)
                     .setHeight(rowHeight)
                     .setWidth(this._width)
@@ -62,8 +62,8 @@ module semio.core {
             let columnWidth = n > 1 ? this._width * (1 - horizontalSpacingRatio) / (n - 1) : this._width;
             let marginWidth = n > 1 ? this._width * horizontalSpacingRatio / (n - 1) : 0;
             return _.range(0, n).map((col) => {
-                let id = this.containerId + '_column_' + col.toString();
-                this.svg.append('g').attr('id', id);
+                let id = this.containerId + "_column_" + col.toString();
+                this.svg.append("g").attr("id", id);
                 return new DrawingSurface(id)
                     .setHeight(this._height)
                     .setWidth(columnWidth)
@@ -90,8 +90,8 @@ module semio.core {
                         let i = row * nColumns + col;
                         return i < n; 
                     }).map((col) => {
-                        let id = this.containerId + '_row_' + row.toString() + '_column_' + col.toString();
-                        this.svg.append('g').attr('id', id);
+                        let id = this.containerId + "_row_" + row.toString() + "_column_" + col.toString();
+                        this.svg.append("g").attr("id", id);
                         return new DrawingSurface(id)
                         .setHeight(cellHeight)
                         .setWidth(cellWidth)
@@ -105,11 +105,11 @@ module semio.core {
             let headerHeight = Math.max(Math.min(headerHeightRatio * this._height, this._height), 0);
             let bodyHeight = this._height - headerHeight;
             
-            let headerId = this.containerId + '_header';
-            let bodyId = this.containerId + '_body';
+            let headerId = this.containerId + "_header";
+            let bodyId = this.containerId + "_body";
             
-            this.svg.append('g').attr('id', headerId);
-            this.svg.append('g').attr('id', bodyId);
+            this.svg.append("g").attr("id", headerId);
+            this.svg.append("g").attr("id", bodyId);
             
             let headerSurface = new DrawingSurface(headerId)
                 .setWidth(this._width)
@@ -127,9 +127,9 @@ module semio.core {
         }
         
         addCenteredColumn(idSuffix: string, cx: number, width: number): Surface {
-            let id = this.containerId + '_column_' + idSuffix;
+            let id = this.containerId + "_column_" + idSuffix;
             
-            this.svg.append('g').attr('id', id);
+            this.svg.append("g").attr("id", id);
             
             let surface = new DrawingSurface(id)
                 .setWidth(width)
@@ -140,9 +140,9 @@ module semio.core {
         }
         
         addCenteredRow(idSuffix: string, cy: number, height: number): Surface {
-            let id = this.containerId + '_row_' + idSuffix;
+            let id = this.containerId + "_row_" + idSuffix;
             
-            this.svg.append('g').attr('id', id);
+            this.svg.append("g").attr("id", id);
             
             let surface = new DrawingSurface(id)
                 .setWidth(this._width)
@@ -153,9 +153,9 @@ module semio.core {
         }
         
         addSurface(idSuffix: string, x: number, y: number, width: number, height: number): Surface {
-            let id = this.containerId + '_' + idSuffix;
+            let id = this.containerId + "_" + idSuffix;
             
-            this.svg.append('g').attr('id', id);
+            this.svg.append("g").attr("id", id);
             
             let surface = new DrawingSurface(id)
                 .setWidth(width)

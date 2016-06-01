@@ -11,8 +11,8 @@ module semio.core {
              "#aec7e8","#ffbb78","#98df8a","#ff9896","#c5b0d5",
              "#c49c94","#f7b6d2","#c7c7c7","#dbdb8d","#9edae5"];
 
-        static qualitative(values: Array<string>): (x: string) => string   {
-            var colors: Array<string>;
+        public static qualitative(values: Array<string>): (x: string) => string  {
+            let colors: Array<string>;
             if (values.length <= 12) {
                 colors = ColorPalette._qualitativeColors12.slice(0, values.length);
             } else if (values.length <= 20) {
@@ -20,9 +20,9 @@ module semio.core {
             }
             let mapping: {[x: string]: string } = { };
             _.zip(values, colors).forEach((x) => {
-               mapping[x[0]] = x[1]; 
+               mapping[x[0]] = x[1];
             });
             return (x: string) => mapping[x];
-        } 
+        }
     }
 }

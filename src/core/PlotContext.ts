@@ -5,7 +5,7 @@
 module semio.core {
     import Context = semio.interfaces.Context;
     import Tooltip = semio.interfaces.Tooltip;
-    
+
     export class PlotContext implements Context {
         private _categoryColours: { [column: string]: (value: string) => string } = { };
         private _categoryValues: { [column: string]: Array<string> } = { };
@@ -14,81 +14,81 @@ module semio.core {
         private _yScale: { [column: string]: (value: d3.Primitive) => number } = { };
         private _xScale: { [column: string]: (value: d3.Primitive) => number } = { };
         private _tooltip: Tooltip;
-        
-        setCategoryValues(column: string, values: Array<string>): Context {
+
+        public setCategoryValues(column: string, values: Array<string>): Context {
             let clone = this.clone();
             clone._categoryValues[column] = values.slice(0);
             return clone;
         }
-        
-        setCategoryColours(column: string, colours: (value: string) => string): Context {
+
+        public setCategoryColours(column: string, colours: (value: string) => string): Context {
             let clone = this.clone();
             clone._categoryColours[column] = colours;
             return clone;
         }
-        
-        setNumericRange(column:string, range: [number, number]): Context {
+
+        public setNumericRange(column:string, range: [number, number]): Context {
             let clone = this.clone();
             clone._numericRange[column] = range;
             return clone;
         }
-        
-        setSlicedColumnValue(column: string, value: string): Context {
+
+        public setSlicedColumnValue(column: string, value: string): Context {
             let clone = this.clone();
             clone._slicedColumns[column] = value;
             return clone;
         }
-        
-        setXScale(column: string, scale: (value: d3.Primitive) => number): Context {
+
+        public setXScale(column: string, scale: (value: d3.Primitive) => number): Context {
             let clone = this.clone();
             clone._xScale[column] = scale;
             return clone;
         }
-        
-        setYScale(column: string, scale: (value: d3.Primitive) => number): Context {
+
+        public setYScale(column: string, scale: (value: d3.Primitive) => number): Context {
            let clone = this.clone();
            clone._yScale[column] = scale;
-           return clone;   
+           return clone;
         }
-        
-        setTooltip(tooltip: Tooltip): Context {
+
+        public setTooltip(tooltip: Tooltip): Context {
             let clone = this.clone();
             clone._tooltip = tooltip;
             return clone;
         }
-        
-        getCategoryValues(column: string): Array<string> {            
+
+        public getCategoryValues(column: string): Array<string> {
             return this._categoryValues[column];
         }
-        
-        getCategoryColours(column: string): (value: string) => string {
+
+        public getCategoryColours(column: string): (value: string) => string {
             return this._categoryColours[column];
         }
-        
-        getNumericRange(column: string): [number, number] {
+
+        public getNumericRange(column: string): [number, number] {
             return this._numericRange[column];
         }
-        
-        getSlicedColumns(): Array<string> {
+
+        public getSlicedColumns(): Array<string> {
             return _.keys(this._slicedColumns);
         }
-        
-        getSlicedColumnValue(column: string): string {
+
+        public getSlicedColumnValue(column: string): string {
             return this._slicedColumns[column];
         }
-        
-        getXScale(column: string): (value: d3.Primitive) => number {
+
+        public getXScale(column: string): (value: d3.Primitive) => number {
             return this._xScale[column];
         }
-        
-        getYScale(column: string): (value: d3.Primitive) => number {
+
+        public getYScale(column: string): (value: d3.Primitive) => number {
             return this._yScale[column];
         }
-        
-        getTooltip(): Tooltip {
+
+        public getTooltip(): Tooltip {
             return this._tooltip;
         }
-        
+
         private clone(): PlotContext {
             let clone = new PlotContext();
             clone._categoryColours = _.clone(this._categoryColours);

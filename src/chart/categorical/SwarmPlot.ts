@@ -10,7 +10,7 @@ module semio.chart.categorical {
     import Context = semio.interfaces.Context;
     import Surface = semio.interfaces.Surface;
     import VerticalSwarm = semio.shape.VerticalSwarm;
-    
+
     export class SwarmPlot implements CategoricalPlotable {
         private _valueColumn: string;
         private _splitOnColumn: string;
@@ -21,81 +21,82 @@ module semio.chart.categorical {
         private _diameter: number = 5;
         private _delay: number = 2000;
 
-        value(column: string): SwarmPlot {
+        public value(column: string): SwarmPlot {
             this._valueColumn = column;
             this._numericAccessor = function (d) {
                 return +d[column];
             };
             return this;
         }
-        
-        splitOn(column: string): SwarmPlot {
+
+        public splitOn(column: string): SwarmPlot {
             this._splitOnColumn = column;
             this._categoricalAccessor = function (d) {
                 return d[column].toString();
             };
             return this;
-        } 
-        
-        getLegendColumn(): string {
+        }
+
+        public getLegendColumn(): string {
             return this._colorColumn;
         }
-        
-        color(column: string): SwarmPlot {
+
+        public color(column: string): SwarmPlot {
             this._colorColumn = column;
             return this;
-        } 
-        
-        id(column: string): SwarmPlot {
+        }
+
+        public id(column: string): SwarmPlot {
             this._idColumn = column;
             return this;
         }
-        
-        diameter(diameter: number): SwarmPlot {
+
+        public diameter(diameter: number): SwarmPlot {
             this._diameter = diameter;
             return this;
         }
-        
-        delay(delay: number): SwarmPlot {
+
+        public delay(delay: number): SwarmPlot {
             this._delay = delay;
             return this;
         }
-        
-        getCategoricalColumns(): Array<string> {
+
+        public getCategoricalColumns(): Array<string> {
             if (this._colorColumn) {
                 return [this._colorColumn];
             }
             return [];
         }
-        
-        getNumericColumns(): Array<string> {
+
+        public getNumericColumns(): Array<string> {
             if (this._valueColumn) {
                 return [this._valueColumn];
             }
             return [];
         }
-        
-        plot(data: Array<any>, surface: Surface, context: Context): void {
-            if (!data)
+
+        public plot(data: Array<any>, surface: Surface, context: Context): void {
+            if (!data) {
                 return;
-            
+            }
+
             var yScale = context.getYScale(this._valueColumn);
-            
+
             if (this._splitOnColumn) {
                 var xScale = context.getXScale(this._splitOnColumn);
                 var categories = context.getCategoryValues(this._splitOnColumn);
-                
+
                 var categoryWidth = surface.getWidth() / categories.length;
-                
+
                 let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
 
                 _.forOwn(groupedData, (group) => {
                     if (group.values) {
-                        var category = group.key;                
-                        
+                        var category = group.key;
+
                         let subSurface = surface
                             .addCenteredColumn('_swarm_' + category, xScale(category), categoryWidth);
-                        
+
                         let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
                         this.constructVerticalSwarm().draw(group.values, subSurface, context);
                     }
@@ -104,7 +105,7 @@ module semio.chart.categorical {
                 this.constructVerticalSwarm().draw(data, surface, context);
             }
         }
-        
+
         private constructVerticalSwarm(): VerticalSwarm {
             return new semio.shape.VerticalSwarm()
                 .color(this._colorColumn)

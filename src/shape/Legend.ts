@@ -17,9 +17,10 @@ module semio.shape {
         }
 
         public draw(surface: Surface, context: Context): void {
-            if (!this._columns)
+            if (!this._columns) {
                 return;
-                
+            }
+
             let nColumns = this._columns.length;
             let subSurfaces = surface.splitRows(nColumns, this._horizontalSpacingRatio);
             for (let i = 0; i < nColumns; i++) {
@@ -27,7 +28,7 @@ module semio.shape {
                 let subSurface = subSurfaces[i];
                 this.drawLegend(column, subSurface, context);
             }
-            
+
         }
 
         private drawLegend(column: string, surface: Surface, context: Context) {
@@ -54,9 +55,10 @@ module semio.shape {
                 .append("text")
                 .attr("x", surface.getWidth() / 2)
                 .attr("y", (d, i) => (i + 3 / 5) * blockHeight)
-                .attr("text-anchor", "middle")  
+                .attr("text-anchor", "middle")
                 .attr("font-size", blockHeight * 1 / 5)
                 .text((d) => d);
         }
-    }    
+    }
 }
+

@@ -80,28 +80,28 @@ module semio.chart.categorical {
                 return;
             }
 
-            var yScale = context.getYScale(this._valueColumn);
+            let yScale = context.getYScale(this._valueColumn);
 
             if (this._splitOnColumn) {
-                var xScale = context.getXScale(this._splitOnColumn);
-                var categories = context.getCategoryValues(this._splitOnColumn);
+                let xScale = context.getXScale(this._splitOnColumn);
+                let categories = context.getCategoryValues(this._splitOnColumn);
 
-                var categoryWidth = surface.getWidth() / categories.length;
+                let categoryWidth = surface.getWidth() / categories.length;
 
                 let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
 
                 _.forOwn(groupedData, (group) => {
                     if (group.values) {
-                        var category = group.key;
+                        let category = group.key;
 
                         let subSurface = surface
-                            .addCenteredColumn('_swarm_' + category, xScale(category), categoryWidth);
+                            .addCenteredColumn("_swarm_" + category, xScale(category), categoryWidth);
 
                         let updatedContext = context.setSlicedColumnValue(this._splitOnColumn, category);
                         this.constructVerticalSwarm().draw(group.values, subSurface, context);
                     }
                 });
-            } else {                 
+            } else {
                 this.constructVerticalSwarm().draw(data, surface, context);
             }
         }

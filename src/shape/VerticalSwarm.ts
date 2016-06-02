@@ -6,7 +6,7 @@ module semio.shape {
     import Context = semio.interfaces.Context;
     import Surface = semio.interfaces.Surface;
 
-    class SwarmPoint {        
+    class SwarmPoint {
         constructor(public datum: any,
                     public x: number,
                     public y: number, 
@@ -29,8 +29,8 @@ module semio.shape {
         }
     }
 
-    export class VerticalSwarm {  
-        private _delay: number;      
+    export class VerticalSwarm {
+        private _delay: number;
         private _valueColumn: string;
         private _colorColumn: string;
         private _idColumn: string;
@@ -69,7 +69,7 @@ module semio.shape {
             let that = this;
             let centre = surface.getWidth() / 2;
 
-            var yScale = context.getYScale(this._valueColumn);            
+            var yScale = context.getYScale(this._valueColumn);
             let colors = context.getCategoryColours(this._colorColumn);
 
             let startingPositions: Array<SwarmPoint> = _.chain(data).map((d) => {
@@ -128,6 +128,5 @@ module semio.shape {
                 .value();
             return goodCandidates[0];
         }
-        
     }
 }

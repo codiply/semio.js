@@ -16,15 +16,13 @@ namespace semio.chart {
     import Text = semio.shape.Text;
 
     export class SmallMultiple implements Plotable {
-        private _headerRatio: number = 0.1;    
+        private _headerRatio: number = 0.1;
         private _horizontalSpacingRatio = 0.05;
         private _verticalSpacingRatio = 0.05;
         private _maxColumns: number;
         private _splitOnColumn: string;
         private _categoricalAccessor: (d: any) => string;
         private _plotable: Plotable;
-
-        constructor() { }
 
         public maxColumns(maxColumns: number): SmallMultiple {
             this._maxColumns = maxColumns;
@@ -85,7 +83,7 @@ namespace semio.chart {
             categories.forEach((cat, i) => {
                 let splitSurface = subSurfaces[i].splitHeader(this._headerRatio);
 
-                let title = this._splitOnColumn + ': ' + cat;
+                let title = this._splitOnColumn + ": " + cat;
                 Text.placeTitle(splitSurface.header, title);
 
                 let updatedContextWithSlice = updatedContext.setSlicedColumnValue(this._splitOnColumn, cat);

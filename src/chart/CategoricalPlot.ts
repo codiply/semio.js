@@ -32,10 +32,10 @@ module semio.chart {
         private _categoricalAccessor: (d: any) => string;
 
         private _marginRatio: MarginRatio = {
-            top: 0.02,
-            right: 0.16,
             bottom: 0.08,
-            left: 0.08
+            left: 0.08,
+            right: 0.16,
+            top: 0.02
         };
 
         private _plotables: Array<CategoricalPlotable> = [];
@@ -88,7 +88,7 @@ module semio.chart {
             if (!data) {
                 return;
             }
-   
+
             let plotAreaX = this._marginRatio.left * surface.getWidth();
             let plotAreaY = this._marginRatio.top * surface.getHeight();
             let plotAreaWidth = (1 - this._marginRatio.left - this._marginRatio.right) * surface.getWidth();
@@ -100,7 +100,7 @@ module semio.chart {
             let legendAreaY = plotAreaY;
             let legendAreaWidth = this._marginRatio.right * surface.getWidth();
             let legendAreaHeight = plotAreaHeight;
- 
+
             // Add background to plot area
             surface.svg.append("g")
                 .append("rect")
@@ -129,7 +129,7 @@ module semio.chart {
                     "stroke-width" : plotAreaHeight * this._yTickStrokeRatio / yAxis.ticks()[0]
                 });
             yAxisGroup.selectAll(".tick text")
-                .attr("font-size", yAxisAreaWidth / 3)
+                .attr("font-size", yAxisAreaWidth / 3);
             surface.svg.append("svg").append("text")
                 .attr("font-size", yAxisAreaWidth / 3)
                 .attr("text-anchor", "middle")
@@ -158,17 +158,19 @@ module semio.chart {
                     .attr("font-size", xAxisAreaHeight / 3)
                 surface.svg.append("g").append("text")
                     .attr("font-size", xAxisAreaHeight / 3)
-                    .attr("text-anchor", "middle")  
-                    .attr("transform", "translate(" + (plotAreaX + plotAreaWidth / 2) + "," + (plotAreaY + plotAreaHeight + xAxisAreaHeight * 3 / 4) + ")")
+                    .attr("text-anchor", "middle")
+                    .attr("transform",
+                          "translate(" + (plotAreaX + plotAreaWidth / 2) + "," +
+                                         (plotAreaY + plotAreaHeight + xAxisAreaHeight * 3 / 4) + ")")
                     .text(this._splitOnColumn);
 
-                updatedContext = updatedContext.setXScale(this._splitOnColumn, xScale); 
+                updatedContext = updatedContext.setXScale(this._splitOnColumn, xScale);
             }
 
             let legendSurface = surface.addSurface("legendarea", legendAreaX, legendAreaY, legendAreaWidth, legendAreaHeight);
             let legend = new Legend();
 
-            let plotSurface = surface.addSurface("plotablearea", plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);     
+            let plotSurface = surface.addSurface("plotablearea", plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
             this._plotables.forEach((pl) => {
                 pl.value(this._valueColumn).splitOn(this._splitOnColumn);
                 pl.plot(data, plotSurface, updatedContext);

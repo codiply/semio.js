@@ -2,30 +2,30 @@
 
 module semio.math {
     export interface KdePoint {
-        value: number,
-        density: number
+        value: number;
+        density: number;
     }
-        
+
     export class Kde {
-        static estimate(kernel: (x: number) => number,
+        public static estimate(kernel: (x: number) => number,
                         sample: Array<number>,
                         bandwidth: number,
                         support: Array<number>): Array<KdePoint> {
             let estimator = Kde.estimator(kernel, sample, bandwidth);
-            return support.map((v) => { 
-                return { value: v, density: estimator(v) };
+            return support.map((v) => {
+                return { density: estimator(v), value: v };
             });
         }
-        
-        static estimator(kernel: (x: number) => number, 
+
+        public static estimator(kernel: (x: number) => number,
                          sample: Array<number>, 
                          bandwidth: number): (x: number) => number {
             return (x: number) => {
                 return d3.mean(sample, (s: number) => kernel((x - s) / bandwidth)) / bandwidth;
             }
         }
-        
-        static epanechnikovKernel(x: number): number {
+
+        public static epanechnikovKernel(x: number): number {
             return Math.abs(x) <= 1 ? 0.75 * (1 - x * x) : 0;
         }
     }

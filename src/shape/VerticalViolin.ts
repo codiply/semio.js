@@ -55,7 +55,7 @@ module semio.shape {
             return this;
         }
 
-        public  preDraw(data:Array<any>): VerticalViolinPreDrawResult {
+        public  preDraw(data: Array<any>): VerticalViolinPreDrawResult {
             if (!data) {
                 return;
             }

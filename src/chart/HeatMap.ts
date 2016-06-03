@@ -25,7 +25,7 @@ module semio.chart {
             return this;
         }
 
-        public radiusColumn(column: string): HeatMap { 
+        public radiusColumn(column: string): HeatMap {
             this._radiusColumn = column;
             return this;
         }

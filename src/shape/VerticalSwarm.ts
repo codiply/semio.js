@@ -9,7 +9,7 @@ module semio.shape {
     class SwarmPoint {
         constructor(public datum: any,
                     public x: number,
-                    public y: number, 
+                    public y: number,
                     public color: string) { }
 
         public setX(newX: number): SwarmPoint {
@@ -69,12 +69,12 @@ module semio.shape {
             let that = this;
             let centre = surface.getWidth() / 2;
 
-            var yScale = context.getYScale(this._valueColumn);
+            let yScale = context.getYScale(this._valueColumn);
             let colors = context.getCategoryColours(this._colorColumn);
 
             let startingPositions: Array<SwarmPoint> = _.chain(data).map((d) => {
-                return new SwarmPoint(d, centre, 
-                                      yScale(this._numericAccessor(d)), 
+                return new SwarmPoint(d, centre,
+                                      yScale(this._numericAccessor(d)),
                                       colors(d[this._colorColumn]));
             }).orderBy((p) => -p.y).value();
 

@@ -155,7 +155,7 @@ module semio.chart {
                     .attr("transform", "translate(" + plotAreaX + "," + (plotAreaY + plotAreaHeight) + ")")
                     .call(xAxis);
                 xAxisGroup.selectAll(".tick text")
-                    .attr("font-size", xAxisAreaHeight / 3)
+                    .attr("font-size", xAxisAreaHeight / 3);
                 surface.svg.append("g").append("text")
                     .attr("font-size", xAxisAreaHeight / 3)
                     .attr("text-anchor", "middle")

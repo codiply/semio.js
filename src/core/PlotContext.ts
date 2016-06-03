@@ -27,7 +27,7 @@ module semio.core {
             return clone;
         }
 
-        public setNumericRange(column:string, range: [number, number]): Context {
+        public setNumericRange(column: string, range: [number, number]): Context {
             let clone = this.clone();
             clone._numericRange[column] = range;
             return clone;

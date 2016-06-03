@@ -18,11 +18,11 @@ module semio.math {
         }
 
         public static estimator(kernel: (x: number) => number,
-                         sample: Array<number>, 
+                         sample: Array<number>,
                          bandwidth: number): (x: number) => number {
             return (x: number) => {
                 return d3.mean(sample, (s: number) => kernel((x - s) / bandwidth)) / bandwidth;
-            }
+            };
         }
 
         public static epanechnikovKernel(x: number): number {

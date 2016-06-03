@@ -1,7 +1,7 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 
-module semio.interfaces { 
+module semio.interfaces {
     export interface SurfaceHeaderBody {
         header: Surface;
         body: Surface;

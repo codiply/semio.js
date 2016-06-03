@@ -3,9 +3,9 @@
 module semio.core {
     import Tooltip = semio.interfaces.Tooltip;
 
-    export class PlotTooltip implements Tooltip { 
-        private _container: d3.Selection<any>; 
-        private _tooltip: d3.Selection<any>; 
+    export class PlotTooltip implements Tooltip {
+        private _container: d3.Selection<any>;
+        private _tooltip: d3.Selection<any>;
 
         constructor(private containerId: string) {
             this._container = d3.select("#" + containerId);
@@ -32,9 +32,9 @@ module semio.core {
                 let mouse = d3.mouse(document.body);
                 return that._tooltip
                     .style("top", (mouse[1] - 10) + "px")
-                    .style("left",(mouse[0] + 20) + "px"); })
+                    .style("left", (mouse[0] + 20) + "px"); })
             .on("mouseout", function(d) {
-                return that._tooltip.style("visibility", "hidden"); 
+                return that._tooltip.style("visibility", "hidden");
             });
         }
     }

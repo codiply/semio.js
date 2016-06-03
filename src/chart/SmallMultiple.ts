@@ -75,7 +75,7 @@ namespace semio.chart {
             let groupedData = d3.nest().key(this._categoricalAccessor).entries(data);
             let categories = groupedData.map((g) => g.key);
 
-            let subSurfaces = surface.splitGrid(categories.length, 
+            let subSurfaces = surface.splitGrid(categories.length,
                 this._maxColumns, this._horizontalSpacingRatio, this._verticalSpacingRatio);
 
             let updatedContext = this.fixNumericRanges(data, context);
@@ -98,7 +98,7 @@ namespace semio.chart {
                     let extent = d3.extent(data, d => +d[col]);
                     newContext = newContext.setNumericRange(col, extent);
                 }
-            })
+            });
             return newContext;
         }
     }

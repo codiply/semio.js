@@ -13,7 +13,7 @@ module semio.core {
         private _x: number;
         private _y: number;
 
-        constructor(public containerId: string) { 
+        constructor(public containerId: string) {
             this.svg = d3.select("#" + containerId)
                          .append("svg");
         }
@@ -54,7 +54,7 @@ module semio.core {
                 return new DrawingSurface(id)
                     .setHeight(rowHeight)
                     .setWidth(this._width)
-                    .setY(row * (rowHeight + marginHeight)); 
+                    .setY(row * (rowHeight + marginHeight));
             });
         }
 
@@ -88,7 +88,7 @@ module semio.core {
                 return _.range(0, nColumns)
                     .filter((col) => {
                         let i = row * nColumns + col;
-                        return i < n; 
+                        return i < n;
                     }).map((col) => {
                         let id = this.containerId + "_row_" + row.toString() + "_column_" + col.toString();
                         this.svg.append("g").attr("id", id);
@@ -121,8 +121,8 @@ module semio.core {
                 .setY(headerHeight);
 
             return {
-                header: headerSurface,
-                body: bodySurface
+                body: bodySurface,
+                header: headerSurface
             };
         }
 

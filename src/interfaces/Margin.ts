@@ -1,5 +1,5 @@
 module semio.interfaces {
-    export interface MarginRatio {
+    export interface Margin {
         top: number;
         right: number;
         bottom: number;

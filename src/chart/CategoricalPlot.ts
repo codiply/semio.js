@@ -3,7 +3,7 @@
 /// <reference path="../core/ColorPalette.ts"/>
 /// <reference path="../interfaces/CategoricalPlotable.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
-/// <reference path="../interfaces/MarginRatio.ts"/>
+/// <reference path="../interfaces/Margin.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 /// <reference path="../math/Extent.ts"/>
@@ -13,7 +13,7 @@ module semio.chart {
     import ColorPalette = semio.core.ColorPalette;
     import CategoricalPlotable = semio.interfaces.CategoricalPlotable;
     import Context = semio.interfaces.Context;
-    import MarginRatio = semio.interfaces.MarginRatio;
+    import Margin = semio.interfaces.Margin;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import VerticalViolin = semio.shape.VerticalViolin;
@@ -31,7 +31,7 @@ module semio.chart {
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
 
-        private _marginRatio: MarginRatio = {
+        private _marginRatio: Margin = {
             bottom: 0.08,
             left: 0.08,
             right: 0.16,
@@ -61,7 +61,7 @@ module semio.chart {
             return this;
         }
 
-        public marginRatio(marginRatio: MarginRatio): CategoricalPlot {
+        public marginRatio(marginRatio: Margin): CategoricalPlot {
             this._marginRatio = marginRatio;
             return this;
         }

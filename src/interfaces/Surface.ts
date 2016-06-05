@@ -27,5 +27,7 @@ module semio.interfaces {
         addCenteredRow(idSuffix: string, cy: number, height: number): Surface;
 
         addSurface(idSuffix: string, x: number, y: number, width: number, height: number): Surface;
+
+        marginFromRatio(marginRatio: Margin): Margin;
     }
 }

@@ -1,7 +1,9 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
+/// <reference path="../interfaces/Margin.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 
 module semio.core {
+    import Margin = semio.interfaces.Margin;
     import Surface = semio.interfaces.Surface;
     import SurfaceHeaderBody = semio.interfaces.SurfaceHeaderBody;
 
@@ -164,6 +166,15 @@ module semio.core {
                 .setY(y);
 
             return surface;
+        }
+
+        public marginFromRatio(marginRatio: Margin): Margin {
+            return {
+                bottom: this._height * marginRatio.bottom,
+                left: this._width * marginRatio.left,
+                right: this._width * marginRatio.right,
+                top: this._height * marginRatio.top
+            };
         }
     }
 }

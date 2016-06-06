@@ -1,11 +1,13 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
+/// <reference path="../interfaces/Margin.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 
 module semio.chart {
     import Context = semio.interfaces.Context;
+    import Margin = semio.interfaces.Margin;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
 
@@ -14,6 +16,13 @@ module semio.chart {
         private _yColumn: string;
         private _radiusColumn: string;
         private _colorColumn: string;
+
+        private _marginRatio: Margin = {
+            bottom: 0.02,
+            left: 0.16,
+            right: 0.02,
+            top: 0.16
+        };
 
         public xColumn(column: string): HeatMap {
             this._xColumn = column;
@@ -35,6 +44,11 @@ module semio.chart {
             return this;
         }
 
+        public marginRatio(marginRatio: Margin): HeatMap {
+            this._marginRatio = marginRatio;
+            return this;
+        }
+
         public getCategoricalColumns(): Array<string> {
             return _.filter([this._xColumn, this._yColumn], _.negate(_.isNull));
         }
@@ -47,6 +61,8 @@ module semio.chart {
             if (!data) {
                 return;
             }
+
+            let margin = surface.marginFromRatio(this._marginRatio);
         }
     }
 }

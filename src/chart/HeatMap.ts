@@ -63,6 +63,21 @@ module semio.chart {
             }
 
             let margin = surface.marginFromRatio(this._marginRatio);
+            let width = surface.getWidth() - margin.left - margin.right;
+            let height = surface.getWidth() - margin.top - margin.bottom;
+
+            let xValues = d3.set(data.map((d) => d[this._xColumn]));
+            let yValues = d3.set(data.map((d) => d[this._yColumn]));
+
+            let xScale = d3.scale.ordinal().rangeBands([0, width]);
+            let yScale = d3.scale.ordinal().rangeBands([0, height]);
+
+            let xAxis = d3.svg.axis().orient("top");
+            let yAxis = d3.svg.axis().orient("left");
+
+            let plotableArea = surface.svg
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         }
     }
 }

@@ -11,6 +11,11 @@ module semio.core {
              "#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5",
              "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"];
 
+        private static _sequentialColors9: Array<string> =
+            ["#fff7fb", "#ece7f2", "#d0d1e6",
+             "#a6bddb", "#74a9cf", "#3690c0",
+             "#0570b0", "#045a8d", "#023858"];
+
         public static qualitative(values: Array<string>): (x: string) => string  {
             let colors: Array<string>;
             if (values.length <= 12) {
@@ -23,6 +28,12 @@ module semio.core {
                mapping[x[0]] = x[1];
             });
             return (x: string) => mapping[x];
+        }
+
+        public static sequential(values: Array<number>): (x: number) => string {
+            return d3.scale.quantile<string>()
+                  .domain(d3.extent(values))
+                  .range(ColorPalette._sequentialColors9);
         }
     }
 }

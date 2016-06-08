@@ -105,7 +105,7 @@ module semio.chart {
 
             let color = ColorPalette.sequential(data.map((d) => d[this._colorColumn]));
 
-            plotableArea.selectAll(".tile")
+            let tiles = plotableArea.selectAll(".tile")
                 .data(data)
                 .enter().append("rect")
                     .attr("class", "tile")
@@ -114,6 +114,13 @@ module semio.chart {
                     .attr("width", tileWidth)
                     .attr("height", tileHeight)
                     .style("fill", (d) => color(d[this._colorColumn]));
+
+           let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._radiusColumn];
+           tooltipColumns = _.filter(tooltipColumns, (c) => c);
+
+           context.getTooltip().addOn(tiles, (d) => {
+                return tooltipColumns.map((col) => col + ": " + d[col]).join("<br/>");
+            });
         }
 
         private styleAxis(axisGroup: d3.Selection<any>) {

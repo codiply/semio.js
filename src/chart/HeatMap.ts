@@ -1,11 +1,13 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../core/ColorPalette.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
 /// <reference path="../interfaces/Margin.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 
 module semio.chart {
+    import ColorPalette = semio.core.ColorPalette;
     import Context = semio.interfaces.Context;
     import Margin = semio.interfaces.Margin;
     import Plotable = semio.interfaces.Plotable;
@@ -97,6 +99,21 @@ module semio.chart {
             yAxisGroup.selectAll("text")
                     .style("text-anchor", "end");
             this.styleAxis(yAxisGroup);
+
+            let tileWidth = width / xNames.length;
+            let tileHeight = height / yNames.length;
+
+            let color = ColorPalette.sequential(data.map((d) => d[this._colorColumn]));
+
+            plotableArea.selectAll(".tile")
+                .data(data)
+                .enter().append("rect")
+                    .attr("class", "tile")
+                    .attr("x", (d) => xScale(d[this._xColumn]))
+                    .attr("y", (d) => yScale(d[this._yColumn]))
+                    .attr("width", tileWidth)
+                    .attr("height", tileHeight)
+                    .style("fill", (d) => color(d[this._colorColumn]));
         }
 
         private styleAxis(axisGroup: d3.Selection<any>) {

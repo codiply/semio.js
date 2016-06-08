@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example: HeatMap - Color</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
+    <script src="../../semio.js"></script>
+    <script type="text/javascript">
+        d3.csv('../../data/airquality.csv', function(data) {
+            var heatMap = new semio.chart.HeatMap()
+                .xColumn('Month')
+                .yColumn('Day')
+                .colorColumn('Temp');
+            new semio.Visualization('visualizationContainer')
+                .width(800)
+                .height(600)
+                .add(heatMap)
+                .plot(data);
+        });
+    </script>
+</head>
+<body>
+    <div id="visualizationContainer"></div>
+</body>
+</html>

@@ -82,7 +82,6 @@ module semio.chart {
             let xAxisGroup = plotableArea.append("g")
                 .attr("class", "x axis")
                 .call(xAxis);
-
             xAxisGroup.selectAll("text")
                     .attr("y", -10)
                     .attr("dy", ".5em")
@@ -90,14 +89,22 @@ module semio.chart {
                     .attr("transform", "rotate(-45)")
                     .style("text-anchor", "start")
                     .style("font-weight", "bold");
+            this.styleAxis(xAxisGroup);
 
             let yAxisGroup = plotableArea.append("g")
                 .attr("class", "y axis")
                 .call(yAxis);
-
             yAxisGroup.selectAll("text")
                     .style("text-anchor", "end");
+            this.styleAxis(yAxisGroup);
+        }
 
+        private styleAxis(axisGroup: d3.Selection<any>) {
+            axisGroup.selectAll(".axis path")
+                .style({
+                    "fill": "none",
+                    "stroke": "none"
+                });
         }
     }
 }

@@ -69,6 +69,14 @@ module semio.core {
             return this._numericRange[column];
         }
 
+        public fixNumericRangeIfNotFixed(data: Array<any>, column: string): Context {
+            if (!this._numericRange[column]) {
+                let extent = d3.extent(data, d => +d[column]);
+                return this.setNumericRange(column, extent);
+            }
+            return this;
+        }
+
         public getOrCalculateNumericRange(data: Array<any>, column: string): [number, number] {
             return this._numericRange[column] || d3.extent(data, (d) => +d[column]);
         }

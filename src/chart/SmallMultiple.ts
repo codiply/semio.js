@@ -94,10 +94,7 @@ namespace semio.chart {
         private fixNumericRanges(data: Array<any>, context: Context): Context {
             let newContext = context;
             this._plotable.getNumericColumns().forEach((col) => {
-                if (!context.getNumericRange(col)) {
-                    let extent = d3.extent(data, d => +d[col]);
-                    newContext = newContext.setNumericRange(col, extent);
-                }
+                newContext = newContext.fixNumericRangeIfNotFixed(data, col);
             });
             return newContext;
         }

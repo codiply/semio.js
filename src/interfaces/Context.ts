@@ -14,6 +14,7 @@ module semio.interfaces {
         getCategoryValues(column: string): Array<string>;
         getNumericRange(column: string): [number, number];
         getOrCalculateNumericRange(data: Array<any>, column: string): [number, number];
+        fixNumericRangeIfNotFixed(data: Array<any>, column: string): Context;
         getSlicedColumns(): Array<string>;
         getSlicedColumnValue(column: string): string;
         getXScale(column: string): (value: d3.Primitive) => number;

@@ -111,7 +111,7 @@ module semio.chart {
                 .attr("fill", this._background);
 
             // Draw y axis
-            let yExtent = context.getNumericRange(this._valueColumn) || d3.extent(data, this._numericAccessor);
+            let yExtent = context.getOrCalculateNumericRange(data, this._valueColumn);
             yExtent = Extent.widen(yExtent, this._valueExtentWidening);
             let yScale = d3.scale.linear()
                 .domain(yExtent)

@@ -13,6 +13,7 @@ module semio.interfaces {
         getCategoryColours(column: string): (value: string) => string;
         getCategoryValues(column: string): Array<string>;
         getNumericRange(column: string): [number, number];
+        getOrCalculateNumericRange(data: Array<any>, column: string): [number, number];
         getSlicedColumns(): Array<string>;
         getSlicedColumnValue(column: string): string;
         getXScale(column: string): (value: d3.Primitive) => number;

@@ -30,9 +30,9 @@ module semio.core {
             return (x: string) => mapping[x];
         }
 
-        public static sequential(values: Array<number>): (x: number) => string {
+        public static sequential(extent: [number, number]): (x: number) => string {
             return d3.scale.quantile<string>()
-                  .domain(d3.extent(values))
+                  .domain(extent)
                   .range(ColorPalette._sequentialColors9);
         }
     }

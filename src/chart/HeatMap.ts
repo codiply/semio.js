@@ -16,7 +16,7 @@ module semio.chart {
     export class HeatMap implements Plotable {
         private _xColumn: string;
         private _yColumn: string;
-        private _radiusColumn: string;
+        private _sizeColumn: string;
         private _colorColumn: string;
 
         private _marginRatio: Margin = {
@@ -36,8 +36,8 @@ module semio.chart {
             return this;
         }
 
-        public radiusColumn(column: string): HeatMap {
-            this._radiusColumn = column;
+        public sizeColumn(column: string): HeatMap {
+            this._sizeColumn = column;
             return this;
         }
 
@@ -56,7 +56,7 @@ module semio.chart {
         }
 
         public getNumericColumns(): Array<string> {
-            return _.filter([this._radiusColumn, this._colorColumn], _.negate(_.isNull));
+            return _.filter([this._sizeColumn, this._colorColumn], _.negate(_.isNull));
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {
@@ -103,7 +103,9 @@ module semio.chart {
             let tileWidth = width / xNames.length;
             let tileHeight = height / yNames.length;
 
-            let color = ColorPalette.sequential(data.map((d) => d[this._colorColumn]));
+
+            let colorColumnExtent = context.getOrCalculateNumericRange(data, this._colorColumn);
+            let color = ColorPalette.sequential(colorColumnExtent);
 
             let tiles = plotableArea.selectAll(".tile")
                 .data(data)
@@ -115,8 +117,8 @@ module semio.chart {
                     .attr("height", tileHeight)
                     .style("fill", (d) => color(d[this._colorColumn]));
 
-           let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._radiusColumn];
-           tooltipColumns = _.filter(tooltipColumns, (c) => c);
+           let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._sizeColumn];
+           tooltipColumns = _.filter(tooltipColumns, _.negate(_.isNull));
 
            context.getTooltip().addOn(tiles, (d) => {
                 return tooltipColumns.map((col) => col + ": " + d[col]).join("<br/>");

@@ -103,19 +103,35 @@ module semio.chart {
             let tileWidth = width / xNames.length;
             let tileHeight = height / yNames.length;
 
-
             let colorColumnExtent = context.getOrCalculateNumericRange(data, this._colorColumn);
             let color = ColorPalette.sequential(colorColumnExtent);
+            let tiles: d3.Selection<any>;
 
-            let tiles = plotableArea.selectAll(".tile")
-                .data(data)
-                .enter().append("rect")
-                    .attr("class", "tile")
-                    .attr("x", (d) => xScale(d[this._xColumn]))
-                    .attr("y", (d) => yScale(d[this._yColumn]))
-                    .attr("width", tileWidth)
-                    .attr("height", tileHeight)
-                    .style("fill", (d) => color(d[this._colorColumn]));
+            if (this._sizeColumn) {
+                let maxRadius = d3.min([tileWidth, tileHeight]) / 2;
+
+                let sizeColumnExtent = context.getOrCalculateNumericRange(data, this._sizeColumn);
+                let radiusScale = d3.scale.linear().domain(sizeColumnExtent).range([0, maxRadius]);
+
+                tiles = plotableArea.selectAll(".tile")
+                    .data(data)
+                    .enter().append("circle")
+                        .attr("class", "tile")
+                        .attr("cx", (d) => tileWidth / 2 + xScale(d[this._xColumn]))
+                        .attr("cy", (d) => tileHeight / 2 + yScale(d[this._yColumn]))
+                        .attr("r", (d) => radiusScale(d[this._sizeColumn]))
+                        .style("fill", (d) => color(d[this._colorColumn]));
+            } else {
+                tiles = plotableArea.selectAll(".tile")
+                    .data(data)
+                    .enter().append("rect")
+                        .attr("class", "tile")
+                        .attr("x", (d) => xScale(d[this._xColumn]))
+                        .attr("y", (d) => yScale(d[this._yColumn]))
+                        .attr("width", tileWidth)
+                        .attr("height", tileHeight)
+                        .style("fill", (d) => color(d[this._colorColumn]));
+            }
 
            let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._sizeColumn];
            tooltipColumns = _.filter(tooltipColumns, _.negate(_.isNull));

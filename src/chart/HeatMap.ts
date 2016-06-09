@@ -111,7 +111,7 @@ module semio.chart {
                 let maxRadius = d3.min([tileWidth, tileHeight]) / 2;
 
                 let sizeColumnExtent = context.getOrCalculateNumericRange(data, this._sizeColumn);
-                let radiusScale = d3.scale.linear().domain(sizeColumnExtent).range([0, maxRadius]);
+                let radiusScale = d3.scale.linear().domain([0, sizeColumnExtent[1]]).range([0, maxRadius]);
 
                 tiles = plotableArea.selectAll(".tile")
                     .data(data)

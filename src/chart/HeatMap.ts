@@ -18,6 +18,7 @@ module semio.chart {
         private _yColumn: string;
         private _sizeColumn: string;
         private _colorColumn: string;
+        private _delay: number = 300;
 
         private _marginRatio: Margin = {
             bottom: 0.02,
@@ -25,6 +26,11 @@ module semio.chart {
             right: 0.02,
             top: 0.16
         };
+
+        public delay(delay: number): HeatMap {
+            this._delay = delay;
+            return this;
+        }
 
         public xColumn(column: string): HeatMap {
             this._xColumn = column;
@@ -119,8 +125,11 @@ module semio.chart {
                         .attr("class", "tile")
                         .attr("cx", (d) => tileWidth / 2 + xScale(d[this._xColumn]))
                         .attr("cy", (d) => tileHeight / 2 + yScale(d[this._yColumn]))
-                        .attr("r", (d) => radiusScale(d[this._sizeColumn]))
+                        .attr("r", (d) => 0)
                         .style("fill", (d) => color(d[this._colorColumn]));
+               tiles.transition()
+                   .delay(this._delay)
+                   .attr("r", (d) => radiusScale(d[this._sizeColumn]));
             } else {
                 tiles = plotableArea.selectAll(".tile")
                     .data(data)

@@ -137,9 +137,12 @@ module semio.chart {
                         .attr("class", "tile")
                         .attr("x", (d) => xScale(d[this._xColumn]))
                         .attr("y", (d) => yScale(d[this._yColumn]))
-                        .attr("width", tileWidth)
+                        .attr("width", 0)
                         .attr("height", tileHeight)
                         .style("fill", (d) => color(d[this._colorColumn]));
+                tiles.transition()
+                    .delay(this._delay)
+                    .attr("width", tileWidth);
             }
 
            let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._sizeColumn];

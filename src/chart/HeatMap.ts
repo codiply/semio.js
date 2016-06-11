@@ -18,7 +18,7 @@ module semio.chart {
         private _yColumn: string;
         private _sizeColumn: string;
         private _colorColumn: string;
-        private _delay: number = 300;
+        private _delay: number = 500;
 
         private _marginRatio: Margin = {
             bottom: 0.02,
@@ -111,6 +111,7 @@ module semio.chart {
 
             let colorColumnExtent = context.getOrCalculateNumericRange(data, this._colorColumn);
             let color = ColorPalette.sequential(colorColumnExtent);
+            let lightestColor = color(colorColumnExtent[0]);
             let tiles: d3.Selection<any>;
 
             if (this._sizeColumn) {
@@ -137,12 +138,12 @@ module semio.chart {
                         .attr("class", "tile")
                         .attr("x", (d) => xScale(d[this._xColumn]))
                         .attr("y", (d) => yScale(d[this._yColumn]))
-                        .attr("width", 0)
+                        .attr("width", tileWidth)
                         .attr("height", tileHeight)
-                        .style("fill", (d) => color(d[this._colorColumn]));
+                        .style("fill", lightestColor);
                 tiles.transition()
                     .delay(this._delay)
-                    .attr("width", tileWidth);
+                    .style("fill", (d) => color(d[this._colorColumn]));
             }
 
            let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._sizeColumn];

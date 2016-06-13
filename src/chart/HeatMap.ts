@@ -118,7 +118,7 @@ module semio.chart {
                 let maxRadius = d3.min([tileWidth, tileHeight]) / 2;
 
                 let sizeColumnExtent = context.getOrCalculateNumericRange(data, this._sizeColumn);
-                let radiusScale = d3.scale.linear().domain([0, sizeColumnExtent[1]]).range([0, maxRadius]);
+                let areaScale = d3.scale.linear().domain([0, sizeColumnExtent[1]]).range([0, maxRadius * maxRadius]);
 
                 tiles = plotableArea.selectAll(".tile")
                     .data(data)
@@ -130,7 +130,7 @@ module semio.chart {
                         .style("fill", (d) => color(d[this._colorColumn]));
                tiles.transition()
                    .delay(this._delay)
-                   .attr("r", (d) => radiusScale(d[this._sizeColumn]));
+                   .attr("r", (d) => Math.sqrt(areaScale(d[this._sizeColumn])));
             } else {
                 tiles = plotableArea.selectAll(".tile")
                     .data(data)

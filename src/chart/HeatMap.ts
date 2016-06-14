@@ -16,7 +16,7 @@ module semio.chart {
     export class HeatMap implements Plotable {
         private _xColumn: string;
         private _yColumn: string;
-        private _sizeColumn: string;
+        private _areaColumn: string;
         private _colorColumn: string;
         private _delay: number = 500;
 
@@ -42,8 +42,8 @@ module semio.chart {
             return this;
         }
 
-        public sizeColumn(column: string): HeatMap {
-            this._sizeColumn = column;
+        public areaColumn(column: string): HeatMap {
+            this._areaColumn = column;
             return this;
         }
 
@@ -62,7 +62,7 @@ module semio.chart {
         }
 
         public getNumericColumns(): Array<string> {
-            return _.filter([this._sizeColumn, this._colorColumn], _.negate(_.isNull));
+            return _.filter([this._areaColumn, this._colorColumn], _.negate(_.isNull));
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {
@@ -114,10 +114,10 @@ module semio.chart {
             let lightestColor = color(colorColumnExtent[0]);
             let tiles: d3.Selection<any>;
 
-            if (this._sizeColumn) {
+            if (this._areaColumn) {
                 let maxRadius = d3.min([tileWidth, tileHeight]) / 2;
 
-                let sizeColumnExtent = context.getOrCalculateNumericRange(data, this._sizeColumn);
+                let sizeColumnExtent = context.getOrCalculateNumericRange(data, this._areaColumn);
                 let areaScale = d3.scale.linear().domain([0, sizeColumnExtent[1]]).range([0, maxRadius * maxRadius]);
 
                 tiles = plotableArea.selectAll(".tile")
@@ -130,7 +130,7 @@ module semio.chart {
                         .style("fill", (d) => color(d[this._colorColumn]));
                tiles.transition()
                    .delay(this._delay)
-                   .attr("r", (d) => Math.sqrt(areaScale(d[this._sizeColumn])));
+                   .attr("r", (d) => Math.sqrt(areaScale(d[this._areaColumn])));
             } else {
                 tiles = plotableArea.selectAll(".tile")
                     .data(data)
@@ -146,7 +146,7 @@ module semio.chart {
                     .style("fill", (d) => color(d[this._colorColumn]));
             }
 
-           let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._sizeColumn];
+           let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._areaColumn];
            tooltipColumns = _.filter(tooltipColumns, _.negate(_.isNull));
 
            context.getTooltip().addOn(tiles, (d) => {

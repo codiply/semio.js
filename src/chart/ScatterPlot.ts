@@ -10,12 +10,34 @@ namespace semio.chart {
     import Surface = semio.interfaces.Surface;
 
     export class ScatterPlot implements Plotable {
+        private _xColumn: string;
+        private _yColumn: string;
+        private _colorColumn: string;
+
+        public xColumn(column: string): ScatterPlot {
+            this._xColumn = column;
+            return this;
+        }
+        
+        public yColumn(column: string): ScatterPlot {
+            this._yColumn = column;
+            return this;
+        }
+        
+        public color(column: string): ScatterPlot {
+            this._colorColumn = column;
+            return this;
+        }
+        
         public getCategoricalColumns(): Array<string> {
+            if (this._colorColumn) {
+                return [this._colorColumn];
+            }
             return [];
         }
 
         public getNumericColumns(): Array<string> {
-            return [];
+            return [this._xColumn, this._yColumn];
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {

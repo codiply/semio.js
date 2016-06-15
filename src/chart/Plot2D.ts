@@ -9,26 +9,26 @@ namespace semio.chart {
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
 
-    export class ScatterPlot implements Plotable {
+    export class Plot2D implements Plotable {
         private _xColumn: string;
         private _yColumn: string;
         private _colorColumn: string;
 
-        public xColumn(column: string): ScatterPlot {
+        public xColumn(column: string): Plot2D {
             this._xColumn = column;
             return this;
         }
-        
-        public yColumn(column: string): ScatterPlot {
+
+        public yColumn(column: string): Plot2D {
             this._yColumn = column;
             return this;
         }
-        
-        public color(column: string): ScatterPlot {
+
+        public color(column: string): Plot2D {
             this._colorColumn = column;
             return this;
         }
-        
+
         public getCategoricalColumns(): Array<string> {
             if (this._colorColumn) {
                 return [this._colorColumn];

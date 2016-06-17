@@ -3,9 +3,9 @@
 /// <reference path="./Surface.ts"/>
 
 module semio.interfaces {
-    export interface CategoricalPlotable extends Plotable {
-        value(column: string): CategoricalPlotable;
-        splitOn(column: string): CategoricalPlotable;
+    export interface TwoDimensionalPlotable extends Plotable {
+        xColumn(column: string): TwoDimensionalPlotable;
+        yColumn(column: string): TwoDimensionalPlotable;
         getLegendColumn(): string;
     }
 }

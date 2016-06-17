@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
     <script src="../../semio.js"></script>
     <script type="text/javascript">
-        d3.csv('../../data/airquality.csv', function(data) {
+        d3.csv('../../data/auto_mpg.csv', function(data) {
             var scatterPlot = new semio.chart.plot2d.BubbleChart(); 
             var plot2d = new semio.chart.Plot2D()
                 .xColumn('weight')
@@ -15,7 +15,7 @@
                 .add(scatterPlot);
             new semio.Visualization('visualizationContainer')
                 .width(600)
-                .height(800)
+                .height(600)
                 .add(plot2d)
                 .plot(data);
         });

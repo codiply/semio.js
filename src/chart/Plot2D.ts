@@ -46,6 +46,12 @@ namespace semio.chart {
             if (!data) {
                 return;
             }
+            
+            this._plotables.forEach((pl) => {
+                pl.xColumn(this._xColumn)
+                  .yColumn(this._yColumn)
+                  .plot(data, surface, context);
+            })
         }
     }
 }

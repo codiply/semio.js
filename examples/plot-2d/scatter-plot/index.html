@@ -8,13 +8,15 @@
     <script src="../../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../../data/airquality.csv', function(data) {
-            var heatMap = new semio.chart.Plot2D()
+            var scatterPlot = new semio.chart.plot2d.BubbleChart(); 
+            var plot2d = new semio.chart.Plot2D()
                 .xColumn('weight')
-                .yColumn('horsepower');
+                .yColumn('horsepower')
+                .add(scatterPlot);
             new semio.Visualization('visualizationContainer')
                 .width(600)
                 .height(800)
-                .add(heatMap)
+                .add(plot2d)
                 .plot(data);
         });
     </script>

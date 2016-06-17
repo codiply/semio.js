@@ -12,6 +12,8 @@ module semio.chart.plot2d {
     export class BubbleChart implements TwoDimensionalPlotable {
         private _xColumn: string;
         private _yColumn: string;
+        private _colorColumn: string;
+        private _areaColumn: string;
 
         public xColumn(column: string): BubbleChart {
             return this;
@@ -21,16 +23,26 @@ module semio.chart.plot2d {
             return this;
         }
 
+        public colorColumn(column: string): BubbleChart {
+            this._colorColumn = column;
+            return this;
+        }
+        
+        public areaColumn(column: string): BubbleChart {
+            this._areaColumn = column;
+            return this;
+        }
+
         public getLegendColumn(): string {
-            return null;
+            return this._colorColumn;
         }
 
         public getCategoricalColumns(): Array<string> {
-            return [];
+            return _.filter([this._colorColumn], _.negate(_.isNull));
         }
 
         public getNumericColumns(): Array<string> {
-            return [];
+            return _.filter([this._xColumn, this._yColumn, this._areaColumn], _.negate(_.isNull));
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {

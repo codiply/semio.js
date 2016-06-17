@@ -14,7 +14,6 @@ namespace semio.chart {
     export class Plot2D implements Plotable {
         private _xColumn: string;
         private _yColumn: string;
-        private _colorColumn: string;
 
         private _plotables: Array<TwoDimensionalPlotable> = [];
 
@@ -28,24 +27,18 @@ namespace semio.chart {
             return this;
         }
 
-        public color(column: string): Plot2D {
-            this._colorColumn = column;
-            return this;
-        }
-
         public add(plotable: TwoDimensionalPlotable): Plot2D {
             this._plotables.push(plotable);
             return this;
         }
 
         public getCategoricalColumns(): Array<string> {
-            if (this._colorColumn) {
-                return [this._colorColumn];
-            }
+            // TODO: get categorical columns from plotables
             return [];
         }
 
         public getNumericColumns(): Array<string> {
+            // TODO: include numeric columns from plotables
             return [this._xColumn, this._yColumn];
         }
 

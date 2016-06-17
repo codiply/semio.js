@@ -9,12 +9,12 @@
     <script type="text/javascript">
         d3.csv('../../data/airquality.csv', function(data) {
             var heatMap = new semio.chart.HeatMap()
-                .xColumn('Month')
-                .yColumn('Day')
+                .xColumn('Day')
+                .yColumn('Month')
                 .colorColumn('Temp');
             new semio.Visualization('visualizationContainer')
-                .width(600)
-                .height(800)
+                .width(800)
+                .height(400)
                 .add(heatMap)
                 .plot(data);
         });

@@ -14,7 +14,7 @@ module semio.chart.plot2d {
         private _yColumn: string;
         private _colorColumn: string;
         private _areaColumn: string;
-        
+
         private _xAccessor: (d: any) => number;
         private _yAccessor: (d: any) => number;
 
@@ -34,7 +34,7 @@ module semio.chart.plot2d {
             this._colorColumn = column;
             return this;
         }
-        
+
         public areaColumn(column: string): BubbleChart {
             this._areaColumn = column;
             return this;
@@ -56,20 +56,20 @@ module semio.chart.plot2d {
             if (!data) {
                 return;
             }
-            
+
             let xScale = context.getXScale(this._xColumn);
             let yScale = context.getYScale(this._yColumn);
-            
+
             let xAccessor = (d: any) => +d[this._xColumn];
             let yAccessor = (d: any) => +d[this._yColumn];
-            
+
             surface.svg.selectAll(".bubble")
                 .data(data)
                 .enter().append("circle")
                 .attr("class", "bubble")
                 .attr("r", 3.5)
                 .attr("cx", (d) => xScale(xAccessor(d)))
-                .attr("cy", (d) => yScale(yAccessor(d)))
+                .attr("cy", (d) => yScale(yAccessor(d)));
         }
     }
 }

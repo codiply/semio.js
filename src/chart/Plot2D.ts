@@ -46,28 +46,28 @@ namespace semio.chart {
             if (!data) {
                 return;
             }
-            
+
             let plotableWidth = surface.getWidth();
             let plotableHeight = surface.getHeight();
-            
+
             let xColumnExtent = context.getOrCalculateNumericRange(data, this._xColumn);
-            let yColumnExtent = context.getOrCalculateNumericRange(data, this._yColumn)
-            
+            let yColumnExtent = context.getOrCalculateNumericRange(data, this._yColumn);
+
             let xScale = d3.scale.linear()
                     .domain(xColumnExtent)
                     .range([0, plotableWidth]);
             let yScale = d3.scale.linear()
                     .domain(yColumnExtent)
                     .range([0, plotableHeight]);
-                    
+
             let updatedContext = context.setXScale(this._xColumn, xScale)
                 .setYScale(this._yColumn, yScale);
-            
+
             this._plotables.forEach((pl) => {
                 pl.xColumn(this._xColumn)
                     .yColumn(this._yColumn)
                     .plot(data, surface, updatedContext);
-            })
+            });
         }
     }
 }

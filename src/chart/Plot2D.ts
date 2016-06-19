@@ -53,12 +53,15 @@ namespace semio.chart {
             let xColumnExtent = context.getOrCalculateNumericRange(data, this._xColumn);
             let yColumnExtent = context.getOrCalculateNumericRange(data, this._yColumn);
 
+            let xPadding = d3.max(this._plotables.map((pl) => pl.getXPadding()));
+            let yPadding = d3.max(this._plotables.map((pl) => pl.getYPadding()));
+
             let xScale = d3.scale.linear()
                     .domain(xColumnExtent)
-                    .range([0, plotableWidth]);
+                    .range([0 + xPadding, plotableWidth - xPadding]);
             let yScale = d3.scale.linear()
                     .domain(yColumnExtent)
-                    .range([0, plotableHeight]);
+                    .range([0 + yPadding, plotableHeight - yPadding]);
 
             let updatedContext = context.setXScale(this._xColumn, xScale)
                 .setYScale(this._yColumn, yScale);

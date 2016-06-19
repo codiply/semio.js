@@ -7,5 +7,7 @@ module semio.interfaces {
         xColumn(column: string): TwoDimensionalPlotable;
         yColumn(column: string): TwoDimensionalPlotable;
         getLegendColumn(): string;
+        getXPadding(): number;
+        getYPadding(): number;
     }
 }

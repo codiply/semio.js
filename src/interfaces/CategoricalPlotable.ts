@@ -8,6 +8,5 @@ module semio.interfaces {
         value(column: string): CategoricalPlotable;
         splitOn(column: string): CategoricalPlotable;
         getLegendColumn(): string;
-        getAxesPadding(): Margin;
     }
 }

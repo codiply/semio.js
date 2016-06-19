@@ -1,4 +1,5 @@
 /// <reference path="./Context.ts"/>
+/// <reference path="./Margin.ts"/>
 /// <reference path="./Plotable.ts"/>
 /// <reference path="./Surface.ts"/>
 
@@ -7,5 +8,6 @@ module semio.interfaces {
         value(column: string): CategoricalPlotable;
         splitOn(column: string): CategoricalPlotable;
         getLegendColumn(): string;
+        getAxesPadding(): Margin;
     }
 }

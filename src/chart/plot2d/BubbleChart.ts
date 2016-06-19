@@ -1,11 +1,13 @@
 /// <reference path="../../../typings/d3/d3.d.ts"/>
 /// <reference path="../../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../../interfaces/Context.ts"/>
+/// <reference path="../../interfaces/Margin.ts"/>
 /// <reference path="../../interfaces/Surface.ts"/>
 /// <reference path="../../interfaces/TwoDimensionalPlotable.ts"/>
 
 module semio.chart.plot2d {
     import Context = semio.interfaces.Context;
+    import Margin = semio.interfaces.Margin;
     import Surface = semio.interfaces.Surface;
     import TwoDimensionalPlotable = semio.interfaces.TwoDimensionalPlotable;
 
@@ -14,6 +16,7 @@ module semio.chart.plot2d {
         private _yColumn: string;
         private _colorColumn: string;
         private _areaColumn: string;
+        private _radius: number = 4;
 
         private _xAccessor: (d: any) => number;
         private _yAccessor: (d: any) => number;
@@ -40,8 +43,22 @@ module semio.chart.plot2d {
             return this;
         }
 
+        public radius(r: number): BubbleChart {
+            this._radius = r;
+            return this;
+        }
+
         public getLegendColumn(): string {
             return this._colorColumn;
+        }
+
+        public getAxisPadding(): Margin {
+            return {
+                bottom: this._radius,
+                left: this._radius,
+                right: this._radius,
+                top: this._radius
+            };
         }
 
         public getCategoricalColumns(): Array<string> {

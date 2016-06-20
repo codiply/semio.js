@@ -77,13 +77,18 @@ module semio.chart.plot2d {
             let xAccessor = (d: any) => +d[this._xColumn];
             let yAccessor = (d: any) => +d[this._yColumn];
 
-            surface.svg.selectAll(".bubble")
+            let bubbles = surface.svg.selectAll(".bubble")
                 .data(data)
                 .enter().append("circle")
                 .attr("class", "bubble")
                 .attr("r", this._radius)
                 .attr("cx", (d) => xScale(xAccessor(d)))
                 .attr("cy", (d) => yScale(yAccessor(d)));
+
+            if (this._colorColumn) {
+                let color = context.getCategoryColours(this._colorColumn);
+                bubbles.attr("fill", (d) => color(d[this._colorColumn]));
+            }
         }
     }
 }

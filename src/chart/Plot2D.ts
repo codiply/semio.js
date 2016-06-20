@@ -33,13 +33,14 @@ namespace semio.chart {
         }
 
         public getCategoricalColumns(): Array<string> {
-            // TODO: get categorical columns from plotables
-            return [];
+            let columns = _.flatMap(this._plotables, (pl) => pl.getCategoricalColumns());
+            return _.union(columns);
         }
 
         public getNumericColumns(): Array<string> {
-            // TODO: include numeric columns from plotables
-            return [this._xColumn, this._yColumn];
+            let columns1 = [this._xColumn, this._yColumn];
+            let columns2 = _.flatMap(this._plotables, (pl) => pl.getNumericColumns());
+            return _.union(columns1, columns2);
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {

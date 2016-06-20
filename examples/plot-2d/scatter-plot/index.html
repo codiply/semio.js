@@ -8,7 +8,8 @@
     <script src="../../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../../data/auto_mpg.csv', function(data) {
-            var scatterPlot = new semio.chart.plot2d.BubbleChart(); 
+            var scatterPlot = new semio.chart.plot2d.BubbleChart()
+                .colorColumn('origin'); 
             var plot2d = new semio.chart.Plot2D()
                 .xColumn('weight')
                 .yColumn('horsepower')

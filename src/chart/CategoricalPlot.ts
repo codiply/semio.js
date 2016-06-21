@@ -34,12 +34,12 @@ module semio.chart {
         private _marginRatioWithLegend: Margin = {
             bottom: 0.08,
             left: 0.08,
-            right: 0.16,
+            right: 0.12,
             top: 0.02
         };
 
         private _marginRatioWithoutLegend: Margin = {
-                        bottom: 0.08,
+            bottom: 0.08,
             left: 0.08,
             right: 0.02,
             top: 0.02
@@ -78,7 +78,7 @@ module semio.chart {
         public getCategoricalColumns(): Array<string> {
             let columns = _.flatMap(this._plotables, (p) => p.getCategoricalColumns());
             columns.push(this._splitOnColumn);
-            return columns;
+            return _.union(columns);
         }
 
         public getNumericColumns(): Array<string> {

@@ -36,7 +36,7 @@ module semio.shape {
         }
 
         private drawLegend(column: string, surface: Surface, context: Context) {
-            let split = surface.splitLeftRight(0.8);
+            let split = surface.splitLeftRight(0.7);
 
             Text.placeVerticalText(split.right, column);
 

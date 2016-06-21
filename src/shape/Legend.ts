@@ -48,6 +48,10 @@ module semio.shape {
                 .attr("y", (d, i) => (i + 1 / 10) * blockHeight)
                 .attr("fill", (d) => colors(d));
 
+            context.getTooltip().addOn(rects, (value) => {
+               return column + ": " + value;
+            });
+
             let labels = surface.svg.append("g")
                 .selectAll("text")
                 .data(values)

@@ -59,11 +59,11 @@ module semio.chart.plot2d {
         }
 
         public getCategoricalColumns(): Array<string> {
-            return _.filter([this._colorColumn], _.negate(_.isNull));
+            return _.filter([this._colorColumn], _.negate(_.isNil));
         }
 
         public getNumericColumns(): Array<string> {
-            return _.filter([this._xColumn, this._yColumn, this._areaColumn], _.negate(_.isNull));
+            return _.filter([this._xColumn, this._yColumn, this._areaColumn], _.negate(_.isNil));
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {

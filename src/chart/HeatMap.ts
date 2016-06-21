@@ -58,11 +58,11 @@ module semio.chart {
         }
 
         public getCategoricalColumns(): Array<string> {
-            return _.filter([this._xColumn, this._yColumn], _.negate(_.isNull));
+            return _.filter([this._xColumn, this._yColumn], _.negate(_.isNil));
         }
 
         public getNumericColumns(): Array<string> {
-            return _.filter([this._areaColumn, this._colorColumn], _.negate(_.isNull));
+            return _.filter([this._areaColumn, this._colorColumn], _.negate(_.isNil));
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {
@@ -147,7 +147,7 @@ module semio.chart {
             }
 
            let tooltipColumns = [this._yColumn, this._xColumn, this._colorColumn, this._areaColumn];
-           tooltipColumns = _.filter(tooltipColumns, _.negate(_.isNull));
+           tooltipColumns = _.filter(tooltipColumns, _.negate(_.isNil));
 
            context.getTooltip().addOn(tiles, (d) => {
                 return tooltipColumns.map((col) => col + ": " + d[col]).join("<br/>");

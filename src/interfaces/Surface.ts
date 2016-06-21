@@ -6,6 +6,10 @@ module semio.interfaces {
         header: Surface;
         body: Surface;
     }
+    export interface SurfaceLeftRightColumn {
+        left: Surface;
+        right: Surface;
+    }
     export interface Surface {
         containerId: string;
         svg: d3.Selection<any>;
@@ -22,6 +26,7 @@ module semio.interfaces {
         splitColumns(n: number, verticalSpacingRatio: number): Array<Surface>;
         splitGrid(n: number, maxColumns: number, verticalSpacingRatio: number, horizontalSpacingRatio: number): Array<Surface>;
         splitHeader(headerHeightRatio: number): SurfaceHeaderBody;
+        splitLeftRight(leftWidthRatio: number): SurfaceLeftRightColumn;
 
         addCenteredColumn(idSuffix: string, cx: number, width: number): Surface;
         addCenteredRow(idSuffix: string, cy: number, height: number): Surface;

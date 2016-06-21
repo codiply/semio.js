@@ -6,6 +6,7 @@ module semio.core {
     import Margin = semio.interfaces.Margin;
     import Surface = semio.interfaces.Surface;
     import SurfaceHeaderBody = semio.interfaces.SurfaceHeaderBody;
+    import SurfaceLeftRightColumn = semio.interfaces.SurfaceLeftRightColumn;
 
     export class DrawingSurface implements Surface {
         public svg: d3.Selection<any>;
@@ -125,6 +126,31 @@ module semio.core {
             return {
                 body: bodySurface,
                 header: headerSurface
+            };
+        }
+
+        public splitLeftRight(leftWidthRatio: number): SurfaceLeftRightColumn {
+            let leftWidth = Math.max(Math.min(leftWidthRatio * this._width, this._width), 0);
+            let rightWidth = this._width - leftWidth;
+
+            let leftId = this.containerId + "_left";
+            let rightId = this.containerId + "_right";
+
+            this.svg.append("g").attr("id", leftId);
+            this.svg.append("g").attr("id", rightId);
+
+            let leftSurface = new DrawingSurface(leftId)
+                .setWidth(leftWidth)
+                .setHeight(this._height)
+                .setX(0);
+            let rightSurface = new DrawingSurface(rightId)
+                .setWidth(rightWidth)
+                .setHeight(this._height)
+                .setX(leftWidth);
+
+            return {
+                left: leftSurface,
+                right: rightSurface
             };
         }
 

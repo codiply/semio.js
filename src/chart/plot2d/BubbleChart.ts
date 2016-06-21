@@ -89,6 +89,16 @@ module semio.chart.plot2d {
                 let color = context.getCategoryColours(this._colorColumn);
                 bubbles.attr("fill", (d) => color(d[this._colorColumn]));
             }
+
+            let tooltipColumns = [this._xColumn, this._yColumn, this._colorColumn, this._areaColumn];
+            tooltipColumns = _.filter(tooltipColumns, _.negate(_.isNil));
+
+            context.getSlicedColumns().forEach((column) => {
+                tooltipColumns.push(column);
+            });
+            context.getTooltip().addOn(bubbles, (d) => {
+                return tooltipColumns.map((col) => col + ": " + d[col]).join("<br/>");
+            });
         }
     }
 }

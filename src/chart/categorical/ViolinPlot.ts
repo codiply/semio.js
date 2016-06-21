@@ -73,9 +73,6 @@ module semio.chart.categorical {
         }
 
         public getNumericColumns(): Array<string> {
-            if (this._valueColumn) {
-                return [this._valueColumn];
-            }
             return [];
         }
 

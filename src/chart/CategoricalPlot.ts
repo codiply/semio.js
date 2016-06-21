@@ -31,12 +31,21 @@ module semio.chart {
         private _numericAccessor: (d: any) => number;
         private _categoricalAccessor: (d: any) => string;
 
-        private _marginRatio: Margin = {
+        private _marginRatioWithLegend: Margin = {
             bottom: 0.08,
             left: 0.08,
             right: 0.16,
             top: 0.02
         };
+
+        private _marginRatioWithoutLegend: Margin = {
+                        bottom: 0.08,
+            left: 0.08,
+            right: 0.02,
+            top: 0.02
+        };
+
+        private _marginRatioOverride: Margin;
 
         private _plotables: Array<CategoricalPlotable> = [];
 
@@ -62,7 +71,7 @@ module semio.chart {
         }
 
         public marginRatio(marginRatio: Margin): CategoricalPlot {
-            this._marginRatio = marginRatio;
+            this._marginRatioOverride = marginRatio;
             return this;
         }
 
@@ -89,17 +98,25 @@ module semio.chart {
                 return;
             }
 
-            let plotAreaX = this._marginRatio.left * surface.getWidth();
-            let plotAreaY = this._marginRatio.top * surface.getHeight();
-            let plotAreaWidth = (1 - this._marginRatio.left - this._marginRatio.right) * surface.getWidth();
-            let plotAreaHeight = (1 - this._marginRatio.top - this._marginRatio.bottom) * surface.getHeight();
-            let xAxisAreaHeight = this._marginRatio.bottom * surface.getHeight();
-            let yAxisAreaWidth = this._marginRatio.left * surface.getWidth();
+            let legendColumns: Array<string> = [];
 
-            let legendAreaX = (1 - this._marginRatio.right) * surface.getWidth();
-            let legendAreaY = plotAreaY;
-            let legendAreaWidth = this._marginRatio.right * surface.getWidth();
-            let legendAreaHeight = plotAreaHeight;
+            this._plotables.forEach((pl) => {
+                pl.value(this._valueColumn).splitOn(this._splitOnColumn);
+                let legendCol = pl.getLegendColumn();
+                if (legendCol) {
+                    legendColumns.push(legendCol);
+                }
+            });
+
+            let marginRatio = this._marginRatioOverride ||
+                (legendColumns.length ? this._marginRatioWithLegend : this._marginRatioWithoutLegend);
+
+            let plotAreaX = marginRatio.left * surface.getWidth();
+            let plotAreaY = marginRatio.top * surface.getHeight();
+            let plotAreaWidth = (1 - marginRatio.left - marginRatio.right) * surface.getWidth();
+            let plotAreaHeight = (1 - marginRatio.top - marginRatio.bottom) * surface.getHeight();
+            let xAxisAreaHeight = marginRatio.bottom * surface.getHeight();
+            let yAxisAreaWidth = marginRatio.left * surface.getWidth();
 
             // Add background to plot area
             surface.svg.append("g")
@@ -167,17 +184,23 @@ module semio.chart {
                 updatedContext = updatedContext.setXScale(this._splitOnColumn, xScale);
             }
 
-            let legendSurface = surface.addSurface("legendarea", legendAreaX, legendAreaY, legendAreaWidth, legendAreaHeight);
-            let legend = new Legend();
-
             let plotSurface = surface.addSurface("plotablearea", plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
             this._plotables.forEach((pl) => {
-                pl.value(this._valueColumn).splitOn(this._splitOnColumn);
                 pl.plot(data, plotSurface, updatedContext);
-                legend.addColumn(pl.getLegendColumn());
             });
 
-            legend.draw(legendSurface, context);
+            if (legendColumns) {
+                let legendAreaX = (1 - marginRatio.right) * surface.getWidth();
+                let legendAreaY = plotAreaY;
+                let legendAreaWidth = marginRatio.right * surface.getWidth();
+                let legendAreaHeight = plotAreaHeight;
+
+                let legendSurface = surface.addSurface("legendarea", legendAreaX, legendAreaY, legendAreaWidth, legendAreaHeight);
+                let legend = new Legend();
+
+                legendColumns.forEach((col) => legend.addColumn(col));
+                legend.draw(legendSurface, context);
+            }
         }
     }
 }

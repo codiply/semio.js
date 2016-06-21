@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example: Plot2D - Bubble Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
+    <script src="../../semio.js"></script>
+    <script type="text/javascript">
+        d3.csv('../../data/auto_mpg.csv', function(data) {
+            var bubbleChart = new semio.chart.plot2d.BubbleChart()
+                .colorColumn('origin')
+                .areaColumn('acceleration'); 
+            var plot2d = new semio.chart.Plot2D()
+                .xColumn('weight')
+                .yColumn('horsepower')
+                .add(bubbleChart);
+            new semio.Visualization('visualizationContainer')
+                .width(600)
+                .height(600)
+                .add(plot2d)
+                .plot(data);
+        });
+    </script>
+</head>
+<body>
+    <div id="visualizationContainer"></div>
+</body>
+</html>

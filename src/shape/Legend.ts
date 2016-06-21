@@ -2,17 +2,21 @@
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../interfaces/surface.ts"/>
 /// <reference path="../interfaces/context.ts"/>
+/// <reference path="../shape/Text.ts"/>
 
 module semio.shape {
     import Context = semio.interfaces.Context;
     import Surface = semio.interfaces.Surface;
+    import Text = semio.shape.Text;
 
     export class Legend {
         private _horizontalSpacingRatio = 0.1;
         private _columns: Array<string> = [];
 
         public addColumn(column: string): Legend {
-            this._columns.push(column);
+            if (column) {
+                this._columns.push(column);
+            }
             return this;
         }
 
@@ -32,36 +36,31 @@ module semio.shape {
         }
 
         private drawLegend(column: string, surface: Surface, context: Context) {
+            let split = surface.splitLeftRight(0.8);
+
+            Text.placeVerticalText(split.right, column);
+
+            let legendSurface = split.left;
+
             let colors = context.getCategoryColours(column);
             let values = context.getCategoryValues(column);
 
-            let blockHeight = surface.getHeight() / values.length;
+            let blockHeight = legendSurface.getHeight() / (values.length + 1);
 
-            let rects = surface.svg.append("g")
+            let rects = legendSurface.svg.append("g")
                 .selectAll("rect")
                 .data(values)
                 .enter()
                 .append("rect")
-                .attr("width", surface.getWidth() * 4 / 5)
-                .attr("height", blockHeight / 5)
-                .attr("x", surface.getWidth() / 10)
-                .attr("y", (d, i) => (i + 1 / 10) * blockHeight)
+                .attr("width", legendSurface.getWidth() * 0.8)
+                .attr("height", blockHeight * 0.8)
+                .attr("x", legendSurface.getWidth() * 0.1)
+                .attr("y", (d, i) => (i + 0.6 ) * blockHeight)
                 .attr("fill", (d) => colors(d));
 
             context.getTooltip().addOn(rects, (value) => {
                return column + ": " + value;
             });
-
-            let labels = surface.svg.append("g")
-                .selectAll("text")
-                .data(values)
-                .enter()
-                .append("text")
-                .attr("x", surface.getWidth() / 2)
-                .attr("y", (d, i) => (i + 3 / 5) * blockHeight)
-                .attr("text-anchor", "middle")
-                .attr("font-size", blockHeight * 1 / 5)
-                .text((d) => d);
         }
     }
 }

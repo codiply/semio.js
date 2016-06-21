@@ -76,7 +76,10 @@ module semio.chart {
         }
 
         public getCategoricalColumns(): Array<string> {
-            let columns = _.flatMap(this._plotables, (p) => p.getCategoricalColumns());
+            let columns: Array<string> = [];
+            this._plotables.forEach((pl) => {
+                columns = columns.concat(pl.getCategoricalColumns());
+            });
             columns.push(this._splitOnColumn);
             return _.union(columns);
         }

@@ -19,9 +19,9 @@ module semio.core {
                 offset = offset % allColors.length;
                 allColors = allColors.slice(offset, allColors.length).concat(allColors.slice(0, offset));
             }
-            
+
             let colors = allColors.slice(0, values.length);
-            
+
             let mapping: {[x: string]: string } = { };
             _.zip(values, colors).forEach((x) => {
                mapping[x[0]] = x[1];

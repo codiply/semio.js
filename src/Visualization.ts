@@ -55,7 +55,7 @@ namespace semio {
             this._plotable.getCategoricalColumns().forEach((column) => {
                 let values = d3.set(data.map((d) => d[column])).values();
                 context = context.setCategoryValues(column, values);
-                
+
                 let colors = ColorPalette.qualitative(values, colorsOffset);
                 colorsOffset += values.length;
                 context = context.setCategoryColours(column, colors);

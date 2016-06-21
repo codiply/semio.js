@@ -81,13 +81,20 @@ module semio.chart.plot2d {
                 .data(data)
                 .enter().append("circle")
                 .attr("class", "bubble")
-                .attr("r", this._radius)
                 .attr("cx", (d) => xScale(xAccessor(d)))
                 .attr("cy", (d) => yScale(yAccessor(d)));
 
             if (this._colorColumn) {
                 let color = context.getCategoryColours(this._colorColumn);
                 bubbles.attr("fill", (d) => color(d[this._colorColumn]));
+            }
+
+            if (this._areaColumn) {
+                let areaColumnExtent = context.getOrCalculateNumericRange(data, this._areaColumn);
+                let areaScale = d3.scale.linear().domain([0, areaColumnExtent[1]]).range([0, this._radius * this._radius]);
+                bubbles.attr("r", (d) => Math.sqrt(areaScale(d[this._areaColumn])));
+            } else {
+                bubbles.attr("r", this._radius);
             }
 
             let tooltipColumns = [this._xColumn, this._yColumn, this._colorColumn, this._areaColumn];

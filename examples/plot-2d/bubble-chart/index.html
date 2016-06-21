@@ -10,7 +10,8 @@
         d3.csv('../../data/auto_mpg.csv', function(data) {
             var bubbleChart = new semio.chart.plot2d.BubbleChart()
                 .colorColumn('origin')
-                .areaColumn('acceleration'); 
+                .areaColumn('acceleration')
+                .radius(10); 
             var plot2d = new semio.chart.Plot2D()
                 .xColumn('weight')
                 .yColumn('horsepower')

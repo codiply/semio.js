@@ -71,8 +71,24 @@ namespace semio.chart {
                 return;
             }
 
-            let plotableWidth = surface.getWidth();
-            let plotableHeight = surface.getHeight();
+            let legendColumns: Array<string> = [];
+
+            this._plotables.forEach((pl) => {
+                let legendCol = pl.getLegendColumn();
+                if (legendCol) {
+                    legendColumns.push(legendCol);
+                }
+            });
+
+            let marginRatio = this._marginRatioOverride ||
+                (legendColumns.length ? this._marginRatioWithLegend : this._marginRatioWithoutLegend);
+
+            let plotAreaX = marginRatio.left * surface.getWidth();
+            let plotAreaY = marginRatio.top * surface.getHeight();
+            let plotAreaWidth = (1 - marginRatio.left - marginRatio.right) * surface.getWidth();
+            let plotAreaHeight = (1 - marginRatio.top - marginRatio.bottom) * surface.getHeight();
+            let xAxisAreaHeight = marginRatio.bottom * surface.getHeight();
+            let yAxisAreaWidth = marginRatio.left * surface.getWidth();
 
             let xColumnExtent = context.getOrCalculateNumericRange(data, this._xColumn);
             let yColumnExtent = context.getOrCalculateNumericRange(data, this._yColumn);
@@ -82,10 +98,10 @@ namespace semio.chart {
 
             let xScale = d3.scale.linear()
                     .domain(xColumnExtent)
-                    .range([0 + xPadding, plotableWidth - xPadding]);
+                    .range([0 + xPadding, plotAreaWidth - xPadding]);
             let yScale = d3.scale.linear()
                     .domain(yColumnExtent)
-                    .range([0 + yPadding, plotableHeight - yPadding]);
+                    .range([0 + yPadding, plotAreaHeight - yPadding]);
 
             let updatedContext = context.setXScale(this._xColumn, xScale)
                 .setYScale(this._yColumn, yScale);

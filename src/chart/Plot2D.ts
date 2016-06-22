@@ -5,6 +5,7 @@
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 /// <reference path="../interfaces/TwoDimensionalPlotable.ts"/>
+/// <reference path="../shape/Legend.ts"/>
 
 namespace semio.chart {
     import Context = semio.interfaces.Context;
@@ -12,6 +13,7 @@ namespace semio.chart {
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import TwoDimensionalPlotable = semio.interfaces.TwoDimensionalPlotable;
+    import Legend = semio.shape.Legend;
 
     export class Plot2D implements Plotable {
         private _valueExtentWidening: number = 0.12;
@@ -175,6 +177,19 @@ namespace semio.chart {
                     .yColumn(this._yColumn)
                     .plot(data, plotSurface, updatedContext);
             });
+
+            if (legendColumns) {
+                let legendAreaX = (1 - marginRatio.right) * surface.getWidth();
+                let legendAreaY = plotAreaY;
+                let legendAreaWidth = marginRatio.right * surface.getWidth();
+                let legendAreaHeight = plotAreaHeight;
+
+                let legendSurface = surface.addSurface("legendarea", legendAreaX, legendAreaY, legendAreaWidth, legendAreaHeight);
+                let legend = new Legend();
+
+                legendColumns.forEach((col) => legend.addColumn(col));
+                legend.draw(legendSurface, context);
+            }
         }
     }
 }

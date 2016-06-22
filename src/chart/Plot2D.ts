@@ -1,12 +1,14 @@
 /// <reference path="../../typings/d3/d3.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 /// <reference path="../interfaces/Context.ts"/>
+/// <reference path="../interfaces/Margin.ts"/>
 /// <reference path="../interfaces/Plotable.ts"/>
 /// <reference path="../interfaces/Surface.ts"/>
 /// <reference path="../interfaces/TwoDimensionalPlotable.ts"/>
 
 namespace semio.chart {
     import Context = semio.interfaces.Context;
+    import Margin = semio.interfaces.Margin;
     import Plotable = semio.interfaces.Plotable;
     import Surface = semio.interfaces.Surface;
     import TwoDimensionalPlotable = semio.interfaces.TwoDimensionalPlotable;
@@ -14,6 +16,22 @@ namespace semio.chart {
     export class Plot2D implements Plotable {
         private _xColumn: string;
         private _yColumn: string;
+
+        private _marginRatioWithLegend: Margin = {
+            bottom: 0.08,
+            left: 0.08,
+            right: 0.12,
+            top: 0.02
+        };
+
+        private _marginRatioWithoutLegend: Margin = {
+            bottom: 0.08,
+            left: 0.08,
+            right: 0.02,
+            top: 0.02
+        };
+
+        private _marginRatioOverride: Margin;
 
         private _plotables: Array<TwoDimensionalPlotable> = [];
 
@@ -24,6 +42,11 @@ namespace semio.chart {
 
         public yColumn(column: string): Plot2D {
             this._yColumn = column;
+            return this;
+        }
+
+        public marginRatio(marginRatio: Margin): Plot2D {
+            this._marginRatioOverride = marginRatio;
             return this;
         }
 

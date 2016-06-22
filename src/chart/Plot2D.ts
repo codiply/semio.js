@@ -16,6 +16,7 @@ namespace semio.chart {
     export class Plot2D implements Plotable {
         private _valueExtentWidening: number = 0.12;
         private _background: string = "#e6e6e6";
+        private _xTickStrokeRatio: number = 0.05;
         private _yTickStrokeRatio: number = 0.05;
 
         private _xColumn: string;
@@ -120,6 +121,28 @@ namespace semio.chart {
                 .attr("x", plotAreaX)
                 .attr("y", plotAreaY)
                 .attr("fill", this._background);
+
+            // Draw x-axis
+            let xAxis = d3.svg.axis()
+                .scale(xScale)
+                .orient("bottom")
+                .tickSize(-plotAreaHeight, 0);
+            let xAxisGroup = surface.svg.append("g")
+                .attr("transform", "translate(" + plotAreaX + "," + (plotAreaY + plotAreaHeight) + ")")
+                .call(xAxis);
+            xAxisGroup.selectAll(".tick line")
+                .style({
+                    "stroke" : "white",
+                    "stroke-width" : plotAreaWidth * this._xTickStrokeRatio / xAxis.ticks()[0]
+                });
+            xAxisGroup.selectAll(".tick text")
+                .attr("font-size", xAxisAreaHeight / 3);
+            surface.svg.append("svg").append("text")
+                .attr("font-size", xAxisAreaHeight / 3)
+                .attr("text-anchor", "middle")
+                .attr("transform", "translate(" + (plotAreaX + plotAreaWidth / 2) + "," +
+                                                  (plotAreaY + plotAreaHeight + xAxisAreaHeight * 3 / 4) + ")")
+                .text(this._xColumn);
 
             // Draw y-axis
             let yAxis = d3.svg.axis()

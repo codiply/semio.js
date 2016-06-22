@@ -14,7 +14,10 @@ namespace semio.chart {
     import TwoDimensionalPlotable = semio.interfaces.TwoDimensionalPlotable;
 
     export class Plot2D implements Plotable {
+        private _valueExtentWidening: number = 0.12;
         private _background: string = "#e6e6e6";
+        private _yTickStrokeRatio: number = 0.05;
+
         private _xColumn: string;
         private _yColumn: string;
 
@@ -107,7 +110,7 @@ namespace semio.chart {
                     .range([0 + 2 * xPadding, plotAreaWidth - 2 * xPadding]);
             let yScale = d3.scale.linear()
                     .domain(yColumnExtent)
-                    .range([0 + 2 * yPadding, plotAreaHeight - 2 * yPadding]);
+                    .range([plotAreaHeight - 2 * yPadding, 0 + 2 * yPadding]);
 
             // Add background to plot area
             surface.svg.append("g")
@@ -117,6 +120,27 @@ namespace semio.chart {
                 .attr("x", plotAreaX)
                 .attr("y", plotAreaY)
                 .attr("fill", this._background);
+
+            // Draw y-axis
+            let yAxis = d3.svg.axis()
+                .scale(yScale)
+                .orient("left")
+                .tickSize(-plotAreaWidth, 0);
+            let yAxisGroup = surface.svg.append("g")
+                .attr("transform", "translate(" + plotAreaX + "," + plotAreaY + ")")
+                .call(yAxis);
+            yAxisGroup.selectAll(".tick line")
+                .style({
+                    "stroke" : "white",
+                    "stroke-width" : plotAreaHeight * this._yTickStrokeRatio / yAxis.ticks()[0]
+                });
+            yAxisGroup.selectAll(".tick text")
+                .attr("font-size", yAxisAreaWidth / 3);
+            surface.svg.append("svg").append("text")
+                .attr("font-size", yAxisAreaWidth / 3)
+                .attr("text-anchor", "middle")
+                .attr("transform", "translate(" + yAxisAreaWidth / 4 + "," + (plotAreaY + plotAreaHeight / 2) + ")rotate(-90)")
+                .text(this._yColumn);
 
             let updatedContext = context.setXScale(this._xColumn, xScale)
                 .setYScale(this._yColumn, yScale);

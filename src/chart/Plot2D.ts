@@ -14,9 +14,9 @@ namespace semio.chart {
     import TwoDimensionalPlotable = semio.interfaces.TwoDimensionalPlotable;
 
     export class Plot2D implements Plotable {
+        private _background: string = "#e6e6e6";
         private _xColumn: string;
         private _yColumn: string;
-        private _background: string = "#e6e6e6";
 
         private _marginRatioWithLegend: Margin = {
             bottom: 0.08,
@@ -35,6 +35,11 @@ namespace semio.chart {
         private _marginRatioOverride: Margin;
 
         private _plotables: Array<TwoDimensionalPlotable> = [];
+
+        public background(colour: string): Plot2D {
+            this._background = colour;
+            return this;
+        }
 
         public xColumn(column: string): Plot2D {
             this._xColumn = column;

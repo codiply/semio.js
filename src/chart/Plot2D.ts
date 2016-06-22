@@ -16,6 +16,7 @@ namespace semio.chart {
     export class Plot2D implements Plotable {
         private _xColumn: string;
         private _yColumn: string;
+        private _background: string = "#e6e6e6";
 
         private _marginRatioWithLegend: Margin = {
             bottom: 0.08,
@@ -98,10 +99,19 @@ namespace semio.chart {
 
             let xScale = d3.scale.linear()
                     .domain(xColumnExtent)
-                    .range([0 + xPadding, plotAreaWidth - xPadding]);
+                    .range([0 + 2 * xPadding, plotAreaWidth - 2 * xPadding]);
             let yScale = d3.scale.linear()
                     .domain(yColumnExtent)
-                    .range([0 + yPadding, plotAreaHeight - yPadding]);
+                    .range([0 + 2 * yPadding, plotAreaHeight - 2 * yPadding]);
+
+            // Add background to plot area
+            surface.svg.append("g")
+                .append("rect")
+                .attr("width", plotAreaWidth)
+                .attr("height", plotAreaHeight)
+                .attr("x", plotAreaX)
+                .attr("y", plotAreaY)
+                .attr("fill", this._background);
 
             let updatedContext = context.setXScale(this._xColumn, xScale)
                 .setYScale(this._yColumn, yScale);

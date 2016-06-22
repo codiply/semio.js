@@ -106,10 +106,12 @@ namespace semio.chart {
             let updatedContext = context.setXScale(this._xColumn, xScale)
                 .setYScale(this._yColumn, yScale);
 
+            let plotSurface = surface.addSurface("plotablearea", plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
+
             this._plotables.forEach((pl) => {
                 pl.xColumn(this._xColumn)
                     .yColumn(this._yColumn)
-                    .plot(data, surface, updatedContext);
+                    .plot(data, plotSurface, updatedContext);
             });
         }
     }

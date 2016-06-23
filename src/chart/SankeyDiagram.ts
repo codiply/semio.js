@@ -10,6 +10,25 @@ namespace semio.chart {
     import Surface = semio.interfaces.Surface;
 
     export class SankeyDiagram implements Plotable {
+        private _sourceColumn: string;
+        private _targetColumn: string;
+        private _valueColumn: string;
+
+        public sourceColumn(column: string): SankeyDiagram {
+            this._sourceColumn = column;
+            return this;
+        }
+
+        public targetColumn(column: string): SankeyDiagram {
+            this._targetColumn = column;
+            return this;
+        }
+
+        public valueColumn(column: string): SankeyDiagram {
+            this._valueColumn = column;
+            return this;
+        }
+
         public getCategoricalColumns(): Array<string> {
             return [];
         }

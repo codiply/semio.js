@@ -10,6 +10,13 @@ namespace semio.chart {
     import Surface = semio.interfaces.Surface;
 
     export class RadarChart implements Plotable {
+        private _dimensionColumns: Array<string>;
+
+        public dimensionColumns(columns: Array<string>): RadarChart {
+            this._dimensionColumns = columns;
+            return this;
+        }
+
         public getCategoricalColumns(): Array<string> {
             return [];
         }

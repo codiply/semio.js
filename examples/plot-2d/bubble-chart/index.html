@@ -7,14 +7,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js"></script>
     <script src="../../semio.js"></script>
     <script type="text/javascript">
-        d3.csv('../../data/auto_mpg.csv', function(data) {
+        d3.csv('../../data/tips.csv', function(data) {
+            data.forEach(function(d) {
+                d.tip_pct = (+d.tip) / (+d.total_bill); 
+            });
             var bubbleChart = new semio.chart.plot2d.BubbleChart()
-                .colorColumn('origin')
-                .areaColumn('acceleration')
+                .colorColumn('sex')
+                .areaColumn('size')
                 .radius(10); 
             var plot2d = new semio.chart.Plot2D()
-                .xColumn('weight')
-                .yColumn('horsepower')
+                .xColumn('total_bill')
+                .yColumn('tip_pct')
                 .add(bubbleChart);
             new semio.Visualization('visualizationContainer')
                 .width(800)

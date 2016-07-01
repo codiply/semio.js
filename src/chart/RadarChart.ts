@@ -27,7 +27,7 @@ namespace semio.chart {
         }
 
         public getNumericColumns(): Array<string> {
-            return [];
+            return this._dimensionColumns;
         }
 
         public plot(data: Array<any>, surface: Surface, context: Context): void {

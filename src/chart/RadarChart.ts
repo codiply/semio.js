@@ -11,7 +11,15 @@ namespace semio.chart {
 
     export class RadarChart implements Plotable {
         private _dimensionColumns: Array<string>;
+
+        private _radius: number;
+        private _centerX: number;
+        private _centerY: number;
+
         private _dimensionAngle: { [col: string]: number };
+
+        private _dimensionXScale: { [col: string]: (value: number) => number } = {};
+        private _dimensionYScale: { [col: string]: (value: number) => number } = {};
 
         public dimensionColumns(columns: Array<string>): RadarChart {
             this._dimensionColumns = columns;
@@ -37,9 +45,10 @@ namespace semio.chart {
 
             let width = surface.getWidth();
             let height = surface.getHeight();
-            let radius = Math.min(width / 2, height / 2);
-            let centerX = width / 2;
-            let centerY = height / 2;
+
+            this._radius = Math.min(width / 2, height / 2);
+            this._centerX = width / 2;
+            this._centerY = height / 2;
 
             let svg = surface.svg;
 
@@ -50,13 +59,31 @@ namespace semio.chart {
                 .attr("class", "axis");
 
             axes.append("line")
-                .attr("x1", centerX)
-                .attr("y1", centerY)
-                .attr("x2", (d) => centerX + radius * Math.sin(this._dimensionAngle[d]))
-                .attr("y2", (d) => centerY + radius * Math.cos(this._dimensionAngle[d]))
+                .attr("x1", this._centerX)
+                .attr("y1", this._centerY)
+                .attr("x2", (d) => this._centerX + this._radius * Math.sin(this._dimensionAngle[d]))
+                .attr("y2", (d) => this._centerY + this._radius * Math.cos(this._dimensionAngle[d]))
                 .attr("class", "line")
                 .style("stroke", "grey")
                 .style("stroke-width", "1px");
+
+            this._dimensionColumns.forEach((col) => {
+                this.setupScaleForColumn(col, data, context);
+            });
+        }
+
+        private setupScaleForColumn(column: string, data: Array<any>, context: Context): void {
+            let columnExtent = context.getOrCalculateNumericRange(data, column);
+
+            let xScale = d3.scale.linear()
+                .domain(columnExtent)
+                .range([this._centerX, this._centerX + this._radius * Math.sin(this._dimensionAngle[column])]);
+            let yScale = d3.scale.linear()
+                .domain(columnExtent)
+                .range([this._centerY, this._centerY + this._radius * Math.cos(this._dimensionAngle[column])]);
+
+            this._dimensionXScale[column] = xScale;
+            this._dimensionYScale[column] = yScale;
         }
     }
 }

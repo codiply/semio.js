@@ -79,7 +79,8 @@ module semio.chart.plot2d {
 
             let bubbles = surface.svg.selectAll(".bubble")
                 .data(data)
-                .enter().append("circle")
+                .enter()
+                .append("circle")
                 .attr("class", "bubble")
                 .attr("cx", (d) => xScale(xAccessor(d)))
                 .attr("cy", (d) => yScale(yAccessor(d)));

@@ -70,6 +70,21 @@ namespace semio.chart {
             this._dimensionColumns.forEach((col) => {
                 this.setupScaleForColumn(col, data, context);
             });
+
+            let pointsGroup = svg.append("g");
+
+            data.forEach((d, i) => {
+                let values = pointsGroup.selectAll(".values-" + i)
+                    .data(this._dimensionColumns)
+                    .enter()
+                    .append("g")
+                    .attr("class", "values-" + i);
+                values.append("circle")
+                    .attr("r", 3)
+                    .attr("cx", (col) => this._dimensionXScale[col](+d[col]))
+                    .attr("cy", (col) => this._dimensionYScale[col](+d[col]))
+                    .attr("fill", "blue");
+            });
         }
 
         private setupScaleForColumn(column: string, data: Array<any>, context: Context): void {

@@ -8,6 +8,7 @@
     <script src="../../semio.js"></script>
     <script type="text/javascript">
         d3.csv('../data/mtcars.csv', function(data) {
+            var data = data.slice(0, 4);
             var radarChart = new semio.chart.RadarChart()
                 .dimensionColumns(['cyl','disp','hp','drat','wt','qsec','vs','am','gear','carb']); 
             new semio.Visualization('visualizationContainer')

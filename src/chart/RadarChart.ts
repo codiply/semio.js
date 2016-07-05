@@ -11,8 +11,9 @@ namespace semio.chart {
 
     export class RadarChart implements Plotable {
         private _dimensionColumns: Array<string>;
+        private _pointRadius = 4;
 
-        private _radius: number;
+        private _radarRadius: number;
         private _centerX: number;
         private _centerY: number;
 
@@ -27,6 +28,11 @@ namespace semio.chart {
             columns.forEach((col, i) => {
                 this._dimensionAngle[col] = 2 *  Math.PI * i / this._dimensionColumns.length;
             });
+            return this;
+        }
+
+        public pointRadius(r: number): RadarChart {
+            this._pointRadius = r;
             return this;
         }
 
@@ -46,7 +52,7 @@ namespace semio.chart {
             let width = surface.getWidth();
             let height = surface.getHeight();
 
-            this._radius = Math.min(width / 2, height / 2);
+            this._radarRadius = Math.min(width / 2, height / 2);
             this._centerX = width / 2;
             this._centerY = height / 2;
 
@@ -61,8 +67,8 @@ namespace semio.chart {
             axes.append("line")
                 .attr("x1", this._centerX)
                 .attr("y1", this._centerY)
-                .attr("x2", (d) => this._centerX + this._radius * Math.sin(this._dimensionAngle[d]))
-                .attr("y2", (d) => this._centerY + this._radius * Math.cos(this._dimensionAngle[d]))
+                .attr("x2", (d) => this._centerX + this._radarRadius * Math.sin(this._dimensionAngle[d]))
+                .attr("y2", (d) => this._centerY + this._radarRadius * Math.cos(this._dimensionAngle[d]))
                 .attr("class", "line")
                 .style("stroke", "grey")
                 .style("stroke-width", "1px");
@@ -80,7 +86,7 @@ namespace semio.chart {
                     .append("g")
                     .attr("class", "values-" + i);
                 values.append("circle")
-                    .attr("r", 3)
+                    .attr("r", this._pointRadius)
                     .attr("cx", (col) => this._dimensionXScale[col](+d[col]))
                     .attr("cy", (col) => this._dimensionYScale[col](+d[col]))
                     .attr("fill", "blue");
@@ -92,10 +98,10 @@ namespace semio.chart {
 
             let xScale = d3.scale.linear()
                 .domain(columnExtent)
-                .range([this._centerX, this._centerX + this._radius * Math.sin(this._dimensionAngle[column])]);
+                .range([this._centerX, this._centerX + (this._radarRadius - this._pointRadius) * Math.sin(this._dimensionAngle[column])]);
             let yScale = d3.scale.linear()
                 .domain(columnExtent)
-                .range([this._centerY, this._centerY + this._radius * Math.cos(this._dimensionAngle[column])]);
+                .range([this._centerY, this._centerY + (this._radarRadius - this._pointRadius) * Math.cos(this._dimensionAngle[column])]);
 
             this._dimensionXScale[column] = xScale;
             this._dimensionYScale[column] = yScale;
